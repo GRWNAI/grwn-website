@@ -8,6 +8,31 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
+/* GRWN unified nav */
+.gnav{position:sticky;top:0;z-index:10000;background:rgba(255,255,255,.9);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid #EAEEF1;box-shadow:0 2px 10px rgba(23,48,73,.07);font-family:Inter,system-ui,-apple-system,sans-serif}
+.gnav .gn-in{max-width:1140px;margin:0 auto;padding:0 28px;height:68px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.gnav a{text-decoration:none;color:#3a3d44}
+.gnav .gn-logo{display:flex;align-items:center}
+.gnav .gn-logo img{width:150px;display:block}
+.gnav .gn-links{display:flex;align-items:center;gap:30px;font-size:15px;font-weight:500}
+.gnav .gn-links>a:hover{color:#173049}
+.gnav .gn-dd{position:relative;display:flex;align-items:center}
+.gnav .gn-dd>a{cursor:pointer}
+.gnav .gn-dd>a::after{content:"▾";font-size:10px;margin-left:5px;color:#5C6873}
+.gnav .gn-menu{position:absolute;top:100%;left:0;display:none;flex-direction:column;background:#fff;border:1px solid #EAEEF1;border-radius:12px;box-shadow:0 14px 34px rgba(0,0,0,.10);padding:8px;min-width:190px;margin-top:10px}
+.gnav .gn-menu::before{content:"";position:absolute;top:-10px;left:0;right:0;height:10px}
+.gnav .gn-dd:hover .gn-menu,.gnav .gn-dd:focus-within .gn-menu{display:flex}
+.gnav .gn-menu a{padding:9px 12px;border-radius:8px;font-size:14.5px;white-space:nowrap}
+.gnav .gn-menu a:hover{background:#F6F9FB;color:#173049}
+.gnav .gn-right{display:flex;align-items:center;gap:14px}
+.gnav .gn-cta{background:#2274A5;color:#fff;font-weight:700;font-size:15px;padding:11px 22px;border-radius:999px}
+.gnav .gn-cta:hover{background:#1A5D85}
+.gnav .gn-hamb{display:none;background:0;border:0;font-size:24px;color:#173049;cursor:pointer;line-height:1;padding:4px}
+.gnav .gn-mob{display:none;flex-direction:column;background:#fff;border-top:1px solid #EAEEF1;padding:6px 28px 16px}
+.gnav .gn-mob a{padding:12px 0;font-size:16px;font-weight:500;border-bottom:1px solid #F2F5F7}
+.gnav .gn-mob.open{display:flex}
+@media(max-width:860px){.gnav .gn-links,.gnav .gn-cta{display:none}.gnav .gn-hamb{display:block}}
+
 :root{
   --ink:#173049; --ink2:#0F2336; --cloud:#F6F9FB; --white:#fff; --cream:#FBFCFD;
   --green:#2274A5; --green-d:#1A5D85; --slate:#5C6873; --mint:#E4F0F6; --line:#EAEEF1;
@@ -354,17 +379,16 @@ footer .fine{margin-top:30px;color:var(--slate);font-size:13px}
   <symbol id="ic-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18"/></symbol>
 </defs></svg>
 
-<nav>
-  <div class="wrap inner">
-    <a href="#"><svg class="lg-wm"><use href="#wm"/></svg></a>
-    <div class="links">
+<nav class="gnav">
+  <div class="gn-in">
+    <a class="gn-logo" href="#"><img src="grwn-logo.svg" alt="GRWN.ai"></a>
+    <div class="gn-links">
       <a href="#waarom">Waarom</a>
       <a href="#waarde">Wat we doen</a>
-      <div class="dd">
-        <a tabindex="0">Tools</a>
-        <div class="ddmenu">
+      <div class="gn-dd"><a tabindex="0">Tools</a>
+        <div class="gn-menu">
           <a href="grwn-ai-maturity-scan.html">AI-scan</a>
-          <a href="/lvlup/">LVL UP</a>
+          <a href="lvlup/">LVL UP</a>
           <a href="grwn-prompts.html">Prompt-tips</a>
         </div>
       </div>
@@ -372,23 +396,22 @@ footer .fine{margin-top:30px;color:var(--slate);font-size:13px}
       <a href="grwn-pricing.html">Prijzen</a>
       <a href="#contact">Contact</a>
     </div>
-    <div class="right">
-      <a class="btn btn-green" href="#contact">Plan een demo</a>
-      <button class="hamb" aria-label="Menu" onclick="document.getElementById('mobmenu').classList.toggle('open')">☰</button>
+    <div class="gn-right">
+      <a class="gn-cta" href="#contact">Plan een demo</a>
+      <button class="gn-hamb" aria-label="Menu" onclick="this.closest('.gnav').querySelector('.gn-mob').classList.toggle('open')">&#9776;</button>
     </div>
   </div>
-  <div class="mobmenu" id="mobmenu">
+  <div class="gn-mob">
     <a href="#waarom">Waarom</a>
     <a href="#waarde">Wat we doen</a>
     <a href="grwn-ai-maturity-scan.html">AI-scan</a>
-    <a href="/lvlup/">LVL UP</a>
+    <a href="lvlup/">LVL UP</a>
     <a href="grwn-prompts.html">Prompt-tips</a>
     <a href="#aanpak">Aanpak</a>
     <a href="grwn-pricing.html">Prijzen</a>
     <a href="#contact">Contact</a>
   </div>
 </nav>
-<script>document.querySelectorAll('#mobmenu a').forEach(function(a){a.addEventListener('click',function(){document.getElementById('mobmenu').classList.remove('open')})});</script>
 
 <header class="hero">
   <div class="glow"></div>
@@ -823,5 +846,6 @@ footer .fine{margin-top:30px;color:var(--slate);font-size:13px}
   });
 })();
 </script>
+<script src="/grwn-chat.js" defer></script>
 </body>
 </html>
