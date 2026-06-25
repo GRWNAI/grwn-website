@@ -6,10 +6,13 @@
 
   var INK = "#173049", MAG = "#E83F6F", MAG_D = "#C72C58", GOLD = "#F5B400", LINE = "#EAEEF1", CLOUD = "#F6F9FB", SLATE = "#5C6873", CERU = MAG, CERU_D = MAG_D;
 
+  var GROWIE = '<svg viewBox="0 0 100 100" aria-hidden="true"><line x1="50" y1="24" x2="50" y2="13" stroke="#1A5D85" stroke-width="3" stroke-linecap="round"/><path d="M50 3 L52.6 10 L60 12.6 L52.6 15.2 L50 22 L47.4 15.2 L40 12.6 L47.4 10 Z" fill="#F5B400"/><circle cx="22" cy="52" r="6.5" fill="#1A5D85"/><circle cx="78" cy="52" r="6.5" fill="#1A5D85"/><rect x="27" y="26" width="46" height="52" rx="18" fill="#E83F6F"/><rect x="27" y="26" width="46" height="16" rx="12" fill="#C72C58" opacity="0.30"/><circle cx="50" cy="49" r="15" fill="#fff"/><circle cx="50" cy="49" r="9" fill="#2274A5"/><circle cx="50" cy="49" r="4" fill="#173049"/><circle cx="53.4" cy="45.6" r="1.9" fill="#fff"/><circle cx="35" cy="63" r="3.4" fill="#FF8AB0" opacity="0.85"/><circle cx="65" cy="63" r="3.4" fill="#FF8AB0" opacity="0.85"/><path d="M41 68 Q50 75 59 68" stroke="#173049" stroke-width="2.8" fill="none" stroke-linecap="round"/></svg>';
+
   var css = "" +
     ".grwnc-btn{position:fixed;right:22px;bottom:22px;z-index:99998;height:54px;padding:0 22px 0 17px;border-radius:999px;border:0;cursor:pointer;background:" + CERU + ";color:#fff;box-shadow:0 12px 32px rgba(23,48,73,.30);display:flex;align-items:center;gap:10px;font-family:Inter,system-ui,sans-serif;font-size:15px;font-weight:700;transition:transform .15s,background .15s}" +
     ".grwnc-btn:hover{background:" + CERU_D + ";transform:translateY(-2px)}" +
-    ".grwnc-btn svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}" +
+    ".grwnc-btn .gface{width:33px;height:33px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex:none}" +
+    ".grwnc-btn .gface svg{width:33px;height:33px}" +
     ".grwnc-btn .dot{position:absolute;top:9px;left:30px;width:9px;height:9px;border-radius:50%;background:" + GOLD + ";border:2px solid " + CERU + "}" +
     ".grwnc-btn.hidden{display:none}" +
     ".grwnc-btn.pulse{animation:grwncPulse 2.8s ease-out infinite}" +
@@ -24,11 +27,15 @@
     ".grwnc-chips{display:flex;flex-direction:column;align-items:flex-start;gap:7px;margin-top:2px}" +
     ".grwnc-chip{border:1px solid " + LINE + ";background:#fff;color:" + CERU_D + ";font:inherit;font-size:13.5px;font-weight:600;padding:9px 13px;border-radius:999px;cursor:pointer;text-align:left;transition:.12s}" +
     ".grwnc-chip:hover{background:" + CLOUD + ";border-color:" + CERU + "}" +
+    ".grwnc-cta{padding:10px 12px 0;background:#fff}" +
+    ".grwnc-cta button{width:100%;border:1.5px solid " + MAG + ";background:#fff;color:" + MAG_D + ";font:inherit;font-size:14px;font-weight:700;padding:11px;border-radius:12px;cursor:pointer;transition:.12s}" +
+    ".grwnc-cta button:hover{background:#FFF1F5}" +
     ".grwnc-panel{position:fixed;right:22px;bottom:92px;z-index:99999;width:380px;max-width:calc(100vw - 32px);height:560px;max-height:calc(100vh - 130px);background:#fff;border:1px solid " + LINE + ";border-radius:18px;box-shadow:0 24px 70px rgba(23,48,73,.30);display:none;flex-direction:column;overflow:hidden;font-family:Inter,system-ui,-apple-system,sans-serif}" +
     ".grwnc-panel.open{display:flex;animation:grwncIn .18s ease}" +
     "@keyframes grwncIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}" +
     ".grwnc-head{background:" + CERU + ";color:#fff;padding:16px 18px;display:flex;align-items:center;gap:11px}" +
-    ".grwnc-head .av{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;letter-spacing:.02em}" +
+    ".grwnc-head .av{width:40px;height:40px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex:none;overflow:hidden}" +
+    ".grwnc-head .av svg{width:40px;height:40px}" +
     ".grwnc-head .av b{color:#fff}.grwnc-head .av .w{color:" + GOLD + "}" +
     ".grwnc-head h4{margin:0;font-size:15px;font-weight:700}" +
     ".grwnc-head p{margin:2px 0 0;font-size:12px;color:rgba(255,255,255,.8)}" +
@@ -60,7 +67,7 @@
   var wrap = document.createElement("div");
   wrap.innerHTML =
     '<button class="grwnc-btn pulse" aria-label="Chat met Growie" id="grwncBtn">' +
-      '<svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.7A8.5 8.5 0 1 1 21 11.5z"/></svg>' +
+      '<span class="gface">' + GROWIE + '</span>' +
       '<span class="dot"></span>' +
       'Vraag Growie' +
     '</button>' +
@@ -73,11 +80,12 @@
     '</div>' +
     '<div class="grwnc-panel" id="grwncPanel" role="dialog" aria-label="Growie — AI-assistent van GRWN">' +
       '<div class="grwnc-head">' +
-        '<div class="av"><b>GR<span class="w">W</span>N</b></div>' +
+        '<div class="av">' + GROWIE + '</div>' +
         '<div><h4>Growie</h4><p>De AI-assistent van GRWN</p></div>' +
         '<button class="x" id="grwncClose" aria-label="Sluiten">&times;</button>' +
       '</div>' +
       '<div class="grwnc-msgs" id="grwncMsgs"></div>' +
+      '<div class="grwnc-cta"><button id="grwncCta" type="button">📅 Plan een vrijblijvende kennismaking</button></div>' +
       '<div class="grwnc-foot">' +
         '<textarea id="grwncInput" rows="1" placeholder="Stel je vraag…"></textarea>' +
         '<button id="grwncSend" aria-label="Versturen"><svg viewBox="0 0 24 24"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>' +
@@ -140,17 +148,20 @@
       var hi = "Hoi, ik ben **Growie** 👋 — de AI-assistent van GRWN. Vraag me gerust iets over AI in jouw organisatie: waar je zou kunnen beginnen, wat AI-adoptie inhoudt, of wat wij doen. Waar loop je tegenaan?";
       addMsg("bot", hi);
       history.push({ role: "assistant", content: hi });
-      var qs = ["Waar begin ik met AI?", "Wat is LVL UP?", "Wat doet GRWN precies?", "Is dit iets voor mijn organisatie?"];
+      var qs = ["Waar begin ik met AI?", "Wat is LVL UP?", "Is dit iets voor mijn organisatie?", "📅 Plan een kennismaking"];
       var cw = document.createElement("div"); cw.className = "grwnc-chips";
       qs.forEach(function (q) {
         var c = document.createElement("button"); c.className = "grwnc-chip"; c.type = "button"; c.textContent = q;
-        c.addEventListener("click", function () { cw.remove(); input.value = q; sendMsg(); });
+        c.addEventListener("click", function () {
+          if (q.indexOf("kennismaking") > -1) { gotoContact(); return; }
+          cw.remove(); input.value = q; sendMsg();
+        });
         cw.appendChild(c);
       });
       msgs.appendChild(cw); msgs.scrollTop = msgs.scrollHeight;
     }
     setTimeout(function () { fitMobile(); }, 40);
-    setTimeout(function () { input.focus(); }, 50);
+    if (window.innerWidth > 560) setTimeout(function () { input.focus(); }, 50);
   }
   function closePanel() { panel.classList.remove("open"); btn.classList.remove("hidden"); panel.style.height = ""; }
   function fitMobile() {
@@ -198,9 +209,15 @@
       .finally(function () { busy = false; send.disabled = false; input.focus(); });
   }
 
+  function gotoContact() {
+    var path = location.pathname;
+    location.href = (path === "/" || /index\.html$/.test(path)) ? "#contact" : "/#contact";
+  }
+
   btn.addEventListener("click", function () { panel.classList.contains("open") ? closePanel() : openPanel(); });
   closeBtn.addEventListener("click", closePanel);
   send.addEventListener("click", sendMsg);
+  document.getElementById("grwncCta").addEventListener("click", gotoContact);
   input.addEventListener("input", autoGrow);
   input.addEventListener("keydown", function (e) {
     if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMsg(); }
