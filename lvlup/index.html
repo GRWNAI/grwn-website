@@ -25,6 +25,26 @@
   .pixel{font-family:'Press Start 2P',monospace;line-height:1.6;letter-spacing:1px}
   .app{max-width:760px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;padding:14px}
 
+  /* GRWN marketing-nav (licht, los van het arcade-thema) */
+  nav.grwnnav{position:sticky;top:0;z-index:10000;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid #EAEEF1;box-shadow:0 2px 10px rgba(23,48,73,.12)}
+  nav.grwnnav .inner{max-width:760px;margin:0 auto;padding:0 16px;display:flex;align-items:center;justify-content:space-between;height:60px}
+  nav.grwnnav a{text-decoration:none}
+  nav.grwnnav .lg-wm{width:130px;display:block}
+  nav.grwnnav .links{display:flex;gap:24px;font-family:'Inter',system-ui,sans-serif;font-size:15px;font-weight:500;letter-spacing:0;text-transform:none}
+  nav.grwnnav .links a{color:#3a3d44}
+  nav.grwnnav .links a:hover{color:#173049}
+  nav.grwnnav .dd{position:relative;display:flex;align-items:center}
+  nav.grwnnav .dd>a{cursor:pointer}
+  nav.grwnnav .dd>a::after{content:"▾";font-size:10px;margin-left:5px;color:#5C6873}
+  nav.grwnnav .ddmenu{position:absolute;top:100%;left:0;display:none;flex-direction:column;background:#fff;border:1px solid #EAEEF1;border-radius:12px;box-shadow:0 14px 34px rgba(0,0,0,.12);padding:8px;min-width:190px;margin-top:10px}
+  nav.grwnnav .ddmenu::before{content:"";position:absolute;top:-10px;left:0;right:0;height:10px}
+  nav.grwnnav .dd:hover .ddmenu,nav.grwnnav .dd:focus-within .ddmenu{display:flex}
+  nav.grwnnav .ddmenu a{padding:9px 12px;border-radius:8px;font-size:14.5px;color:#3a3d44;white-space:nowrap}
+  nav.grwnnav .ddmenu a:hover{background:#F6F9FB;color:#173049}
+  nav.grwnnav .btn-nav{font-family:'Inter',system-ui,sans-serif;background:#2274A5;color:#fff;font-weight:700;font-size:14px;letter-spacing:0;text-transform:none;padding:9px 18px;border-radius:999px}
+  nav.grwnnav .btn-nav:hover{background:#1A5D85}
+  @media(max-width:820px){nav.grwnnav .links{display:none}}
+
   /* Top bar / marquee */
   .topbar{background:var(--panel);border:1px solid var(--border);border-radius:14px;
     padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
@@ -236,6 +256,31 @@
 <symbol id="pi-medal-b" viewBox="0 0 12 12"><rect x="4" y="1" width="1" height="3" fill="#ff4fa3"/><rect x="7" y="1" width="1" height="3" fill="#4fd1c5"/><rect x="4" y="4" width="4" height="1" fill="#cd7f3f"/><rect x="3" y="5" width="6" height="4" fill="#cd7f3f"/><rect x="4" y="9" width="4" height="1" fill="#cd7f3f"/><rect x="5" y="6" width="2" height="2" fill="#7a4a1f"/></symbol>
 <symbol id="pi-gem" viewBox="0 0 12 12"><rect x="5" y="2" width="2" height="1" fill="#4fd1c5"/><rect x="4" y="3" width="4" height="1" fill="#4fd1c5"/><rect x="3" y="4" width="6" height="1" fill="#7ee8df"/><rect x="2" y="5" width="8" height="1" fill="#4fd1c5"/><rect x="3" y="6" width="6" height="1" fill="#4fd1c5"/><rect x="4" y="7" width="4" height="1" fill="#4fd1c5"/><rect x="5" y="8" width="2" height="1" fill="#4fd1c5"/></symbol>
 </defs></svg>
+
+<nav class="grwnnav">
+  <div class="inner">
+    <a href="/"><img src="/grwn-logo.svg" class="lg-wm" alt="GRWN.ai"></a>
+    <div class="links">
+      <a href="/index.html#waarom">Waarom</a>
+      <a href="/index.html#waarde">Wat we doen</a>
+      <div class="dd">
+        <a tabindex="0">Tools</a>
+        <div class="ddmenu">
+          <a href="/grwn-ai-maturity-scan.html">AI-scan</a>
+          <a href="/lvlup/">LVL UP</a>
+          <a href="/grwn-prompts.html">Prompt-tips</a>
+        </div>
+      </div>
+      <a href="/index.html#aanpak">Aanpak</a>
+      <a href="/grwn-pricing.html">Prijzen</a>
+      <a href="/grwn-contact.html">Contact</a>
+    </div>
+    <div class="right">
+      <a class="btn-nav" href="/grwn-contact.html">Plan een demo</a>
+    </div>
+  </div>
+</nav>
+
 <div class="app">
   <div class="topbar">
     <div>

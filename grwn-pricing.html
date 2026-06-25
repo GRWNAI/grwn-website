@@ -20,6 +20,24 @@ body{margin:0;font-family:Inter,system-ui,sans-serif;color:var(--ink);background
 h1,h2,h3{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.15}
 .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
 .lg-wm{width:169px;color:var(--ink)}
+/* nav */
+nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);box-shadow:0 2px 10px rgba(23,48,73,.06)}
+nav .inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+nav a{text-decoration:none}
+nav .lg-wm{width:138px;display:block}
+nav .links{display:flex;gap:26px;font-size:15px;font-weight:500;color:#3a3d44}
+nav .links a:hover{color:var(--ink)}
+nav .dd{position:relative;display:flex;align-items:center}
+nav .dd>a{cursor:pointer}
+nav .dd>a::after{content:"▾";font-size:10px;margin-left:5px;color:var(--slate)}
+nav .ddmenu{position:absolute;top:100%;left:0;display:none;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 14px 34px rgba(0,0,0,.10);padding:8px;min-width:190px;margin-top:10px}
+nav .ddmenu::before{content:"";position:absolute;top:-10px;left:0;right:0;height:10px}
+nav .dd:hover .ddmenu,nav .dd:focus-within .ddmenu{display:flex}
+nav .ddmenu a{padding:9px 12px;border-radius:8px;font-size:14.5px;color:#3a3d44;white-space:nowrap}
+nav .ddmenu a:hover{background:var(--cloud);color:var(--ink)}
+nav .btn-nav{background:var(--cerulean);color:#fff;font-weight:700;font-size:14px;padding:10px 20px;border-radius:999px}
+nav .btn-nav:hover{background:var(--cerulean-d)}
+@media(max-width:820px){nav .links{display:none}}
 .hero{background:linear-gradient(180deg,#F1F8FB,#fff);color:var(--ink);padding:56px 0 44px}
 .hero .eyebrow{font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--cerulean-d)}
 .hero h1{font-size:38px;margin:20px 0 12px}
@@ -103,9 +121,32 @@ footer{padding:30px 0;color:var(--slate);font-size:12.5px;text-align:center}
 </symbol>
 </defs></svg>
 
+<nav>
+  <div class="wrap inner">
+    <a href="index.html"><img src="grwn-logo.svg" class="lg-wm" alt="GRWN.ai"></a>
+    <div class="links">
+      <a href="index.html#waarom">Waarom</a>
+      <a href="index.html#waarde">Wat we doen</a>
+      <div class="dd">
+        <a tabindex="0">Tools</a>
+        <div class="ddmenu">
+          <a href="grwn-ai-maturity-scan.html">AI-scan</a>
+          <a href="/lvlup/">LVL UP</a>
+          <a href="grwn-prompts.html">Prompt-tips</a>
+        </div>
+      </div>
+      <a href="index.html#aanpak">Aanpak</a>
+      <a href="grwn-pricing.html">Prijzen</a>
+      <a href="grwn-contact.html">Contact</a>
+    </div>
+    <div class="right">
+      <a class="btn-nav" href="grwn-contact.html">Plan een demo</a>
+    </div>
+  </div>
+</nav>
+
 <header class="hero">
   <div class="wrap">
-    <svg class="lg-wm"><use href="#wmonly"/></svg>
     <div class="eyebrow" style="margin-top:20px">Prijzen</div>
     <h1>Klein beginnen. Structureel groeien.</h1>
     <p>De échte waarde zit niet in één project, maar in een vaste AI-partner die je maand na maand verder brengt. We beginnen met luisteren naar waar jullie tegenaan lopen — daarom draait GRWN om partnerschap, met een lichte instap om kennis te maken.</p>
@@ -208,7 +249,7 @@ footer{padding:30px 0;color:var(--slate);font-size:12.5px;text-align:center}
     <p>Doe de gratis AI-scan of plan een vrijblijvende kennismaking — we wijzen je het snelste pad naar een partnerschap aan.</p>
     <div class="cta">
       <a class="btn btn-green" href="grwn-ai-maturity-scan.html">Doe de gratis AI-scan →</a>
-      <a class="btn btn-ghost" href="index.html#contact">Plan een kennismaking</a>
+      <a class="btn btn-ghost" href="grwn-contact.html">Plan een kennismaking</a>
     </div>
   </div>
 </div>
