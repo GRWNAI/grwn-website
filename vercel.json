@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/lvlup", "destination": "/lvlup/index.html" }
+  ]
+}
