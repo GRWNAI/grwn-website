@@ -20,7 +20,18 @@ body{margin:0;font-family:Inter,system-ui,sans-serif;color:var(--ink);background
 h1,h2,h3{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.15}
 .wrap{max-width:760px;margin:0 auto;padding:0 24px}
 .lg-wm{width:182px;color:var(--ink)}
-.hero{background:linear-gradient(180deg,#fff,var(--mint));color:var(--ink);padding:48px 0 40px}
+/* nav */
+nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);box-shadow:0 2px 10px rgba(23,48,73,.06)}
+nav .inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+nav .lg-wm{width:138px;display:block}
+nav a{text-decoration:none}
+nav .links{display:flex;gap:26px;font-size:15px;font-weight:500;color:#3a3d44}
+nav .links a{color:inherit}
+nav .links a:hover{color:var(--ink)}
+nav .btn-nav{background:var(--cerulean);color:#fff;font-weight:700;font-size:14px;padding:10px 20px;border-radius:999px}
+nav .btn-nav:hover{background:var(--cerulean-d)}
+@media(max-width:820px){nav .links{display:none}}
+.hero{background:linear-gradient(180deg,#fff,var(--mint));color:var(--ink);padding:40px 0 40px}
 .hero h1{font-size:32px;margin:22px 0 10px}
 .hero p{color:var(--slate);font-size:16px;max-width:560px}
 .main{padding:40px 0 60px}
@@ -113,9 +124,23 @@ footer{padding:30px 0;color:var(--slate);font-size:12.5px;text-align:center}
 </symbol>
 </defs></svg>
 
+<nav>
+  <div class="wrap inner">
+    <a href="index.html"><svg class="lg-wm"><use href="#wmonly"/></svg></a>
+    <div class="links">
+      <a href="index.html#waarde">Wat we doen</a>
+      <a href="index.html#aanpak">Aanpak</a>
+      <a href="grwn-pricing.html">Prijzen</a>
+      <a href="grwn-prompts.html">Prompt-tips</a>
+    </div>
+    <div class="right">
+      <a class="btn-nav" href="index.html#contact">Plan een demo</a>
+    </div>
+  </div>
+</nav>
+
 <header class="hero">
   <div class="wrap">
-    <svg class="lg-wm"><use href="#wmonly"/></svg>
     <h1>Hoe AI-volwassen ben je?</h1>
     <p>Geen oordeel, gewoon nieuwsgierig naar waar je staat. Tien stellingen, twee minuten. Je ziet meteen op welk niveau je staat, hoe je je verhoudt tot de rest, en wat je volgende stap is.</p>
   </div>
