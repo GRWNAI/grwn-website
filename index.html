@@ -1,0 +1,772 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GRWN — with AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#173049; --ink2:#0F2336; --cloud:#F6F9FB; --white:#fff; --cream:#FBFCFD;
+  --green:#2274A5; --green-d:#1A5D85; --slate:#5C6873; --mint:#E4F0F6; --line:#EAEEF1;
+  --accent:#E83F6F; --accent-soft:#FCE6EE; --lime:#8FD0E8; --aqua:#8FD0E8;
+  --gold:#F5B400; --gold-d:#B07E00; --magenta:#E83F6F; --magenta-d:#C72C58;
+  --cerulean:#2274A5; --cerulean-d:#1A5D85; --seagreen:#32936F; --seagreen-d:#26765A;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--white);line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-weight:700;letter-spacing:-.014em;line-height:1.16;margin:0}
+p{margin:0}
+a{text-decoration:none;color:inherit}
+.wrap{max-width:1140px;margin:0 auto;padding:0 28px}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:15px;padding:14px 26px;border-radius:999px;cursor:pointer;border:1px solid transparent;transition:.15s}
+.btn-green{box-shadow:0 8px 22px rgba(34,116,165,.22)}
+.btn-green:hover{box-shadow:0 10px 26px rgba(34,116,165,.28);transform:translateY(-1px)}
+.btn-green{background:var(--cerulean);color:#fff}
+.btn-green:hover{background:var(--cerulean-d)}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn-ghost:hover{border-color:var(--ink)}
+.btn-dark{background:var(--ink);color:#fff}
+.btn-dark:hover{background:var(--ink2)}
+.eyebrow{font-size:13px;font-weight:600;letter-spacing:.04em;color:var(--cerulean-d)}
+.tlink{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:15px;color:var(--cerulean-d);transition:.15s}
+.tlink:hover{gap:10px}
+.ital{font-family:Georgia,'Times New Roman',serif;font-style:italic;font-weight:500;color:var(--magenta)}
+.promptcard{display:flex;gap:28px;align-items:center;background:#E1EEF6;border-radius:24px;padding:40px 44px}
+.promptcard .ic-lg{flex:0 0 auto;width:64px;height:64px;border-radius:18px;background:#fff;display:flex;align-items:center;justify-content:center;color:var(--cerulean-d);box-shadow:0 6px 16px rgba(23,48,73,.08)}
+.promptcard .ic-lg svg{width:32px;height:32px}
+.promptcard h2{font-size:26px;margin:6px 0 0}
+.promptcard p{color:#3a3d44;margin:12px 0 16px;font-size:16px;max-width:580px}
+@media(max-width:640px){.promptcard{flex-direction:column;align-items:flex-start;padding:30px 26px}}
+
+/* nav */
+nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav .inner{display:flex;align-items:center;justify-content:space-between;height:68px}
+nav .lg-wm{width:150px;color:var(--ink)}
+nav .links{display:flex;gap:30px;font-size:15px;font-weight:500;color:#3a3d44}
+nav .links a:hover{color:var(--ink)}
+nav .right{display:flex;align-items:center;gap:14px}
+@media(max-width:820px){nav .links{display:none}}
+nav .dd{position:relative;display:flex;align-items:center}
+nav .dd>a{cursor:pointer}
+nav .dd>a::after{content:"▾";font-size:10px;margin-left:5px;color:var(--slate)}
+nav .ddmenu{position:absolute;top:100%;left:0;display:none;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 14px 34px rgba(0,0,0,.10);padding:8px;min-width:190px;margin-top:10px}
+nav .ddmenu::before{content:"";position:absolute;top:-10px;left:0;right:0;height:10px}
+nav .dd:hover .ddmenu,nav .dd:focus-within .ddmenu{display:flex}
+nav .ddmenu a{padding:9px 12px;border-radius:8px;font-size:14.5px;color:#3a3d44;white-space:nowrap}
+nav .ddmenu a:hover{background:var(--cloud);color:var(--ink)}
+.hamb{display:none;background:transparent;border:0;font-size:24px;line-height:1;cursor:pointer;color:var(--ink);padding:4px 6px}
+.mobmenu{display:none}
+@media(max-width:820px){
+  .hamb{display:inline-flex;align-items:center}
+  nav .right a:first-child{display:none}
+  .mobmenu{flex-direction:column;padding:6px 28px 16px;background:#fff;border-top:1px solid var(--line)}
+  .mobmenu.open{display:flex}
+  .mobmenu a{padding:12px 0;font-size:16px;font-weight:600;color:#3a3d44;border-bottom:1px solid var(--line)}
+  .mobmenu a:last-child{border-bottom:0}
+}
+
+/* hero */
+.hero{color:var(--ink);overflow:hidden;position:relative;
+  background:
+    radial-gradient(820px 480px at 88% -14%, rgba(34,116,165,.09), transparent 60%),
+    radial-gradient(680px 520px at -8% 116%, rgba(245,180,0,.08), transparent 58%),
+    linear-gradient(180deg,#FDFDFC 0%, #F8FAFB 100%)}
+.hero .wrap{padding:88px 28px 96px;position:relative;z-index:2}
+.hero .eyebrow{color:var(--cerulean-d);background:rgba(255,255,255,.7);box-shadow:0 1px 0 rgba(23,48,73,.04);display:inline-block;padding:6px 14px;border-radius:30px}
+.hero h1{font-size:56px;max-width:780px;margin:18px 0 0}
+.hero h1 .g{font-family:Georgia,'Times New Roman',serif;font-style:italic;font-weight:500;color:var(--magenta)}
+.hero p{font-size:19px;color:#4a5560;max-width:560px;margin:22px 0 32px}
+.hero .cta{display:flex;gap:14px;flex-wrap:wrap}
+.hero .markbg{position:absolute;right:40px;bottom:-40px;width:330px;height:330px;color:rgba(34,116,165,.05);z-index:1}
+@media(max-width:680px){.hero h1{font-size:38px}.hero .markbg{display:none}}
+
+/* trust strip */
+.trust{border-bottom:1px solid var(--line);background:var(--cloud)}
+.trust .wrap{display:flex;align-items:center;gap:34px;flex-wrap:wrap;padding:20px 28px;justify-content:center}
+.trust span{font-size:13px;color:var(--slate);font-weight:600;letter-spacing:.04em}
+.trust .l{font-weight:800;color:#aeb3b0;font-size:18px;letter-spacing:-.02em}
+
+/* sections */
+section{padding:84px 0}
+.center{text-align:center;max-width:680px;margin:0 auto 52px}
+.center h2{font-size:36px}
+.center p{font-size:18px;color:#3a3d44;margin-top:14px}
+
+/* features */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+@media(max-width:860px){.cards{grid-template-columns:1fr}}
+.card{border:0;border-radius:24px;padding:30px;background:#E1EEF6;transition:.2s}
+.card:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(23,48,73,.10)}
+.cards .card:nth-child(4n+1){background:#E1EEF6}
+.cards .card:nth-child(4n+2){background:#FBE2EB}
+.cards .card:nth-child(4n+3){background:#FBEFCE}
+.cards .card:nth-child(4n+4){background:#E3F3EB}
+.card .ic{width:46px;height:46px;border-radius:14px;background:#fff;display:flex;align-items:center;justify-content:center;color:var(--ink);font-size:18px;font-weight:800;margin-bottom:18px;box-shadow:0 3px 10px rgba(23,48,73,.08)}
+.card .ic svg{width:24px;height:24px}
+.cards .card:nth-child(4n+1) .ic{color:var(--cerulean-d)}
+.cards .card:nth-child(4n+2) .ic{color:var(--magenta-d)}
+.cards .card:nth-child(4n+3) .ic{color:var(--gold-d)}
+.cards .card:nth-child(4n+4) .ic{color:var(--seagreen-d)}
+/* pastel voices row — the diverse-but-balanced colour moment */
+.voices{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:8px}
+@media(max-width:900px){.voices{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.voices{grid-template-columns:1fr}}
+.voice{border-radius:20px;padding:26px 24px}
+.voice .q{font-weight:600;font-size:15.5px;line-height:1.5;color:var(--ink);margin-bottom:16px}
+.voice .who{font-size:13px;color:#55606b;font-weight:600}
+.voice.gold{background:#FBEFCE}
+.voice.magenta{background:#FBE2EB}
+.voice.cerulean{background:#E1EEF6}
+.voice.seagreen{background:#E3F3EB}
+/* reis: van inspiratie naar adoptie */
+.journey{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:36px}
+@media(max-width:900px){.journey{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.journey{grid-template-columns:1fr}}
+.jstep{background:#fff;border:1px solid #EEF1F4;border-radius:18px;padding:22px 20px;transition:.2s;display:flex;flex-direction:column}
+.jstep:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(23,48,73,.08)}
+.jstep .jn{font-size:12px;font-weight:800;letter-spacing:.03em}
+.jstep h4{font-size:16px;margin:8px 0 7px;font-weight:800}
+.jstep p{font-size:13px;color:var(--slate);margin:0}
+.jstep .res{font-size:12.5px;color:var(--ink);font-weight:600;margin-top:auto;padding-top:12px}
+.journey .jstep:nth-child(1) .jn{color:var(--gold-d)}
+.journey .jstep:nth-child(2) .jn{color:var(--magenta-d)}
+.journey .jstep:nth-child(3) .jn{color:var(--cerulean-d)}
+.journey .jstep:nth-child(4) .jn{color:var(--seagreen-d)}
+.journey .jstep:nth-child(5) .jn{color:var(--magenta-d)}
+/* pijn -> remedie */
+.pr{display:flex;flex-direction:column;gap:16px;margin-top:38px}
+.prrow{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#fff;transition:.2s}
+.prrow:hover{box-shadow:0 14px 36px rgba(23,48,73,.07)}
+@media(max-width:760px){.prrow{grid-template-columns:1fr}}
+.prrow .pain,.prrow .rem{padding:26px 28px}
+.prrow .pain{border-right:1px solid var(--line)}
+@media(max-width:760px){.prrow .pain{border-right:0;border-bottom:1px solid var(--line)}}
+.prrow .rem{background:#F1F7FB}
+.pr .lab{font-size:11.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;margin:0 0 9px}
+.prrow .pain .lab{color:var(--magenta-d)}
+.prrow .rem .lab{color:var(--cerulean-d)}
+.pr h4{font-size:17px;margin:0 0 7px;font-weight:800}
+.pr p{font-size:14px;color:var(--slate);margin:0;line-height:1.55}
+.card h3{font-size:20px}
+.card p{color:var(--slate);margin-top:10px;font-size:15px}
+
+/* LVL UP product */
+.product{background:var(--cloud)}
+.product .row{display:grid;grid-template-columns:1.05fr 1fr;gap:54px;align-items:center}
+@media(max-width:860px){.product .row{grid-template-columns:1fr;gap:34px}}
+.product h2{font-size:34px}
+.product p{color:#3a3d44;font-size:17px;margin-top:16px}
+.checks{margin-top:22px;display:grid;gap:12px}
+.checks div{display:flex;gap:11px;align-items:flex-start;font-size:15px}
+.checks .c{color:var(--green);font-weight:800}
+.appshot{background:#fff;border:1px solid #EEF2F5;border-radius:24px;padding:28px;color:var(--ink);box-shadow:0 22px 54px rgba(23,48,73,.10)}
+.appshot .bar{display:flex;gap:6px;margin-bottom:18px}
+.appshot .bar i{width:10px;height:10px;border-radius:50%;background:#33373d}
+.appshot .lvl{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.appshot .node{width:30px;height:30px;border-radius:9px;background:#22262c;display:flex;align-items:center;justify-content:center;font-size:13px}
+.appshot .node.done{background:var(--green);color:#fff}
+.appshot .node.now{outline:2px solid var(--green);outline-offset:2px}
+.appshot .msg{background:var(--cloud);border-radius:12px;padding:14px 16px;font-size:14px;color:#3a3d44;margin-bottom:10px}
+.appshot .msg.me{background:#E1EEF6;color:var(--cerulean-d);font-weight:600;margin-left:30px}
+.appshot .prog{height:8px;border-radius:6px;background:#22262c;overflow:hidden;margin-top:6px}
+.appshot .prog i{display:block;height:100%;width:62%;background:var(--green)}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;text-align:center}
+@media(max-width:680px){.stats{grid-template-columns:1fr}}
+.stat .n{font-size:46px;font-weight:800;letter-spacing:-.03em}
+.stat .n span{color:var(--cerulean)}
+.stats .stat:nth-child(2) .n span{color:var(--magenta)}
+.stats .stat:nth-child(3) .n span{color:var(--seagreen)}
+.stat .t{color:var(--slate);font-size:15px;margin-top:6px}
+
+/* cta band */
+.band{background:var(--cerulean);color:#fff;border-radius:26px;padding:60px;text-align:center;position:relative;overflow:hidden}
+.band h2{font-size:36px;max-width:620px;margin:0 auto}
+.band p{color:rgba(255,255,255,.86);margin:16px auto 28px;max-width:480px;font-size:17px}
+.band .glow{position:absolute;left:-100px;bottom:-140px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(245,180,0,.20),transparent 65%)}
+.band .btn-green{background:#fff;color:var(--cerulean-d)}
+.band .btn-green:hover{background:#EAF2F7}
+.band .btn-ghost{color:#fff;border-color:rgba(255,255,255,.5)}
+.band .btn-ghost:hover{border-color:#fff}
+
+/* dimensions */
+.dims{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:30px}
+@media(max-width:860px){.dims{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.dims{grid-template-columns:1fr}}
+.dim{background:#fff;border:1px solid #EEF1F4;border-radius:16px;padding:20px;transition:.2s}
+.dim:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(23,48,73,.08)}
+.dim .nn{font-size:13px;font-weight:800;letter-spacing:.02em}
+.dims .dim:nth-child(4n+1) .nn{color:var(--cerulean)}
+.dims .dim:nth-child(4n+2) .nn{color:var(--magenta)}
+.dims .dim:nth-child(4n+3) .nn{color:var(--gold-d)}
+.dims .dim:nth-child(4n+4) .nn{color:var(--seagreen)}
+.dim h4{font-size:15px;margin:5px 0;font-weight:800}
+.dim p{font-size:13px;color:var(--slate);margin:0}
+.contrast{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:28px}
+@media(max-width:620px){.contrast{grid-template-columns:1fr}}
+.contrast .c1,.contrast .c2{border-radius:20px;padding:24px 26px}
+.contrast .c1{background:var(--cloud);border:0}
+.contrast .c2{background:#E3F3EB;border:0;color:var(--ink)}
+.contrast h4{font-size:14px;letter-spacing:.06em;text-transform:uppercase;margin:0 0 10px;font-weight:700}
+.contrast .c1 h4{color:var(--slate)} .contrast .c2 h4{color:var(--seagreen-d)}
+.contrast ul{margin:0;padding-left:18px;font-size:14px}
+.contrast .c1 li{color:#3a3d44;margin-bottom:6px}
+.contrast .c2 li{color:#3a3d44;margin-bottom:6px}
+/* maturity ladder */
+.ladder{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:34px}
+@media(max-width:780px){.ladder{grid-template-columns:repeat(2,1fr)}}
+.rung{background:#E1EEF6;border:0;border-radius:16px;padding:20px;transition:.2s}
+.rung:hover{transform:translateY(-3px)}
+.ladder .rung:nth-child(4n+1){background:#E1EEF6}
+.ladder .rung:nth-child(4n+2){background:#FBE2EB}
+.ladder .rung:nth-child(4n+3){background:#FBEFCE}
+.ladder .rung:nth-child(4n+4){background:#E3F3EB}
+.rung .lv{font-size:12px;font-weight:700;color:#55606b;letter-spacing:.06em}
+.rung h4{font-size:16px;margin:6px 0;font-weight:800}
+.rung p{font-size:13px;color:var(--slate);margin:0}
+.scanbox{margin-top:30px;background:#E1EEF6;border:0;color:var(--ink);border-radius:22px;padding:34px;display:flex;justify-content:space-between;align-items:center;gap:22px;flex-wrap:wrap}
+.scanbox h3{font-size:22px;margin:0 0 6px}
+.scanbox p{color:var(--slate);font-size:15px;margin:0;max-width:440px}
+/* lvl up band */
+#levelup{padding:70px 0}
+.lvlband{position:relative;background:linear-gradient(150deg,#241B5E 0%,#171346 46%,#0E1030 100%);border:1px solid rgba(54,226,196,.18);border-radius:26px;padding:54px 56px;overflow:hidden;color:#fff;box-shadow:0 30px 70px rgba(20,18,56,.35)}
+.lvlglow{position:absolute;right:-120px;top:-120px;width:460px;height:460px;border-radius:50%;background:radial-gradient(circle,rgba(255,73,163,.30),transparent 64%);z-index:1}
+.lvlglow::after{content:"";position:absolute;left:-260px;bottom:-300px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(54,226,196,.26),transparent 64%)}
+.lvlmark{position:absolute;right:18px;bottom:-34px;width:250px;height:250px;color:rgba(255,255,255,.05);z-index:1}
+.lvlcontent{position:relative;z-index:2;max-width:640px}
+.lvlband .pill{display:inline-flex;align-items:center;gap:7px;background:rgba(54,226,196,.14);color:#7af0dd;border:1px solid rgba(54,226,196,.32);font-size:12px;font-weight:700;padding:7px 14px;border-radius:20px}
+.lvlhead{margin:18px 0 14px}
+.lvlkicker{display:block;font-size:21px;font-weight:700;color:#fff;letter-spacing:-.01em}
+.lvllogo{display:block;font-family:'Press Start 2P',monospace;font-size:38px;line-height:1;margin-top:14px}
+.lvllogo .lvl{color:#36E2C4;text-shadow:3px 3px 0 #FF49A3}
+.lvllogo .up{color:#FFD23F;text-shadow:3px 3px 0 #FF49A3}
+.lvlband .ld{font-size:18px;color:#b9bce4;max-width:520px}
+.lvltrack{display:flex;gap:8px;flex-wrap:wrap;margin:26px 0 30px}
+.ln{width:36px;height:36px;border-radius:9px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-family:'Press Start 2P',monospace;font-size:11px;color:#8f93c4}
+.ln.done{background:#36E2C4;color:#0E1030}
+.ln.now{outline:2px solid #FFD23F;outline-offset:2px;color:#fff;background:rgba(255,210,63,.14)}
+.lvlcta{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.lvlband .btn-green{background:#36E2C4;color:#0E1030;font-weight:700;box-shadow:0 8px 22px rgba(54,226,196,.32)}
+.lvlband .btn-green:hover{background:#2ED3B6;box-shadow:0 10px 26px rgba(54,226,196,.4)}
+.lvlsub{font-size:14px;color:#8f93c4}
+@media(max-width:680px){.lvlband{padding:36px 24px}.lvlkicker{font-size:18px}.lvllogo{font-size:30px}}
+/* lvl up uitleg */
+.lvlwhy{margin-top:48px}
+.lvlwhy .eyebrow{color:var(--green-d)}
+.lvlwhy h2{font-size:30px;max-width:640px;margin:8px 0 0}
+.lvlwhy .lead2{font-size:17px;color:#3a3d44;max-width:700px;margin-top:14px}
+.howgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:28px}
+@media(max-width:860px){.howgrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.howgrid{grid-template-columns:1fr}}
+.howstep{background:linear-gradient(155deg,#241B5E,#141240);border:1px solid rgba(54,226,196,.16);border-radius:18px;padding:22px;transition:.2s}
+.howstep:hover{transform:translateY(-3px);border-color:rgba(54,226,196,.34)}
+.howstep .s{width:32px;height:32px;border-radius:9px;background:rgba(54,226,196,.14);border:1px solid rgba(54,226,196,.34);color:#36E2C4;font-family:'Press Start 2P',monospace;font-size:12px;display:flex;align-items:center;justify-content:center}
+.howstep h4{font-size:15px;margin:14px 0 6px;font-weight:800;color:#fff}
+.howstep p{font-size:13.5px;color:#b9bce4;margin:0}
+/* leaderboard */
+.lbwrap{margin-top:34px;display:grid;grid-template-columns:1.3fr 1fr;gap:24px;align-items:start}
+@media(max-width:820px){.lbwrap{grid-template-columns:1fr}}
+.lbcard{background:linear-gradient(160deg,#241B5E,#0E1030);border:1px solid rgba(54,226,196,.16);color:#fff;border-radius:20px;padding:26px 28px;position:relative;overflow:hidden}
+.lbcard h3{font-size:20px;margin:0 0 4px;color:#fff}
+.lbcard .sub{color:#9c9fd0;font-size:13px;margin-bottom:14px}
+.lbrow{display:flex;align-items:center;gap:13px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:15px}
+.lbrow:last-child{border-bottom:0}
+.lbrow .rk{width:24px;font-weight:800;color:#8f93c4;text-align:center;font-family:'Press Start 2P',monospace;font-size:11px}
+.lbrow .rk.top{color:#FFD23F}
+.lbrow .av{width:30px;height:30px;border-radius:9px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-size:15px}
+.lbrow .nm{flex:1;font-weight:600}
+.lbrow .nm small{display:block;color:#8f93c4;font-size:12px;font-weight:400}
+.lbrow .sc{font-weight:800;text-align:right}
+.lbrow .sc small{display:block;color:#36E2C4;font-size:11px;font-weight:600}
+.lbrow.you{background:rgba(54,226,196,.12);border-radius:10px;margin:4px -10px;padding:11px 12px;border-bottom:0}
+.lbside{background:linear-gradient(160deg,#1C1750,#0E1030);border:1px solid rgba(54,226,196,.16);color:#fff;border-radius:20px;padding:24px}
+.lbside h4{font-size:16px;margin:0 0 6px;font-weight:800;color:#fff}
+.lbscore{font-size:42px;font-weight:800;letter-spacing:-.02em;color:#fff;margin-top:6px}
+.lbscore span{font-size:15px;color:#36E2C4;font-weight:700}
+.lbside p{font-size:14px;color:#b9bce4;margin:8px 0 0}
+.lbnote{font-size:12px;color:#9c9fd0;margin-top:12px;border-top:1px solid rgba(255,255,255,.12);padding-top:12px}
+.vbtag{display:inline-block;font-size:11px;font-weight:700;color:#0E1030;background:#36E2C4;padding:3px 9px;border-radius:20px;margin-bottom:12px}
+.vbtag.dark{background:rgba(54,226,196,.16);color:#7af0dd;border:1px solid rgba(54,226,196,.3)}
+/* footer */
+footer{border-top:1px solid var(--line);padding:48px 0;margin-top:30px}
+footer .row{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap}
+footer .lg-wm{width:150px;color:var(--ink);margin-bottom:12px}
+footer .col h4{font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--slate);margin-bottom:12px}
+footer .col a{display:block;font-size:14px;color:#3a3d44;padding:5px 0}
+footer .col a:hover{color:var(--ink)}
+footer .fine{margin-top:30px;color:var(--slate);font-size:13px}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="wm" viewBox="335 1820 1810 525">
+    <g transform="matrix(4.9452,0,0,4.9452,354.464,2312.19)">
+      <g transform="matrix(1,0,0,1,-5,0)">
+        <path d="M33.132,0.84C27.561,0.84 22.676,-0.462 18.477,-3.065C14.277,-5.669 11.002,-9.371 8.65,-14.172C6.299,-18.973 5.123,-24.663 5.123,-31.242C5.123,-37.877 6.299,-43.595 8.65,-48.396C11.002,-53.197 14.249,-56.899 18.393,-59.503C22.536,-62.106 27.281,-63.408 32.628,-63.408C35.931,-63.408 39.018,-62.918 41.887,-61.938C44.757,-60.959 47.325,-59.559 49.593,-57.739C51.86,-55.92 53.743,-53.757 55.241,-51.251C56.738,-48.746 57.767,-45.981 58.327,-42.958L50.097,-42.958C49.453,-44.974 48.599,-46.779 47.535,-48.375C46.471,-49.971 45.205,-51.342 43.735,-52.49C42.265,-53.638 40.606,-54.513 38.759,-55.115C36.911,-55.717 34.882,-56.018 32.67,-56.018C29.003,-56.018 25.671,-55.073 22.676,-53.183C19.68,-51.293 17.301,-48.508 15.537,-44.827C13.773,-41.145 12.892,-36.617 12.892,-31.242C12.892,-25.923 13.78,-21.43 15.558,-17.763C17.336,-14.095 19.75,-11.31 22.802,-9.406C25.853,-7.503 29.297,-6.551 33.132,-6.551C36.659,-6.551 39.767,-7.3 42.454,-8.797C45.142,-10.295 47.234,-12.423 48.732,-15.18C50.23,-17.938 50.979,-21.192 50.979,-24.943L53.372,-24.481L34.77,-24.481L34.77,-31.452L58.789,-31.452L58.789,-24.607C58.789,-19.428 57.683,-14.935 55.472,-11.128C53.26,-7.321 50.23,-4.374 46.38,-2.289C42.531,-0.203 38.115,0.84 33.132,0.84Z" style="fill:currentColor;fill-rule:nonzero;stroke:currentColor;stroke-width:5px;"/>
+      </g>
+      <path d="M69.143,0L69.143,-62.568L90.559,-62.568C95.43,-62.568 99.44,-61.736 102.589,-60.07C105.739,-58.404 108.076,-56.116 109.602,-53.204C111.128,-50.293 111.891,-46.975 111.891,-43.252C111.891,-39.529 111.128,-36.239 109.602,-33.384C108.076,-30.528 105.746,-28.296 102.61,-26.686C99.475,-25.076 95.472,-24.271 90.601,-24.271L73.594,-24.271L73.594,-31.368L90.223,-31.368C93.526,-31.368 96.179,-31.851 98.18,-32.817C100.182,-33.783 101.645,-35.154 102.568,-36.932C103.492,-38.71 103.954,-40.816 103.954,-43.252C103.954,-45.743 103.492,-47.906 102.568,-49.74C101.645,-51.573 100.175,-53.001 98.159,-54.023C96.144,-55.045 93.47,-55.556 90.139,-55.556L77.121,-55.556L77.121,0L69.143,0ZM105.088,0L89.971,-28.177L98.957,-28.177L114.326,0L105.088,0Z" style="fill:currentColor;fill-rule:nonzero;stroke:currentColor;stroke-width:5px;"/>
+    </g>
+    <g transform="matrix(4.9452,0,0,4.9452,251.34,1551.75)">
+      <path d="M141.307,115.988L166.148,153.841C167.43,155.794 169.602,156.979 171.938,157C174.275,157.02 176.467,155.874 177.784,153.943L187,140.426L196.216,153.943C197.624,156.007 200.024,157.165 202.516,156.981C205.007,156.797 207.212,155.299 208.3,153.051L250.885,65.105L238.284,59.003L200.971,136.064L192.784,124.057C191.48,122.144 189.315,121 187,121C184.685,121 182.52,122.144 181.216,124.057L172.111,137.411L153.012,108.307L141.307,115.988Z" style="fill:#E83F6F;fill-rule:nonzero;"/>
+    </g>
+    <g transform="matrix(4.9452,0,0,4.9452,1442.4,2312.19)">
+      <path d="M7.559,0L7.559,-62.568L16.965,-62.568L42.412,-22.55C43.084,-21.514 43.896,-20.184 44.848,-18.561C45.799,-16.937 46.828,-15.103 47.934,-13.06C49.04,-11.016 50.125,-8.832 51.188,-6.509L50.055,-6.509C49.803,-8.916 49.621,-11.219 49.509,-13.417C49.397,-15.614 49.327,-17.637 49.299,-19.484C49.271,-21.332 49.257,-22.9 49.257,-24.188L49.257,-62.568L57.235,-62.568L57.235,0L47.745,0L25.069,-35.609C24.034,-37.261 22.991,-38.962 21.941,-40.711C20.891,-42.461 19.694,-44.533 18.351,-46.926C17.007,-49.32 15.341,-52.28 13.354,-55.808L14.823,-55.808C14.963,-52.7 15.089,-49.831 15.201,-47.199C15.313,-44.568 15.404,-42.272 15.474,-40.313C15.544,-38.353 15.579,-36.813 15.579,-35.693L15.579,0L7.559,0Z" style="fill:currentColor;fill-rule:nonzero;"/>
+    </g>
+    <g transform="matrix(4.9452,0,0,4.9452,1442.4,2312.19)">
+      <path d="M17.886,-42.685C18.569,-41.497 19.206,-40.41 19.797,-39.425C20.856,-37.661 21.907,-35.946 22.951,-34.281C22.954,-34.276 22.957,-34.271 22.961,-34.267L45.636,1.343C46.095,2.064 46.891,2.5 47.745,2.5L57.235,2.5C58.616,2.5 59.735,1.381 59.735,0L59.735,-62.568C59.735,-63.949 58.616,-65.068 57.235,-65.068L49.257,-65.068C47.876,-65.068 46.757,-63.949 46.757,-62.568L46.757,-24.188C46.757,-23.066 46.767,-21.733 46.789,-20.189C45.91,-21.683 45.152,-22.919 44.516,-23.9L19.074,-63.91C18.616,-64.631 17.82,-65.068 16.965,-65.068L7.559,-65.068C6.178,-65.068 5.059,-63.949 5.059,-62.568L5.059,0C5.059,1.381 6.178,2.5 7.559,2.5L15.579,2.5C16.96,2.5 18.079,1.381 18.079,-0L18.079,-35.693C18.079,-36.835 18.044,-38.404 17.973,-40.402L17.886,-42.685ZM47.324,-8.806C46.799,-9.861 46.27,-10.882 45.735,-11.87C44.645,-13.886 43.63,-15.695 42.691,-17.296C41.762,-18.881 40.97,-20.179 40.315,-21.189C40.311,-21.196 40.307,-21.202 40.303,-21.208L15.592,-60.068L10.059,-60.068L10.059,-2.5L13.079,-2.5L13.079,-35.693C13.079,-36.792 13.044,-38.301 12.976,-40.223C12.906,-42.178 12.815,-44.468 12.703,-47.093C12.634,-48.726 12.559,-50.451 12.478,-52.267L11.176,-54.58C10.739,-55.354 10.747,-56.302 11.195,-57.069C11.643,-57.836 12.465,-58.308 13.354,-58.308L14.823,-58.308C16.16,-58.308 17.261,-57.256 17.321,-55.92L17.42,-53.681C18.6,-51.586 19.636,-49.743 20.531,-48.15C21.861,-45.781 23.045,-43.73 24.085,-41.998C25.124,-40.265 26.157,-38.58 27.183,-36.944L49.117,-2.5L54.735,-2.5L54.735,-60.068L51.757,-60.068C51.757,-60.068 51.757,-24.187 51.757,-24.188C51.757,-22.91 51.771,-21.355 51.799,-19.522C51.826,-17.702 51.895,-15.709 52.006,-13.544C52.062,-12.444 52.136,-11.318 52.228,-10.164C52.642,-9.313 53.053,-8.441 53.462,-7.549C53.816,-6.776 53.752,-5.874 53.292,-5.158C52.832,-4.442 52.04,-4.009 51.188,-4.009L50.055,-4.009C48.775,-4.009 47.701,-4.976 47.568,-6.249C47.478,-7.114 47.396,-7.967 47.324,-8.806Z" style="fill:currentColor;fill-rule:nonzero;"/>
+    </g>
+    <g transform="matrix(1.02778,0,0,1.02778,1771.89,2313.92)">
+      <path d="M58.594,-16.846C58.594,-11.377 56.616,-6.714 52.661,-2.856C48.706,1.001 43.994,2.93 38.525,2.93C33.057,2.93 28.345,1.001 24.39,-2.856C20.435,-6.714 18.457,-11.377 18.457,-16.846C18.457,-22.314 20.435,-27.026 24.39,-30.981C28.345,-34.937 33.057,-36.914 38.525,-36.914C43.994,-36.914 48.706,-34.937 52.661,-30.981C56.616,-27.026 58.594,-22.314 58.594,-16.846Z" style="fill:#E83F6F;fill-rule:nonzero;"/>
+      <path d="M182.813,-19.336L181.787,-19.336C179.639,-17.578 177.075,-15.356 174.097,-12.671C171.118,-9.985 167.627,-7.422 163.623,-4.98C159.814,-2.539 155.664,-0.415 151.172,1.392C146.68,3.198 141.797,4.102 136.523,4.102C122.363,4.102 111.255,-0.977 103.198,-11.133C95.142,-21.289 91.113,-35.156 91.113,-52.734C91.113,-64.844 93.359,-76.611 97.852,-88.037C102.344,-99.463 108.545,-109.717 116.455,-118.799C123.975,-127.49 132.91,-134.497 143.262,-139.819C153.613,-145.142 164.258,-147.803 175.195,-147.803C182.129,-147.803 188.745,-146.875 195.044,-145.02C201.343,-143.164 206.299,-141.064 209.912,-138.721L236.719,-145.605L238.477,-143.408L216.211,-48.926C215.43,-45.898 214.624,-42.212 213.794,-37.866C212.964,-33.521 212.549,-30.322 212.549,-28.271C212.549,-22.705 213.721,-18.945 216.064,-16.992C218.408,-15.039 222.363,-14.063 227.93,-14.063C229.785,-14.063 232.422,-14.355 235.84,-14.941C239.258,-15.527 241.895,-16.162 243.75,-16.846L241.553,-7.471C232.764,-3.955 226.221,-1.416 221.924,0.146C217.627,1.709 212.402,2.49 206.25,2.49C199.219,2.49 193.652,0.439 189.551,-3.662C185.449,-7.764 183.203,-12.988 182.813,-19.336ZM203.76,-111.914C203.76,-115.137 203.418,-118.213 202.734,-121.143C202.051,-124.072 200.635,-126.807 198.486,-129.346C196.533,-131.787 193.848,-133.74 190.43,-135.205C187.012,-136.67 182.715,-137.402 177.539,-137.402C170.41,-137.402 163.477,-135.059 156.738,-130.371C150,-125.684 143.945,-119.385 138.574,-111.475C133.496,-104.053 129.346,-95.068 126.123,-84.521C122.9,-73.975 121.289,-63.281 121.289,-52.441C121.289,-46.484 121.631,-41.211 122.314,-36.621C122.998,-32.031 124.316,-27.832 126.27,-24.023C128.125,-20.313 130.811,-17.432 134.326,-15.381C137.842,-13.33 142.285,-12.305 147.656,-12.305C153.125,-12.305 158.862,-13.843 164.868,-16.919C170.874,-19.995 177.637,-25.391 185.156,-33.105L203.76,-111.914Z" style="fill:#E83F6F;fill-rule:nonzero;"/>
+      <path d="M333.398,-15.967L331.201,-6.592C322.217,-2.979 315.039,-0.464 309.668,0.952C304.297,2.368 299.707,3.076 295.898,3.076C288.086,3.076 282.227,1.05 278.32,-3.003C274.414,-7.056 272.461,-12.061 272.461,-18.018C272.461,-20.264 272.656,-22.607 273.047,-25.049C273.438,-27.49 274.072,-30.566 274.951,-34.277L290.479,-96.533C291.26,-99.951 292.017,-103.613 292.749,-107.52C293.481,-111.426 293.848,-114.746 293.848,-117.48C293.848,-122.949 292.944,-126.587 291.138,-128.394C289.331,-130.2 285.645,-131.104 280.078,-131.104C277.93,-131.104 275.073,-130.762 271.509,-130.078C267.944,-129.395 265.234,-128.809 263.379,-128.32L265.576,-137.695C273.193,-141.113 280.029,-143.652 286.084,-145.313C292.139,-146.973 296.924,-147.803 300.439,-147.803C308.447,-147.803 314.258,-145.898 317.871,-142.09C321.484,-138.281 323.291,-133.154 323.291,-126.709C323.291,-124.951 323.096,-122.559 322.705,-119.531C322.314,-116.504 321.729,-113.477 320.947,-110.449L305.273,-48.193C304.297,-44.385 303.442,-40.649 302.71,-36.987C301.978,-33.325 301.611,-30.322 301.611,-27.979C301.611,-22.412 302.856,-18.604 305.347,-16.553C307.837,-14.502 311.865,-13.477 317.432,-13.477C319.287,-13.477 321.948,-13.721 325.415,-14.209C328.882,-14.697 331.543,-15.283 333.398,-15.967ZM343.799,-203.174C343.799,-197.607 341.992,-192.749 338.379,-188.599C334.766,-184.448 330.273,-182.373 324.902,-182.373C319.922,-182.373 315.625,-184.351 312.012,-188.306C308.398,-192.261 306.592,-196.777 306.592,-201.855C306.592,-207.227 308.398,-211.914 312.012,-215.918C315.625,-219.922 319.922,-221.924 324.902,-221.924C330.469,-221.924 335.01,-220.044 338.525,-216.284C342.041,-212.524 343.799,-208.154 343.799,-203.174Z" style="fill:#E83F6F;fill-rule:nonzero;"/>
+    </g>
+</symbol>
+  <symbol id="mark" viewBox="117.31 35.00 157.58 146.00">
+<path d="M141.307,115.988L166.148,153.841C167.43,155.794 169.602,156.979 171.938,157C174.275,157.02 176.467,155.874 177.784,153.943L187,140.426C187,140.426 196.216,153.943 196.216,153.943C197.624,156.007 200.024,157.165 202.516,156.981C205.007,156.797 207.212,155.299 208.3,153.051L250.885,65.105L238.284,59.003L200.971,136.064C200.971,136.064 192.784,124.057 192.784,124.057C191.48,122.144 189.315,121 187,121C184.685,121 182.52,122.144 181.216,124.057L172.111,137.411L153.012,108.307L141.307,115.988Z" style="fill:currentColor;"/>
+</symbol>
+  <symbol id="ic-bolt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></symbol>
+  <symbol id="ic-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></symbol>
+  <symbol id="ic-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.49 4.04 3 5.5l7 7Z"/></symbol>
+  <symbol id="ic-compass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88"/></symbol>
+  <symbol id="ic-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 7 13.5 15.5 8.5 10.5 2 17"/><path d="M16 7h6v6"/></symbol>
+  <symbol id="ic-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></symbol>
+  <symbol id="ic-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18"/></symbol>
+</defs></svg>
+
+<nav>
+  <div class="wrap inner">
+    <a href="#"><svg class="lg-wm"><use href="#wm"/></svg></a>
+    <div class="links">
+      <a href="#waarom">Waarom</a>
+      <a href="#waarde">Wat we doen</a>
+      <div class="dd">
+        <a tabindex="0">Tools</a>
+        <div class="ddmenu">
+          <a href="#maturity">AI-scan</a>
+          <a href="grwn-lvlup.html">LVL UP</a>
+          <a href="grwn-prompts.html">Prompt-tips</a>
+        </div>
+      </div>
+      <a href="#aanpak">Aanpak</a>
+      <a href="grwn-pricing.html">Prijzen</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="right">
+      <a href="#contact" style="font-weight:600;font-size:15px">Inloggen</a>
+      <a class="btn btn-green" href="#contact">Plan een demo</a>
+      <button class="hamb" aria-label="Menu" onclick="document.getElementById('mobmenu').classList.toggle('open')">☰</button>
+    </div>
+  </div>
+  <div class="mobmenu" id="mobmenu">
+    <a href="#waarom">Waarom</a>
+    <a href="#waarde">Wat we doen</a>
+    <a href="#maturity">AI-scan</a>
+    <a href="grwn-lvlup.html">LVL UP</a>
+    <a href="grwn-prompts.html">Prompt-tips</a>
+    <a href="#aanpak">Aanpak</a>
+    <a href="grwn-pricing.html">Prijzen</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+<script>document.querySelectorAll('#mobmenu a').forEach(function(a){a.addEventListener('click',function(){document.getElementById('mobmenu').classList.remove('open')})});</script>
+
+<header class="hero">
+  <div class="glow"></div>
+  <svg class="markbg"><use href="#mark"/></svg>
+  <div class="wrap">
+    <div class="eyebrow">AI-adoptie voor overheid &amp; semi-overheid</div>
+    <h1>Creëer <span class="g">samen</span> meer waarde.<br>Door te groeien met AI.</h1>
+    <p>Goed gebruikt is AI een hefboom: mensen groeien, werken prettiger en leveren meer. Maar in de praktijk liggen de tools stil, weet bijna niemand hoe, en blijft die waarde onbenut. Dat draaien we om — sámen, van laten zien wat kan tot het echt benutten. Menselijk en aantoonbaar.</p>
+    <div class="cta">
+      <a class="btn btn-green" href="#contact">Plan een kennismaking →</a>
+      <a class="tlink" href="#waarde" style="align-self:center">Ontdek onze aanpak →</a>
+    </div>
+  </div>
+</header>
+
+<div class="trust">
+  <div class="wrap">
+    <span>Vertrouwd door teams bij</span>
+    <span class="l">Gemeenten</span>
+    <span class="l">Onderwijs</span>
+    <span class="l">MKB</span>
+    <span class="l">Zorg</span>
+    <span class="l">Finance</span>
+  </div>
+</div>
+
+<section id="waarde">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow">De pijn — en wat wij eraan doen</div>
+      <h2>Vier dingen houden AI tegen.<br>Wij halen ze weg.</h2>
+      <p>Geen IT-project, geen losse training. Voor elke blokkade een concrete, menselijke remedie.</p>
+    </div>
+    <div class="pr">
+      <div class="prrow">
+        <div class="pain"><div class="lab">De pijn</div><h4>De tools liggen stil</h4><p>AI is aangeschaft, maar een paar enthousiastelingen gebruiken het — de rest niet. De licenties lopen door, het rendement blijft uit.</p></div>
+        <div class="rem"><div class="lab">Onze remedie</div><h4>Spelenderwijs echt gebruiken</h4><p>Met LVL UP gaan mensen op hun eigen werk met AI aan de slag — leuk en laagdrempelig. Zo verbreedt het gebruik van een paar naar de hele organisatie.</p></div>
+      </div>
+      <div class="prrow">
+        <div class="pain"><div class="lab">De pijn</div><h4>Je weet niet wat mogelijk is</h4><p>Je weet niet wat je niet weet. De grootste kansen blijven onzichtbaar, en AI blijft "iets voor later".</p></div>
+        <div class="rem"><div class="lab">Onze remedie</div><h4>Ogen openen voor wat kan</h4><p>We laten echte toepassingen zien op jullie eigen werk en vertalen ze naar jullie praktijk. Van abstract naar "dit wil ik ook".</p></div>
+      </div>
+      <div class="prrow">
+        <div class="pain"><div class="lab">De pijn</div><h4>Je kunt niet aantonen wat het oplevert</h4><p>Geen cijfers voor college, raad of RvB. Dus geen budget en geen mandaat om door te pakken.</p></div>
+        <div class="rem"><div class="lab">Onze remedie</div><h4>Zwart-op-wit zichtbaar</h4><p>We meten de voortgang én de waarde, en leveren een bestuursklaar rapport — inclusief hoe je staat ten opzichte van vergelijkbare organisaties.</p></div>
+      </div>
+      <div class="prrow">
+        <div class="pain"><div class="lab">De pijn</div><h4>Trainingen beklijven niet — en er is koudwatervrees</h4><p>Een cursus is zo vergeten. En zorgen over privacy, regels en "neemt het mijn werk af?" blijven onbesproken.</p></div>
+        <div class="rem"><div class="lab">Onze remedie</div><h4>Blijvende praktijk én het goede gesprek</h4><p>Geen eenmalige training, maar doorlopend oefenen op echt werk — plus een open gesprek over kansen, zorgen, ethiek en regels. Zo beklijft het, en ontstaat draagvlak.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pijn">
+  <div class="wrap">
+    <div class="center" style="margin-bottom:30px">
+      <div class="eyebrow">Klinkt dit bekend?</div>
+      <h2>Zo klinkt het in de praktijk.</h2>
+    </div>
+    <div class="voices">
+      <div class="voice cerulean"><div class="q" style="margin:0">"We hebben de tools, maar bijna niemand gebruikt ze."</div></div>
+      <div class="voice magenta"><div class="q" style="margin:0">"We kunnen niet aantonen wat het oplevert."</div></div>
+      <div class="voice gold"><div class="q" style="margin:0">"De training was na een maand weer weg."</div></div>
+      <div class="voice seagreen"><div class="q" style="margin:0">"We weten niet eens wat er mogelijk is."</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="reis">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow">Zo nemen we mensen mee</div>
+      <h2>Van inspiratie naar adoptie</h2>
+      <p>Geen wetenschappelijk model — gewoon hoe wij zien dat mensen écht meekomen met AI: niet door een tool op te leggen, maar stap voor stap.</p>
+    </div>
+    <div class="journey">
+      <div class="jstep">
+        <div class="jn">01 · INSPIRATIE</div>
+        <h4>Laten zien wat kan</h4>
+        <p>Echte AI-toepassingen op jullie eigen werk. We openen ogen voor wat mogelijk is.</p>
+        <div class="res">→ Het vonkje: "dit wil ik ook."</div>
+      </div>
+      <div class="jstep">
+        <div class="jn">02 · BEWUSTWORDING</div>
+        <h4>Wat betekent dit voor óns?</h4>
+        <p>Samen vertalen naar jullie praktijk, en zien waar je staat. Van algemeen naar persoonlijk relevant.</p>
+        <div class="res">→ Urgentie en richting.</div>
+      </div>
+      <div class="jstep">
+        <div class="jn">03 · EXPERIMENTEREN</div>
+        <h4>Veilig zelf doen</h4>
+        <p>Met LVL UP en kant-en-klare tools leren mensen spelenderwijs op echt werk.</p>
+        <div class="res">→ Eerste eigen successen, vertrouwen.</div>
+      </div>
+      <div class="jstep">
+        <div class="jn">04 · DISCUSSIE</div>
+        <h4>Samen betekenis geven</h4>
+        <p>Het goede gesprek over kansen, zorgen, ethiek en regels. Juist in de publieke sector cruciaal.</p>
+        <div class="res">→ Draagvlak en heldere kaders.</div>
+      </div>
+      <div class="jstep">
+        <div class="jn">05 · ADOPTIE</div>
+        <h4>Echt inbedden</h4>
+        <p>Verankeren in het dagelijks werk, meten wat het oplevert, en blijven groeien.</p>
+        <div class="res">→ AI die blijft — aantoonbaar.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="mens" class="product">
+  <div class="wrap">
+    <div class="row">
+      <div>
+        <div class="eyebrow">Onze overtuiging</div>
+        <h2>AI hoort mensen niet te vervangen, maar te bevrijden</h2>
+        <p>AI neemt het routinewerk. Je mensen krijgen tijd voor waar ze goed in zijn — en energie van krijgen. Sneller én warmer, voor medewerkers én klanten. We beginnen met luisteren en bouwen het sámen met je mensen — niet over ze heen.</p>
+        <a class="tlink" href="#contact" style="margin-top:24px">Praat met ons →</a>
+      </div>
+      <div class="appshot">
+        <div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#9aa3ad;margin-bottom:14px">AI neemt over</div>
+        <div class="msg">Rapportages &amp; samenvattingen</div>
+        <div class="msg">Mails sorteren &amp; opstellen</div>
+        <div class="msg">Data opzoeken &amp; verwerken</div>
+        <div style="height:1px;background:var(--line);margin:20px 0"></div>
+        <div style="font-size:12px;letter-spacing:.08em;color:var(--cerulean-d);font-weight:700;margin-bottom:14px">Jij krijgt terug</div>
+        <div class="msg me">Tijd voor je klant</div>
+        <div class="msg me">Ruimte om te creëren</div>
+        <div class="msg me">Aandacht voor je team</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="waarom">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow">Waarom GRWN</div>
+      <h2>Eén partner die adviseert, bouwt én opleidt</h2>
+      <p>AI-trajecten lopen stuk op de naden. Bij ons zit advies, bouwen én opleiden in één hand.</p>
+    </div>
+    <div class="cards">
+      <div class="card"><div class="ic"><svg><use href="#ic-compass"/></svg></div><h3>Advies én uitvoering</h3><p>Geen dik rapport — werkende AI in je eigen praktijk, vaak al in de eerste sessie.</p></div>
+      <div class="card"><div class="ic"><svg><use href="#ic-chart"/></svg></div><h3>Aantoonbare winst</h3><p>We meten wat het oplevert: tijd, kwaliteit, kosten. Zwart-op-wit.</p></div>
+      <div class="card"><div class="ic"><svg><use href="#ic-shield"/></svg></div><h3>Menselijk &amp; verantwoord</h3><p>We nemen je mensen mee en richten alles veilig in — AVG en AI Act geregeld.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="maturity" class="product">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow">AI-maturity</div>
+      <h2>Waar staat jouw organisatie?</h2>
+      <p>Bijna iedereen gebruikt AI. Minder dan 1% is er volwassen in. Waar sta jij?</p>
+    </div>
+    <div class="ladder">
+      <div class="rung"><div class="lv">Niveau 1</div><h4>Verkenner</h4><p>Je probeert wat uit. Losse tools, nog geen lijn.</p></div>
+      <div class="rung"><div class="lv">Niveau 2</div><h4>Gebruiker</h4><p>Handig voor jezelf, maar nog niet voor het team.</p></div>
+      <div class="rung"><div class="lv">Niveau 3</div><h4>Integrator</h4><p>AI zit in je processen en levert merkbaar tijd op.</p></div>
+      <div class="rung"><div class="lv">Niveau 4</div><h4>Versneller</h4><p>Geschaald en gemeten — je loopt voor op de rest.</p></div>
+      <div class="rung"><div class="lv">Niveau 5</div><h4>Vernieuwer</h4><p>AI verandert je werk, mens-centraal. Hier komt bijna niemand.</p></div>
+    </div>
+    <div class="scanbox">
+      <div>
+        <h3>Doe de gratis AI-scan</h3>
+        <p>Tien vragen, twee minuten. Direct je niveau en je eerste winst.</p>
+      </div>
+      <a class="btn btn-green" href="grwn-ai-maturity-scan.html">Start de scan →</a>
+    </div>
+  </div>
+</section>
+
+<section id="verdieping">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow">Verdieping</div>
+      <h2>Wat bedoelen we met opschalen en volwassenheid?</h2>
+      <p>AI gebruiken is een chatvenster. Volwassen zijn is: ingebed, gemeten, geborgd én gedragen. Opschalen is de weg daarheen.</p>
+    </div>
+    <div class="contrast">
+      <div class="c1">
+        <h4>AI gebruiken</h4>
+        <ul>
+          <li>Een paar mensen openen een chatbot</li>
+          <li>Losse prompts, incidenteel</li>
+          <li>Tool naast het bestaande werk</li>
+          <li>Niemand weet wat het oplevert</li>
+        </ul>
+      </div>
+      <div class="c2">
+        <h4>AI-volwassen worden</h4>
+        <ul>
+          <li>Teams gebruiken het in hun dagelijkse werk</li>
+          <li>Herbruikbare oplossingen op jullie eigen data</li>
+          <li>Processen heringericht rondom AI</li>
+          <li>Waarde gemeten, geborgd en gedragen</li>
+        </ul>
+      </div>
+    </div>
+    <p style="text-align:center;color:var(--slate);font-size:14px;margin:30px auto 0;max-width:640px">Echte volwassenheid meten we op zeven assen. De kunst is dat je op álle zeven tegelijk groeit — daarom haalt minder dan 1% het. Wij helpen je per as vooruit.</p>
+    <div class="dims">
+      <div class="dim"><div class="nn">01</div><h4>Strategie &amp; leiderschap</h4><p>AI hoort bij jullie richting, niet bij een los experiment.</p></div>
+      <div class="dim"><div class="nn">02</div><h4>Mensen &amp; vaardigheid</h4><p>Je team weet wanneer en hoe je AI inzet — en wanneer niet.</p></div>
+      <div class="dim"><div class="nn">03</div><h4>Processen</h4><p>AI zit verankerd in hoe het werk echt loopt.</p></div>
+      <div class="dim"><div class="nn">04</div><h4>Technologie &amp; data</h4><p>Eigen data veilig ontsloten, met de juiste tools.</p></div>
+      <div class="dim"><div class="nn">05</div><h4>Governance &amp; risico</h4><p>Beleid, veiligheid, AVG en de EU AI Act geregeld.</p></div>
+      <div class="dim"><div class="nn">06</div><h4>Waarde &amp; meten</h4><p>Je weet wat het oplevert en stuurt erop.</p></div>
+      <div class="dim"><div class="nn">07</div><h4>Cultuur &amp; mens</h4><p>AI ontlast mensen en wordt vertrouwd, niet gevreesd.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- LET OP: LVL UP-sectie. De live LVL UP-app draagt bewust GEEN GRWN-branding.
+     Zolang de GRWN-site niet gedeployed is, is de koppeling nergens publiek zichtbaar. -->
+<section id="levelup">
+  <div class="wrap">
+    <div class="lvlband">
+      <div class="lvlglow"></div>
+      <svg class="lvlmark"><use href="#mark"/></svg>
+      <div class="lvlcontent">
+        <span class="pill">🎮 Gratis mini-game</span>
+        <h2 class="lvlhead"><span class="lvlkicker">Daag jezelf uit met</span><span class="lvllogo"><span class="lvl">LVL</span> <span class="up">UP</span></span></h2>
+        <p class="ld">Speel je in tien levels naar AI-meesterschap. Een persoonlijke coach, echte opdrachten, jouw tempo. Groeien door te spelen.</p>
+        <div class="lvltrack">
+          <span class="ln done">🌱</span><span class="ln done">⚡</span><span class="ln now">3</span>
+          <span class="ln">4</span><span class="ln">5</span><span class="ln">6</span><span class="ln">7</span>
+          <span class="ln">8</span><span class="ln">9</span><span class="ln">👑</span>
+        </div>
+        <div class="lvlcta">
+          <a class="btn btn-green" href="grwn-lvlup.html">▸ Speel LVL UP</a>
+          <span class="lvlsub">Van Starter tot AI-Meester</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="lvlwhy">
+      <div class="eyebrow">De gedachte</div>
+      <h2>Theorie beklijft pas als je het dóét</h2>
+      <p class="lead2">Een goede training legt de basis — maar kennis zakt weg zonder oefening. LVL UP is de praktijk die de theorie laat beklijven: je groeit level voor level op je eigen werk, met een coach die meekijkt en een reden om door te gaan. Plezier is het mechanisme, groei het resultaat. Zo wordt opleiden geen eenmalig moment, maar een vaardigheid die blijft.</p>
+
+      <div class="howgrid">
+        <div class="howstep"><div class="s">1</div><h4>Niveaubepaling</h4><p>Een korte test peilt waar je écht staat. Bluffen werkt niet — de coach toetst je antwoord kritisch.</p></div>
+        <div class="howstep"><div class="s">2</div><h4>Speel je levels</h4><p>Echte opdrachten op je eigen werk, van Starter tot AI-Meester. Level 1 tot en met 10.</p></div>
+        <div class="howstep"><div class="s">3</div><h4>Je coach kijkt mee</h4><p>Directe, persoonlijke feedback. Je kiest zelf het coach-karakter dat bij je past.</p></div>
+        <div class="howstep"><div class="s">4</div><h4>Je score groeit mee</h4><p>Elke voltooide quest levert punten op. Samen vormen ze je AI-score — die meereist over alles wat je speelt.</p></div>
+      </div>
+    </div>
+
+    <div class="lbwrap">
+      <div class="lbcard">
+        <span class="vbtag dark" id="lbtag">Voorbeeld</span>
+        <h3>🏆 Het leaderboard</h3>
+        <div class="sub">Eén score, die meetelt binnen je team en — geanonimiseerd — tegen anderen.</div>
+        <div id="lbrows">
+          <div class="lbrow"><span class="rk top">1</span><span class="av">👑</span><span class="nm">Mark_91</span><span class="sc">2.940<small>Level 9</small></span></div>
+          <div class="lbrow"><span class="rk top">2</span><span class="av">⚡</span><span class="nm">saskia.v</span><span class="sc">2.610<small>Level 8</small></span></div>
+          <div class="lbrow"><span class="rk top">3</span><span class="av">🔧</span><span class="nm">RobinK</span><span class="sc">2.180<small>Level 7</small></span></div>
+          <div class="lbrow"><span class="rk">4</span><span class="av">📊</span><span class="nm">lisa_b</span><span class="sc">1.760<small>Level 6</small></span></div>
+          <div class="lbrow you"><span class="rk">5</span><span class="av">🌱</span><span class="nm">Jij</span><span class="sc">1.480<small>Level 6</small></span></div>
+        </div>
+      </div>
+      <div class="lbside">
+        <span class="vbtag">Voorbeeld</span>
+        <h4>Jouw AI-score</h4>
+        <div class="lbscore">1.480 <span>punten</span></div>
+        <p>Level 6 · AI-Bouwer. Nog 280 punten tot de top 3 van je team.</p>
+        <p class="lbnote">Je score loopt door over élke game en challenge — niet per spel los, maar als één doorlopende stand die laat zien hoe ver je écht bent met AI.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="prompttips" style="padding-top:0">
+  <div class="wrap">
+    <div class="promptcard">
+      <div class="ic-lg"><svg><use href="#ic-spark"/></svg></div>
+      <div>
+        <div class="eyebrow">Zelf aan de slag</div>
+        <h2>We helpen je alvast een beetje op weg</h2>
+        <p>Praktische prompt-tips waarmee je vandaag al meer uit AI haalt. Geen account, geen drempel — gewoon doen en zelf het verschil merken.</p>
+        <a class="tlink" href="grwn-prompts.html">Bekijk de prompt-tips →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="aanpak" class="product" style="background:#fff;border-top:1px solid var(--line)">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow">De aanpak</div>
+      <h2>Van eerste gesprek tot blijvende verandering</h2>
+      <p>Geen rapport in de la. We beginnen met luisteren en werken mee in jouw praktijk — sámen met je mensen, tot het draait.</p>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <div class="ic">1</div>
+        <h3>Scan</h3>
+        <p>Waar lekt tijd, waar wint AI? Concreet in kaart.</p>
+      </div>
+      <div class="card">
+        <div class="ic">2</div>
+        <h3>Inrichten</h3>
+        <p>De juiste AI ingebouwd in je dagelijkse werk. Veilig.</p>
+      </div>
+      <div class="card">
+        <div class="ic">3</div>
+        <h3>Borgen</h3>
+        <p>We blijven tot het vanzelfsprekend is — ook als wij weg zijn.</p>
+      </div>
+    </div>
+    <div class="stats" style="margin-top:54px">
+      <div class="stat"><div class="n">40<span>%</span></div><div class="t">minder tijd aan routinewerk</div></div>
+      <div class="stat"><div class="n">2<span>×</span></div><div class="t">sneller van idee naar uitvoering</div></div>
+      <div class="stat"><div class="n">+</div><div class="t">meer ruimte voor mens en klant</div></div>
+    </div>
+    <p style="text-align:center;color:var(--slate);font-size:13px;margin-top:22px">Indicatieve cijfers — we maken ze concreet voor jouw organisatie.</p>
+  </div>
+</section>
+
+<section id="stemmen">
+  <div class="wrap">
+    <div class="center">
+      <h2><span class="ital">Organisaties</span> kiezen GRWN om menselijker te groeien met AI</h2>
+    </div>
+    <div class="voices">
+      <div class="voice cerulean">
+        <div class="q">"Wat eerst een dag kostte, doen we nu vóór de lunch."</div>
+        <div class="who">Teamlead · gemeente</div>
+      </div>
+      <div class="voice magenta">
+        <div class="q">"Eindelijk AI die onze mensen ontlast in plaats van vervangt."</div>
+        <div class="who">HR-manager · MKB</div>
+      </div>
+      <div class="voice gold">
+        <div class="q">"Binnen één sessie draaide er iets wat we nú nog gebruiken."</div>
+        <div class="who">Operationeel manager · dienstverlening</div>
+      </div>
+      <div class="voice seagreen">
+        <div class="q">"We zien zwart-op-wit wat het oplevert — in tijd én rust."</div>
+        <div class="who">Directeur · zorg</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" style="padding-top:0">
+  <div class="wrap">
+    <div class="band">
+      <div class="glow"></div>
+      <div style="position:relative;z-index:2">
+        <h2>Klaar om efficiënter én menselijker te werken?</h2>
+        <p>Plan een vrijblijvende kennismaking. We laten zien waar AI het snelst verschil maakt.</p>
+        <a class="btn btn-green" href="#" onclick="return false">Plan een kennismaking →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="row">
+      <div style="max-width:280px">
+        <svg class="lg-wm" style="margin-bottom:12px"><use href="#wm"/></svg>
+        <p class="fine" style="margin-top:0">GRWN.ai — mens én AI, samen omhoog.</p>
+      </div>
+      <div class="col"><h4>Diensten</h4><a href="#waarde">Wat we doen</a><a href="#mens">Vermenselijken</a><a href="#aanpak">Aanpak</a></div>
+      <div class="col"><h4>Bedrijf</h4><a href="#">Over GRWN</a><a href="#">Cases</a><a href="#contact">Contact</a></div>
+      <div class="col"><h4>Volg</h4><a href="#">LinkedIn</a><a href="#">Nieuwsbrief</a></div>
+    </div>
+    <div class="fine">© 2026 GRWN · grwn.ai · with AI</div>
+  </div>
+</footer>
+
+<script>
+/* Live leaderboard — haalt echte top-scores op; valt terug op de voorbeeldrijen als de backend er nog niet is. */
+(function(){
+  var API="https://ai-team-challenge.vercel.app/api/score?top=5";
+  var box=document.getElementById("lbrows"); if(!box) return;
+  var AV=["👑","⚡","🔧","📊","🌱","🚀","🎯","💡"];
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];});}
+  fetch(API).then(function(r){return r.json();}).then(function(d){
+    if(!d||!d.ok||!d.leaderboard||!d.leaderboard.length) return; // geen data: voorbeeld blijft staan
+    box.innerHTML=d.leaderboard.map(function(p,i){
+      var rk=i<3?'<span class="rk top">'+(i+1)+'</span>':'<span class="rk">'+(i+1)+'</span>';
+      var tot=Number(p.total||0).toLocaleString("nl-NL");
+      return '<div class="lbrow">'+rk+'<span class="av">'+AV[i%AV.length]+'</span><span class="nm">'+esc(p.name||"Speler")+'</span><span class="sc">'+tot+'<small>Level '+(p.level||1)+'</small></span></div>';
+    }).join("");
+    var tag=document.getElementById("lbtag"); if(tag) tag.textContent="Live";
+  }).catch(function(){});
+})();
+</script>
+</body>
+</html>

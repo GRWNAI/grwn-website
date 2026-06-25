@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GRWN — Prompt-tips</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#173049; --ink2:#0F2336; --cloud:#F6F9FB; --white:#fff; --cream:#FBFCFD;
+  --green:#2274A5; --green-d:#1A5D85; --slate:#5C6873; --mint:#E4F0F6; --line:#EAEEF1;
+  --accent:#E83F6F; --accent-soft:#FCE6EE; --aqua:#8FD0E8;
+  --gold:#F5B400; --gold-d:#B07E00; --magenta:#E83F6F; --magenta-d:#C72C58;
+  --cerulean:#2274A5; --cerulean-d:#1A5D85; --seagreen:#32936F; --seagreen-d:#26765A;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--cloud);line-height:1.65;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;line-height:1.12;margin:0}
+p{margin:0}
+a{color:inherit}
+.wrap{max-width:880px;margin:0 auto;padding:0 24px}
+.lg-wm{width:169px;color:var(--ink)}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--cerulean-d)}
+.hero{background:linear-gradient(180deg,#F1F8FB,#fff);color:var(--ink);padding:56px 0 48px}
+.hero h1{font-size:38px;margin:22px 0 12px}
+.hero p{font-size:18px;color:var(--slate);max-width:600px}
+.back{display:inline-block;margin-top:22px;font-size:14px;color:var(--cerulean-d);text-decoration:none}
+.back:hover{color:var(--ink)}
+section{padding:48px 0;border-bottom:1px solid var(--line)}
+.sec-eyebrow{font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--cerulean-d);margin-bottom:8px}
+h2{font-size:26px;margin-bottom:12px}
+.lead{font-size:16.5px;color:#3a3d44;max-width:680px}
+.crit{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:24px 0}
+@media(max-width:680px){.crit{grid-template-columns:repeat(2,1fr)}}
+.cl{background:#E1EEF6;border:0;border-radius:24px;padding:16px;transition:transform .15s ease}
+.cl:hover{transform:translateY(-4px)}
+.crit .cl:nth-child(4n+1){background:#E1EEF6}
+.crit .cl:nth-child(4n+2){background:#FBE2EB}
+.crit .cl:nth-child(4n+3){background:#FBEFCE}
+.crit .cl:nth-child(4n+4){background:#E3F3EB}
+.cl .l{font-size:22px;font-weight:800;color:var(--cerulean-d)}
+.cl h4{font-size:15px;margin:4px 0 5px}
+.cl p{font-size:13px;color:var(--slate)}
+.promptbox{position:relative;background:#E1EEF6;border-radius:24px;padding:20px 20px 18px;margin-top:16px}
+.promptbox pre{margin:0;white-space:pre-wrap;font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:13.5px;line-height:1.6;color:var(--ink2)}
+.copybtn{position:absolute;top:12px;right:12px;border:0;background:var(--cerulean);color:#fff;font:inherit;font-size:12px;font-weight:600;padding:6px 14px;border-radius:999px;cursor:pointer;box-shadow:0 8px 22px rgba(34,116,165,.22)}
+.copybtn:hover{background:var(--cerulean-d);color:#fff}
+.copybtn.done{color:#fff;background:var(--seagreen);box-shadow:none}
+.fw{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}
+@media(max-width:680px){.fw{grid-template-columns:1fr}}
+.fwc{background:#E1EEF6;border:0;border-radius:24px;padding:22px;transition:transform .15s ease}
+.fwc:hover{transform:translateY(-4px)}
+.fw .fwc:nth-child(4n+1){background:#E1EEF6}
+.fw .fwc:nth-child(4n+2){background:#FBE2EB}
+.fw .fwc:nth-child(4n+3){background:#FBEFCE}
+.fw .fwc:nth-child(4n+4){background:#E3F3EB}
+.fwc h3{font-size:18px}
+.fwc .sub{font-size:13px;color:var(--slate);margin:2px 0 12px}
+.fwc ul{margin:0;padding-left:16px;font-size:14px;color:#3a3d44}
+.fwc li{margin-bottom:6px}
+.fwc b{color:var(--ink)}
+.ex h3{font-size:16px;margin-top:22px}
+.note{background:var(--mint);border-radius:18px;padding:16px 18px;font-size:14.5px;color:var(--ink2);margin-top:22px}
+.note b{color:var(--ink)}
+.band{background:var(--cerulean);color:#fff;border-radius:24px;padding:40px;text-align:center;margin:40px 0}
+.band h2{font-size:26px}
+.band p{color:rgba(255,255,255,.85);margin:12px auto 22px;max-width:460px;font-size:16px}
+.btn{display:inline-block;background:#fff;color:var(--cerulean-d);font-weight:700;font-size:15px;padding:13px 26px;border-radius:999px;text-decoration:none;box-shadow:0 8px 22px rgba(0,0,0,.12)}
+.btn:hover{background:var(--cream)}
+footer{padding:34px 0;color:var(--slate);font-size:13px}
+footer .lg-wm{width:135px;color:var(--ink);margin-bottom:10px}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="wmonly" viewBox="335 1820 1810 525">
+    <g transform="matrix(4.9452,0,0,4.9452,354.464,2312.19)">
+      <g transform="matrix(1,0,0,1,-5,0)">
+        <path d="M33.132,0.84C27.561,0.84 22.676,-0.462 18.477,-3.065C14.277,-5.669 11.002,-9.371 8.65,-14.172C6.299,-18.973 5.123,-24.663 5.123,-31.242C5.123,-37.877 6.299,-43.595 8.65,-48.396C11.002,-53.197 14.249,-56.899 18.393,-59.503C22.536,-62.106 27.281,-63.408 32.628,-63.408C35.931,-63.408 39.018,-62.918 41.887,-61.938C44.757,-60.959 47.325,-59.559 49.593,-57.739C51.86,-55.92 53.743,-53.757 55.241,-51.251C56.738,-48.746 57.767,-45.981 58.327,-42.958L50.097,-42.958C49.453,-44.974 48.599,-46.779 47.535,-48.375C46.471,-49.971 45.205,-51.342 43.735,-52.49C42.265,-53.638 40.606,-54.513 38.759,-55.115C36.911,-55.717 34.882,-56.018 32.67,-56.018C29.003,-56.018 25.671,-55.073 22.676,-53.183C19.68,-51.293 17.301,-48.508 15.537,-44.827C13.773,-41.145 12.892,-36.617 12.892,-31.242C12.892,-25.923 13.78,-21.43 15.558,-17.763C17.336,-14.095 19.75,-11.31 22.802,-9.406C25.853,-7.503 29.297,-6.551 33.132,-6.551C36.659,-6.551 39.767,-7.3 42.454,-8.797C45.142,-10.295 47.234,-12.423 48.732,-15.18C50.23,-17.938 50.979,-21.192 50.979,-24.943L53.372,-24.481L34.77,-24.481L34.77,-31.452L58.789,-31.452L58.789,-24.607C58.789,-19.428 57.683,-14.935 55.472,-11.128C53.26,-7.321 50.23,-4.374 46.38,-2.289C42.531,-0.203 38.115,0.84 33.132,0.84Z" style="fill:currentColor;fill-rule:nonzero;stroke:currentColor;stroke-width:5px;"/>
+      </g>
+      <path d="M69.143,0L69.143,-62.568L90.559,-62.568C95.43,-62.568 99.44,-61.736 102.589,-60.07C105.739,-58.404 108.076,-56.116 109.602,-53.204C111.128,-50.293 111.891,-46.975 111.891,-43.252C111.891,-39.529 111.128,-36.239 109.602,-33.384C108.076,-30.528 105.746,-28.296 102.61,-26.686C99.475,-25.076 95.472,-24.271 90.601,-24.271L73.594,-24.271L73.594,-31.368L90.223,-31.368C93.526,-31.368 96.179,-31.851 98.18,-32.817C100.182,-33.783 101.645,-35.154 102.568,-36.932C103.492,-38.71 103.954,-40.816 103.954,-43.252C103.954,-45.743 103.492,-47.906 102.568,-49.74C101.645,-51.573 100.175,-53.001 98.159,-54.023C96.144,-55.045 93.47,-55.556 90.139,-55.556L77.121,-55.556L77.121,0L69.143,0ZM105.088,0L89.971,-28.177L98.957,-28.177L114.326,0L105.088,0Z" style="fill:currentColor;fill-rule:nonzero;stroke:currentColor;stroke-width:5px;"/>
+    </g>
+    <g transform="matrix(4.9452,0,0,4.9452,251.34,1551.75)">
+      <path d="M141.307,115.988L166.148,153.841C167.43,155.794 169.602,156.979 171.938,157C174.275,157.02 176.467,155.874 177.784,153.943L187,140.426L196.216,153.943C197.624,156.007 200.024,157.165 202.516,156.981C205.007,156.797 207.212,155.299 208.3,153.051L250.885,65.105L238.284,59.003L200.971,136.064L192.784,124.057C191.48,122.144 189.315,121 187,121C184.685,121 182.52,122.144 181.216,124.057L172.111,137.411L153.012,108.307L141.307,115.988Z" style="fill:#E83F6F;fill-rule:nonzero;"/>
+    </g>
+    <g transform="matrix(4.9452,0,0,4.9452,1442.4,2312.19)">
+      <path d="M7.559,0L7.559,-62.568L16.965,-62.568L42.412,-22.55C43.084,-21.514 43.896,-20.184 44.848,-18.561C45.799,-16.937 46.828,-15.103 47.934,-13.06C49.04,-11.016 50.125,-8.832 51.188,-6.509L50.055,-6.509C49.803,-8.916 49.621,-11.219 49.509,-13.417C49.397,-15.614 49.327,-17.637 49.299,-19.484C49.271,-21.332 49.257,-22.9 49.257,-24.188L49.257,-62.568L57.235,-62.568L57.235,0L47.745,0L25.069,-35.609C24.034,-37.261 22.991,-38.962 21.941,-40.711C20.891,-42.461 19.694,-44.533 18.351,-46.926C17.007,-49.32 15.341,-52.28 13.354,-55.808L14.823,-55.808C14.963,-52.7 15.089,-49.831 15.201,-47.199C15.313,-44.568 15.404,-42.272 15.474,-40.313C15.544,-38.353 15.579,-36.813 15.579,-35.693L15.579,0L7.559,0Z" style="fill:currentColor;fill-rule:nonzero;"/>
+    </g>
+    <g transform="matrix(4.9452,0,0,4.9452,1442.4,2312.19)">
+      <path d="M17.886,-42.685C18.569,-41.497 19.206,-40.41 19.797,-39.425C20.856,-37.661 21.907,-35.946 22.951,-34.281C22.954,-34.276 22.957,-34.271 22.961,-34.267L45.636,1.343C46.095,2.064 46.891,2.5 47.745,2.5L57.235,2.5C58.616,2.5 59.735,1.381 59.735,0L59.735,-62.568C59.735,-63.949 58.616,-65.068 57.235,-65.068L49.257,-65.068C47.876,-65.068 46.757,-63.949 46.757,-62.568L46.757,-24.188C46.757,-23.066 46.767,-21.733 46.789,-20.189C45.91,-21.683 45.152,-22.919 44.516,-23.9L19.074,-63.91C18.616,-64.631 17.82,-65.068 16.965,-65.068L7.559,-65.068C6.178,-65.068 5.059,-63.949 5.059,-62.568L5.059,0C5.059,1.381 6.178,2.5 7.559,2.5L15.579,2.5C16.96,2.5 18.079,1.381 18.079,-0L18.079,-35.693C18.079,-36.835 18.044,-38.404 17.973,-40.402L17.886,-42.685ZM47.324,-8.806C46.799,-9.861 46.27,-10.882 45.735,-11.87C44.645,-13.886 43.63,-15.695 42.691,-17.296C41.762,-18.881 40.97,-20.179 40.315,-21.189C40.311,-21.196 40.307,-21.202 40.303,-21.208L15.592,-60.068L10.059,-60.068L10.059,-2.5L13.079,-2.5L13.079,-35.693C13.079,-36.792 13.044,-38.301 12.976,-40.223C12.906,-42.178 12.815,-44.468 12.703,-47.093C12.634,-48.726 12.559,-50.451 12.478,-52.267L11.176,-54.58C10.739,-55.354 10.747,-56.302 11.195,-57.069C11.643,-57.836 12.465,-58.308 13.354,-58.308L14.823,-58.308C16.16,-58.308 17.261,-57.256 17.321,-55.92L17.42,-53.681C18.6,-51.586 19.636,-49.743 20.531,-48.15C21.861,-45.781 23.045,-43.73 24.085,-41.998C25.124,-40.265 26.157,-38.58 27.183,-36.944L49.117,-2.5L54.735,-2.5L54.735,-60.068L51.757,-60.068C51.757,-60.068 51.757,-24.187 51.757,-24.188C51.757,-22.91 51.771,-21.355 51.799,-19.522C51.826,-17.702 51.895,-15.709 52.006,-13.544C52.062,-12.444 52.136,-11.318 52.228,-10.164C52.642,-9.313 53.053,-8.441 53.462,-7.549C53.816,-6.776 53.752,-5.874 53.292,-5.158C52.832,-4.442 52.04,-4.009 51.188,-4.009L50.055,-4.009C48.775,-4.009 47.701,-4.976 47.568,-6.249C47.478,-7.114 47.396,-7.967 47.324,-8.806Z" style="fill:currentColor;fill-rule:nonzero;"/>
+    </g>
+    <g transform="matrix(1.02778,0,0,1.02778,1771.89,2313.92)">
+      <path d="M58.594,-16.846C58.594,-11.377 56.616,-6.714 52.661,-2.856C48.706,1.001 43.994,2.93 38.525,2.93C33.057,2.93 28.345,1.001 24.39,-2.856C20.435,-6.714 18.457,-11.377 18.457,-16.846C18.457,-22.314 20.435,-27.026 24.39,-30.981C28.345,-34.937 33.057,-36.914 38.525,-36.914C43.994,-36.914 48.706,-34.937 52.661,-30.981C56.616,-27.026 58.594,-22.314 58.594,-16.846Z" style="fill:#E83F6F;fill-rule:nonzero;"/>
+      <path d="M182.813,-19.336L181.787,-19.336C179.639,-17.578 177.075,-15.356 174.097,-12.671C171.118,-9.985 167.627,-7.422 163.623,-4.98C159.814,-2.539 155.664,-0.415 151.172,1.392C146.68,3.198 141.797,4.102 136.523,4.102C122.363,4.102 111.255,-0.977 103.198,-11.133C95.142,-21.289 91.113,-35.156 91.113,-52.734C91.113,-64.844 93.359,-76.611 97.852,-88.037C102.344,-99.463 108.545,-109.717 116.455,-118.799C123.975,-127.49 132.91,-134.497 143.262,-139.819C153.613,-145.142 164.258,-147.803 175.195,-147.803C182.129,-147.803 188.745,-146.875 195.044,-145.02C201.343,-143.164 206.299,-141.064 209.912,-138.721L236.719,-145.605L238.477,-143.408L216.211,-48.926C215.43,-45.898 214.624,-42.212 213.794,-37.866C212.964,-33.521 212.549,-30.322 212.549,-28.271C212.549,-22.705 213.721,-18.945 216.064,-16.992C218.408,-15.039 222.363,-14.063 227.93,-14.063C229.785,-14.063 232.422,-14.355 235.84,-14.941C239.258,-15.527 241.895,-16.162 243.75,-16.846L241.553,-7.471C232.764,-3.955 226.221,-1.416 221.924,0.146C217.627,1.709 212.402,2.49 206.25,2.49C199.219,2.49 193.652,0.439 189.551,-3.662C185.449,-7.764 183.203,-12.988 182.813,-19.336ZM203.76,-111.914C203.76,-115.137 203.418,-118.213 202.734,-121.143C202.051,-124.072 200.635,-126.807 198.486,-129.346C196.533,-131.787 193.848,-133.74 190.43,-135.205C187.012,-136.67 182.715,-137.402 177.539,-137.402C170.41,-137.402 163.477,-135.059 156.738,-130.371C150,-125.684 143.945,-119.385 138.574,-111.475C133.496,-104.053 129.346,-95.068 126.123,-84.521C122.9,-73.975 121.289,-63.281 121.289,-52.441C121.289,-46.484 121.631,-41.211 122.314,-36.621C122.998,-32.031 124.316,-27.832 126.27,-24.023C128.125,-20.313 130.811,-17.432 134.326,-15.381C137.842,-13.33 142.285,-12.305 147.656,-12.305C153.125,-12.305 158.862,-13.843 164.868,-16.919C170.874,-19.995 177.637,-25.391 185.156,-33.105L203.76,-111.914Z" style="fill:#E83F6F;fill-rule:nonzero;"/>
+      <path d="M333.398,-15.967L331.201,-6.592C322.217,-2.979 315.039,-0.464 309.668,0.952C304.297,2.368 299.707,3.076 295.898,3.076C288.086,3.076 282.227,1.05 278.32,-3.003C274.414,-7.056 272.461,-12.061 272.461,-18.018C272.461,-20.264 272.656,-22.607 273.047,-25.049C273.438,-27.49 274.072,-30.566 274.951,-34.277L290.479,-96.533C291.26,-99.951 292.017,-103.613 292.749,-107.52C293.481,-111.426 293.848,-114.746 293.848,-117.48C293.848,-122.949 292.944,-126.587 291.138,-128.394C289.331,-130.2 285.645,-131.104 280.078,-131.104C277.93,-131.104 275.073,-130.762 271.509,-130.078C267.944,-129.395 265.234,-128.809 263.379,-128.32L265.576,-137.695C273.193,-141.113 280.029,-143.652 286.084,-145.313C292.139,-146.973 296.924,-147.803 300.439,-147.803C308.447,-147.803 314.258,-145.898 317.871,-142.09C321.484,-138.281 323.291,-133.154 323.291,-126.709C323.291,-124.951 323.096,-122.559 322.705,-119.531C322.314,-116.504 321.729,-113.477 320.947,-110.449L305.273,-48.193C304.297,-44.385 303.442,-40.649 302.71,-36.987C301.978,-33.325 301.611,-30.322 301.611,-27.979C301.611,-22.412 302.856,-18.604 305.347,-16.553C307.837,-14.502 311.865,-13.477 317.432,-13.477C319.287,-13.477 321.948,-13.721 325.415,-14.209C328.882,-14.697 331.543,-15.283 333.398,-15.967ZM343.799,-203.174C343.799,-197.607 341.992,-192.749 338.379,-188.599C334.766,-184.448 330.273,-182.373 324.902,-182.373C319.922,-182.373 315.625,-184.351 312.012,-188.306C308.398,-192.261 306.592,-196.777 306.592,-201.855C306.592,-207.227 308.398,-211.914 312.012,-215.918C315.625,-219.922 319.922,-221.924 324.902,-221.924C330.469,-221.924 335.01,-220.044 338.525,-216.284C342.041,-212.524 343.799,-208.154 343.799,-203.174Z" style="fill:#E83F6F;fill-rule:nonzero;"/>
+    </g>
+</symbol>
+<symbol id="mark" viewBox="117.31 35.00 157.58 146.00">
+<path d="M141.307,115.988L166.148,153.841C167.43,155.794 169.602,156.979 171.938,157C174.275,157.02 176.467,155.874 177.784,153.943L187,140.426C187,140.426 196.216,153.943 196.216,153.943C197.624,156.007 200.024,157.165 202.516,156.981C205.007,156.797 207.212,155.299 208.3,153.051L250.885,65.105L238.284,59.003L200.971,136.064C200.971,136.064 192.784,124.057 192.784,124.057C191.48,122.144 189.315,121 187,121C184.685,121 182.52,122.144 181.216,124.057L172.111,137.411L153.012,108.307L141.307,115.988Z" style="fill:currentColor;"/>
+</symbol>
+</defs></svg>
+
+<header class="hero">
+  <div class="wrap">
+    <svg class="lg-wm"><use href="#wmonly"/></svg>
+    <div class="eyebrow" style="margin-top:22px">Prompt-tips</div>
+    <h1>Beter werken met AI begint bij een betere vraag</h1>
+    <p>Prompten is geen magie. Met een beetje structuur haal je er twee keer zoveel uit. Hieronder onze favoriete frameworks en kant-en-klare prompts om vandaag te gebruiken.</p>
+    <a class="back" href="index.html">← terug naar GRWN</a>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="sec-eyebrow">Eerst dit</div>
+    <h2>Waarom werken deze frameworks?</h2>
+    <p class="lead">Een framework is geen trucje, maar een <b>checklist die voorkomt dat je het belangrijkste vergeet</b>. AI is namelijk een spiegel: een vage vraag erin, een vaag antwoord eruit. Structuur haalt het giswerk eruit — voor de AI én voor jezelf.</p>
+    <div class="fw" style="margin-top:22px">
+      <div class="fwc"><h3>AI vult gaten zélf in</h3><p style="font-size:14px;color:#3a3d44;margin:0">Geef je weinig context, dan gokt de AI — meestal het meest gemiddelde, generieke antwoord. Een framework dwingt je het belangrijke wél mee te geven.</p></div>
+      <div class="fwc"><h3>Een rol stuurt kwaliteit</h3><p style="font-size:14px;color:#3a3d44;margin:0">"Jij bent een ervaren jurist" levert heel ander werk dan geen rol. Je kiest in één zin zowel de expertise als de toon.</p></div>
+      <div class="fwc"><h3>Format bespaart herwerk</h3><p style="font-size:14px;color:#3a3d44;margin:0">Vraag je om 5 bullets, een tabel of max 120 woorden, dan krijg je dat — geen knip- en plakwerk en bijsturen achteraf.</p></div>
+      <div class="fwc"><h3>Interview maakt aannames zichtbaar</h3><p style="font-size:14px;color:#3a3d44;margin:0">Laat je de AI eerst vragen stellen, dan kom je vooraf achter wat je zélf nog niet scherp had. Daar zit vaak de grootste winst.</p></div>
+    </div>
+    <p class="lead" style="margin-top:20px">Kortom: je krijgt in één keer raak in plaats van vijf keer bijsturen. Dát is de tijdwinst — en precies waarom een beetje structuur zoveel oplevert.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-eyebrow">Voor beginners</div>
+    <h2>Hoe gebruik je dit?</h2>
+    <p class="lead">Nog nooit zo gewerkt? In vier stappen ben je weg.</p>
+    <div class="fw" style="margin-top:22px">
+      <div class="fwc"><h3>1 · Open je AI</h3><p style="font-size:14px;color:#3a3d44;margin:0">Bijvoorbeeld ChatGPT, Claude of Copilot. Een gewoon chatvenster, meer heb je niet nodig.</p></div>
+      <div class="fwc"><h3>2 · Kopieer een prompt</h3><p style="font-size:14px;color:#3a3d44;margin:0">Klik op "Kopieer" bij een voorbeeld hieronder en plak 'm in het chatvenster.</p></div>
+      <div class="fwc"><h3>3 · Zet je eigen tekst erbij</h3><p style="font-size:14px;color:#3a3d44;margin:0">Waar <b>[plak hier ...]</b> staat, zet je je eigen mail, document of vraag.</p></div>
+      <div class="fwc"><h3>4 · Praat terug</h3><p style="font-size:14px;color:#3a3d44;margin:0">Niet goed? Zeg "korter", "formeler" of "geef 3 opties". Het is een gesprek, geen eenmalige opdracht.</p></div>
+    </div>
+    <div class="note"><b>Begin klein.</b> Pak één taak die je elke week doet en probeer 'm één keer met AI. Dat is genoeg om het verschil te voelen.</div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-eyebrow">Framework #1 · onze favoriet</div>
+    <h2>CRIT — maak AI je denkpartner</h2>
+    <p class="lead">De kracht zit in de <b>I van Interview</b>: je laat de AI éérst jóu bevragen, zodat het antwoord echt klopt. Eerst begrijpen, dan bouwen — geen losse opdracht, maar een gesprek.</p>
+    <p style="font-size:14px;font-weight:600;color:var(--green-d);margin-top:10px">Wanneer? Voor lastige denkvraagstukken en belangrijke teksten — als je AI wilt als sparringpartner, niet als snelle typemachine.</p>
+    <div class="crit">
+      <div class="cl"><div class="l">C</div><h4>Context</h4><p>Schets de situatie. Waar gaat het over, wat speelt er?</p></div>
+      <div class="cl"><div class="l">R</div><h4>Role</h4><p>Geef de AI een rol. "Jij bent een ervaren…"</p></div>
+      <div class="cl"><div class="l">I</div><h4>Interview</h4><p>Laat de AI eerst vragen stellen vóór 'ie antwoordt.</p></div>
+      <div class="cl"><div class="l">T</div><h4>Task</h4><p>Benoem de concrete taak en wat je wilt krijgen.</p></div>
+    </div>
+    <div class="promptbox">
+      <button class="copybtn">Kopieer</button>
+      <pre>Context: Ik ben teamleider bij een gemeente. Mijn team verwerkt veel bezwaarschriften en onze standaardbrieven zijn juridisch correct maar onpersoonlijk.
+Role: Jij bent een ervaren juridisch tekstschrijver die helder, correct én menselijk schrijft.
+Interview: Stel me eerst 3 vragen die je nodig hebt om dit goed te doen. Wacht op mijn antwoorden.
+Task: Help me daarna een standaard-antwoordbrief opstellen die juridisch klopt en toch warm en begrijpelijk is.</pre>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-eyebrow">Nog twee handige frameworks</div>
+    <h2>CO-STAR &amp; RACE</h2>
+    <div class="fw">
+      <div class="fwc">
+        <h3>CO-STAR</h3>
+        <div class="sub">Voor content, communicatie &amp; tone-of-voice</div>
+        <ul>
+          <li><b>C</b>ontext — de achtergrond</li>
+          <li><b>O</b>bjective — wat moet het bereiken</li>
+          <li><b>S</b>tyle — schrijfstijl</li>
+          <li><b>T</b>one — toon (formeel, warm…)</li>
+          <li><b>A</b>udience — voor wie</li>
+          <li><b>R</b>esponse — gewenst format</li>
+        </ul>
+        <p style="font-size:13px;font-weight:600;color:var(--green-d);margin:14px 0 0">Wanneer? Mails, posts &amp; teksten waar toon en doelgroep tellen.</p>
+      </div>
+      <div class="fwc">
+        <h3>RACE</h3>
+        <div class="sub">Snel &amp; simpel — 80% resultaat, 20% moeite</div>
+        <ul>
+          <li><b>R</b>ole — welke rol neemt de AI</li>
+          <li><b>A</b>ction — wat moet 'ie doen</li>
+          <li><b>C</b>ontext — relevante achtergrond</li>
+          <li><b>E</b>xecute — verwachting &amp; format</li>
+        </ul>
+        <p style="font-size:13px;font-weight:600;color:var(--green-d);margin:14px 0 0">Wanneer? Snelle, alledaagse klusjes — in 10 seconden een goede prompt.</p>
+      </div>
+    </div>
+    <div class="note">Onthoud: een framework is een <b>startpunt</b>, geen toverformule. En check cruciale feiten altijd zelf — AI kan overtuigend onzin geven (hallucinaties). Vraag gerust: "Waar baseer je dit op?"</div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-eyebrow">Niveau omhoog</div>
+    <h2>Claude Skills — maak goede output herhaalbaar</h2>
+    <p class="lead">Een <b>Skill</b> is een herbruikbaar "recept" dat je de AI meegeeft: een vaste set instructies (en eventueel voorbeelden) voor een taak die je vaker doet. De AI pakt de juiste Skill er automatisch bij — je hoeft niet elke keer een lange prompt te typen.</p>
+    <div class="fw" style="margin-top:18px">
+      <div class="fwc">
+        <h3>Voorbeelden</h3>
+        <ul>
+          <li>"Schrijf altijd in onze huisstijl"</li>
+          <li>"Maak een verslag volgens ons vaste format"</li>
+          <li>"Beoordeel volgens onze criteria"</li>
+        </ul>
+      </div>
+      <div class="fwc">
+        <h3>Waarom het goud is</h3>
+        <p style="font-size:14px;color:#3a3d44">Je legt je manier van werken <b>één keer</b> vast, en iedereen in je team profiteert. Goede output wordt zo herhaalbaar — niet afhankelijk van wie toevallig de prompt typt. Precies wat AI-volwassenheid (opschalen) vraagt.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-eyebrow">Ga een stap verder</div>
+    <h2>Laat de AI je dwingen om het goed te doen</h2>
+    <p class="lead">Plak deze "modus"-prompt aan het begin van een gesprek. De AI geeft dan pas antwoord nadat 'ie je netjes door het framework heeft geleid — inclusief de vragen die je anders vergeet.</p>
+    <div class="ex">
+      <h3>CRIT-modus aanzetten</h3>
+      <div class="promptbox"><button class="copybtn">Kopieer</button><pre>Vanaf nu werk je volgens de CRIT-methode. Geef nog GEEN eindantwoord.
+Doorloop eerst deze stappen met mij:
+1. Context — vraag me naar de situatie en het doel.
+2. Role — stel voor welke rol jij het beste aanneemt en vraag of dat klopt.
+3. Interview — stel me 3 tot 5 gerichte vragen die je écht nodig hebt. Stel ze duidelijk en wacht op mijn antwoorden.
+4. Task — vat samen wat de taak is en vraag mijn akkoord.
+Pas als ik "akkoord" zeg, lever je het eindresultaat. Begin nu bij stap 1.</pre></div>
+
+      <h3>Prompt-bouwer (CO-STAR)</h3>
+      <div class="promptbox"><button class="copybtn">Kopieer</button><pre>Help me een sterke prompt bouwen volgens CO-STAR. Stel me één voor één korte vragen over: Context, Objective (doel), Style, Tone, Audience en Response (format). Wacht steeds op mijn antwoord.
+Als we klaar zijn, geef je mij de complete, kant-en-klare prompt die ik kan kopiëren — en daarna voer je 'm uit als ik dat wil.</pre></div>
+    </div>
+    <div class="note"><b>Nog krachtiger: een Skill.</b> Een Skill laat de AI dit <b>automatisch</b> doen — geen prompt meer plakken. Download onze CRIT-coach Skill: <a href="crit-coach.skill" download style="color:var(--green-d);font-weight:600">crit-coach.skill</a> — en voeg 'm toe in Claude via <b>Instellingen → Capabilities</b>.</div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-eyebrow">AI die vanzelf werkt</div>
+    <h2>Scheduled tasks — zet AI op de automaat</h2>
+    <p class="lead">Je kunt Claude taken automatisch laten uitvoeren op een vast moment: elke ochtend, elke maandag, elke maand. Je legt het één keer vast — daarna gebeurt het vanzelf, op tijd, zonder dat iemand eraan hoeft te denken.</p>
+    <div class="fw" style="margin-top:22px">
+      <div class="fwc"><h3>Dagelijkse briefing</h3><p style="font-size:14px;color:#3a3d44;margin:0">Elke ochtend een samenvatting van je agenda, mails of het nieuws in jouw sector.</p></div>
+      <div class="fwc"><h3>Wekelijks rapport</h3><p style="font-size:14px;color:#3a3d44;margin:0">Elke maandag automatisch een overzicht van cijfers, voortgang of openstaande acties.</p></div>
+      <div class="fwc"><h3>Inbox-triage</h3><p style="font-size:14px;color:#3a3d44;margin:0">Dagelijks je mail laten sorteren en de drie belangrijkste eruit laten lichten.</p></div>
+      <div class="fwc"><h3>Monitoring &amp; seintjes</h3><p style="font-size:14px;color:#3a3d44;margin:0">Dagelijks checken of er iets verandert (een prijs, een vacature, een pagina) — en alléén melden als het zo is.</p></div>
+    </div>
+    <div class="note"><b>Waarom dit voor bedrijven goud is:</b> terugkerend werk dat tijd vreet, gebeurt vanzelf — consistent en op tijd. Precies wat opschalen betekent: je legt je werkwijze één keer vast en de hele organisatie profiteert er elke dag van.</div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-eyebrow">Direct te gebruiken</div>
+    <h2>Kant-en-klare prompts</h2>
+    <p class="lead">Kopieer, plak je eigen tekst erbij en ga. Werkt in elke AI-chat.</p>
+
+    <div class="ex">
+      <h3>1 · Samenvatten voor een drukke leidinggevende — inclusief de besluiten</h3>
+      <div class="promptbox"><button class="copybtn">Kopieer</button><pre>Vat het onderstaande document samen voor een drukke leidinggevende. Geef: 1) de kern in 3 zinnen, 2) de 5 belangrijkste punten, 3) de besluiten die genomen moeten worden. Helder, geen jargon.
+
+[plak hier het document]</pre></div>
+
+      <h3>2 · Een mail korter, professioneel én vriendelijk maken — met één duidelijke vraag</h3>
+      <div class="promptbox"><button class="copybtn">Kopieer</button><pre>Herschrijf de onderstaande mail zodat 'ie professioneel én vriendelijk is, kort, en eindigt met één duidelijke vraag. Behoud alle feiten.
+
+[plak hier de mail]</pre></div>
+
+      <h3>3 · Notulen omzetten naar besluiten + actiepunten (met eigenaar &amp; deadline)</h3>
+      <div class="promptbox"><button class="copybtn">Kopieer</button><pre>Zet deze vergadernotulen om in een overzicht met: besluiten, actiepunten (met eigenaar en deadline) en openstaande vragen. Mis niets en verzin niets.
+
+[plak hier de notulen]</pre></div>
+
+      <h3>4 · Een kort, vriendelijk concept-antwoord op een klantvraag schrijven</h3>
+      <div class="promptbox"><button class="copybtn">Kopieer</button><pre>Jij bent klantenservice van [bedrijf]. Schrijf een concept-antwoord op de klantvraag hieronder: vriendelijk, oplossingsgericht, maximaal 120 woorden. Ontbreekt er info? Vraag dan eerst door.
+
+[plak hier de klantvraag]</pre></div>
+    </div>
+  </div>
+</section>
+
+<section style="border-bottom:0;padding-bottom:0">
+  <div class="wrap">
+    <div class="band">
+      <h2>Wil je dit in je hele team?</h2>
+      <p>GRWN helpt je organisatie AI structureel en menselijk inzetten — van losse prompts naar vaste, herbruikbare werkwijzen.</p>
+      <a class="btn" href="index.html#contact">Plan een kennismaking →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap"><svg class="lg-wm"><use href="#wmonly"/></svg><div>© 2026 GRWN · with AI · Prompt-tips v1.0</div></div>
+</footer>
+
+<script>
+document.querySelectorAll('.copybtn').forEach(function(b){
+  b.addEventListener('click',function(){
+    var pre=b.parentNode.querySelector('pre');
+    navigator.clipboard.writeText(pre.textContent).then(function(){
+      var t=b.textContent;b.textContent='Gekopieerd ✓';b.classList.add('done');
+      setTimeout(function(){b.textContent=t;b.classList.remove('done');},1500);
+    });
+  });
+});
+</script>
+</body>
+</html>
