@@ -349,7 +349,7 @@ footer .fine{margin-top:30px;color:var(--slate);font-size:13px}
         <a tabindex="0">Tools</a>
         <div class="ddmenu">
           <a href="#maturity">AI-scan</a>
-          <a href="grwn-lvlup.html">LVL UP</a>
+          <a href="/lvlup/">LVL UP</a>
           <a href="grwn-prompts.html">Prompt-tips</a>
         </div>
       </div>
@@ -367,7 +367,7 @@ footer .fine{margin-top:30px;color:var(--slate);font-size:13px}
     <a href="#waarom">Waarom</a>
     <a href="#waarde">Wat we doen</a>
     <a href="#maturity">AI-scan</a>
-    <a href="grwn-lvlup.html">LVL UP</a>
+    <a href="/lvlup/">LVL UP</a>
     <a href="grwn-prompts.html">Prompt-tips</a>
     <a href="#aanpak">Aanpak</a>
     <a href="grwn-pricing.html">Prijzen</a>
@@ -606,7 +606,7 @@ footer .fine{margin-top:30px;color:var(--slate);font-size:13px}
           <span class="ln">8</span><span class="ln">9</span><span class="ln">👑</span>
         </div>
         <div class="lvlcta">
-          <a class="btn btn-green" href="grwn-lvlup.html">▸ Speel LVL UP</a>
+          <a class="btn btn-green" href="/lvlup/">▸ Speel LVL UP</a>
           <span class="lvlsub">Van Starter tot AI-Meester</span>
         </div>
       </div>
@@ -753,7 +753,7 @@ footer .fine{margin-top:30px;color:var(--slate);font-size:13px}
 <script>
 /* Live leaderboard — haalt echte top-scores op; valt terug op de voorbeeldrijen als de backend er nog niet is. */
 (function(){
-  var API="https://ai-team-challenge.vercel.app/api/score?top=5";
+  var API="/api/score?top=5";
   var box=document.getElementById("lbrows"); if(!box) return;
   var AV=["👑","⚡","🔧","📊","🌱","🚀","🎯","💡"];
   function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];});}
