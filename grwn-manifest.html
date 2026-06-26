@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/favicon.svg">
+<title>GRWN.ai — Ons manifest</title>
+<meta name="description" content="Waar GRWN voor staat: onze missie, visie, kernwaarden en het manifest. Mens én AI, samen omhoog.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#173049; --cloud:#F6F9FB; --slate:#5C6873; --line:#EAEEF1; --mint:#E4F0F6;
+  --cerulean:#2274A5; --cerulean-d:#1A5D85; --magenta:#E83F6F; --magenta-d:#C72C58;
+  --seagreen:#32936F; --seagreen-d:#26765A; --gold:#F5B400; --gold-d:#B07E00;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--cloud);line-height:1.7;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.15}
+a{text-decoration:none;color:inherit}
+.wrap{max-width:1140px;margin:0 auto;padding:0 28px}
+/* GRWN unified nav */
+.gnav{position:sticky;top:0;z-index:10000;background:rgba(255,255,255,.9);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid #EAEEF1;box-shadow:0 2px 10px rgba(23,48,73,.07);font-family:Inter,system-ui,-apple-system,sans-serif}
+.gnav .gn-in{max-width:1140px;margin:0 auto;padding:0 28px;height:68px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.gnav a{text-decoration:none;color:#3a3d44}
+.gnav .gn-logo{display:flex;align-items:center}
+.gnav .gn-logo img{width:150px;display:block}
+.gnav .gn-links{display:flex;align-items:center;gap:30px;font-size:15px;font-weight:500}
+.gnav .gn-links>a:hover{color:#173049}
+.gnav .gn-dd{position:relative;display:flex;align-items:center}
+.gnav .gn-dd>a{cursor:pointer}
+.gnav .gn-dd>a::after{content:"▾";font-size:10px;margin-left:5px;color:#5C6873}
+.gnav .gn-menu{position:absolute;top:100%;left:0;display:none;flex-direction:column;background:#fff;border:1px solid #EAEEF1;border-radius:12px;box-shadow:0 14px 34px rgba(0,0,0,.10);padding:8px;min-width:190px;margin-top:10px}
+.gnav .gn-menu::before{content:"";position:absolute;top:-10px;left:0;right:0;height:10px}
+.gnav .gn-dd:hover .gn-menu,.gnav .gn-dd:focus-within .gn-menu{display:flex}
+.gnav .gn-menu a{padding:9px 12px;border-radius:8px;font-size:14.5px;white-space:nowrap}
+.gnav .gn-menu a:hover{background:#F6F9FB;color:#173049}
+.gnav .gn-right{display:flex;align-items:center;gap:14px}
+.gnav .gn-cta{background:#2274A5;color:#fff;font-weight:700;font-size:15px;padding:11px 22px;border-radius:999px}
+.gnav .gn-cta:hover{background:#1A5D85}
+.gnav .gn-hamb{display:none;background:0;border:0;font-size:24px;color:#173049;cursor:pointer;line-height:1;padding:4px}
+.gnav .gn-mob{display:none;flex-direction:column;background:#fff;border-top:1px solid #EAEEF1;padding:6px 28px 16px}
+.gnav .gn-mob a{padding:12px 0;font-size:16px;font-weight:500;border-bottom:1px solid #F2F5F7}
+.gnav .gn-mob.open{display:flex}
+@media(max-width:860px){.gnav .gn-links,.gnav .gn-cta{display:none}.gnav .gn-hamb{display:block}}
+/* hero */
+.hero{background:linear-gradient(180deg,#fff,var(--mint));padding:60px 0 48px}
+.hero .eyebrow{font-size:13px;font-weight:600;letter-spacing:.04em;color:var(--magenta-d)}
+.hero h1{font-size:40px;margin:16px 0 12px}
+.hero h1 .g{font-family:Georgia,serif;font-style:italic;font-weight:400;color:var(--magenta)}
+.hero p{color:var(--slate);font-size:18px;max-width:620px}
+/* sections */
+section{padding:56px 0}
+.eyebrow{font-size:13px;font-weight:600;letter-spacing:.04em}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+@media(max-width:760px){.grid2{grid-template-columns:1fr}}
+.mvbox{border:1px solid var(--line);border-radius:18px;background:#fff;padding:26px 28px}
+.mvbox .lbl{font-size:12px;font-weight:700;letter-spacing:.06em}
+.mvbox p{font-size:18px;margin:10px 0 0;color:#2a2f36}
+h2.sec{font-size:28px;margin-bottom:4px}
+.sub{color:var(--slate);margin-bottom:24px}
+.sub b{color:var(--ink)}
+.val{border:1px solid var(--line);border-radius:18px;background:#fff;padding:24px 26px}
+.val .vn{font-size:17px;font-weight:800;letter-spacing:.02em}
+.val .vs{font-family:Georgia,serif;font-style:italic;margin:6px 0 12px;font-size:15.5px}
+.val .vr{font-size:15px;color:#3a3d44;margin-bottom:12px}
+.val .vm{font-size:14px;color:var(--slate)}.val .vm b{color:var(--ink);font-weight:600}
+.val .vd{font-size:14px;color:var(--slate);margin-top:8px}.val .vd b{color:var(--ink);font-weight:600}
+/* manifest */
+.manifestsec{background:#fff;border-top:1px solid var(--line)}
+.manifest{max-width:760px}
+.manifest .intro{font-family:Georgia,serif;font-style:italic;font-size:22px;color:var(--ink);margin-bottom:20px;line-height:1.5}
+.manifest p{font-size:17.5px;color:#2a2f36;margin:0 0 18px;line-height:1.8}
+.manifest .sign{font-weight:800;color:var(--ink);letter-spacing:.02em;font-size:17px}
+/* cta band */
+.band{background:linear-gradient(180deg,#F7FBFC,#EAF4F1);border:1px solid var(--line);border-radius:24px;padding:44px;text-align:center;margin:10px 0 0}
+.band h2{font-size:28px}
+.band p{color:var(--slate);font-size:17px;max-width:480px;margin:12px auto 22px}
+.band .btn{display:inline-block;background:var(--cerulean);color:#fff;font-weight:700;font-size:16px;padding:14px 28px;border-radius:999px}
+.band .btn:hover{background:var(--cerulean-d)}
+footer{padding:34px 0;color:var(--slate);font-size:12.5px;text-align:center;border-top:1px solid var(--line);background:#fff}
+</style>
+</head>
+<body>
+
+<nav class="gnav">
+  <div class="gn-in">
+    <a class="gn-logo" href="index.html"><img src="grwn-logo.svg" alt="GRWN.ai"></a>
+    <div class="gn-links">
+      <a href="index.html#waarom">Waarom</a>
+      <a href="index.html#waarde">Wat we doen</a>
+      <div class="gn-dd"><a tabindex="0">Tools</a>
+        <div class="gn-menu">
+          <a href="grwn-ai-maturity-scan.html">AI-scan</a>
+          <a href="lvlup/">LVL UP</a>
+          <a href="grwn-prompts.html">Prompt-tips</a>
+        </div>
+      </div>
+      <a href="index.html#aanpak">Aanpak</a>
+      <a href="grwn-pricing.html">Prijzen</a>
+      <a href="grwn-manifest.html">Manifest</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+    <div class="gn-right">
+      <a class="gn-cta" href="index.html#contact">Plan een demo</a>
+      <button class="gn-hamb" aria-label="Menu" onclick="this.closest('.gnav').querySelector('.gn-mob').classList.toggle('open')">&#9776;</button>
+    </div>
+  </div>
+  <div class="gn-mob">
+    <a href="index.html#waarom">Waarom</a>
+    <a href="index.html#waarde">Wat we doen</a>
+    <a href="grwn-ai-maturity-scan.html">AI-scan</a>
+    <a href="lvlup/">LVL UP</a>
+    <a href="grwn-prompts.html">Prompt-tips</a>
+    <a href="index.html#aanpak">Aanpak</a>
+    <a href="grwn-pricing.html">Prijzen</a>
+    <a href="grwn-manifest.html">Manifest</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Het hart van GRWN</div>
+    <h1>Waar wij <span class="g">in geloven</span>.</h1>
+    <p>Onze missie, onze visie en de waarden waar we elke dag naar handelen — en het manifest dat vertelt waarom we GRWN zijn begonnen.</p>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="grid2">
+      <div class="mvbox"><div class="lbl" style="color:var(--magenta-d)">MISSIE</div><p>Wij helpen mensen en organisaties AI omarmen als een natuurlijk verlengstuk van zichzelf — zodat ze beter worden in wat ze al doen. De verschuiving komt er hoe dan ook; wij zorgen dat jij meegroeit en voorop loopt, hand in hand met AI.</p></div>
+      <div class="mvbox"><div class="lbl" style="color:var(--seagreen-d)">VISIE</div><p>Een wereld waarin werken met AI net zo gewoon en menselijk is als het gebruiken van een computer — zonder angst, vol vertrouwen. Waarin niemand achterblijft, omdat we het samen, stap voor stap en met plezier doen.</p></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <h2 class="sec">Onze kernwaarden</h2>
+    <p class="sub"><b>Luister. Durf. Groei.</b> — mens én AI, samen omhoog.</p>
+    <div class="grid2">
+      <div class="val">
+        <div class="vn" style="color:var(--cerulean-d)">LUISTER EERST</div>
+        <div class="vs" style="color:var(--cerulean-d)">"We beginnen nooit bij de tool, altijd bij de mens."</div>
+        <div class="vr">Elke goede AI-stap begint bij begrijpen wie ermee werkt en waar ze tegenaan lopen. Techniek is het antwoord, nooit het startpunt.</div>
+        <div class="vm"><b>Mindset:</b> De vraag áchter de vraag boven de snelle oplossing.</div>
+        <div class="vd"><b>Wat we doen:</b> We stellen door, kijken mee op de werkvloer, en bouwen pas als we de mens snappen.</div>
+      </div>
+      <div class="val">
+        <div class="vn" style="color:var(--magenta-d)">VERSTERK DE MENS</div>
+        <div class="vs" style="color:var(--magenta-d)">"AI is een partner, geen vervanger."</div>
+        <div class="vr">We zetten AI in om mensen te bevrijden van routine, zodat ze tijd en energie houden voor waar ze écht goed in zijn. Werken vanuit je talent kost geen energie — het geeft het. En zo staan we ook naast jou: mét je team, niet eroverheen.</div>
+        <div class="vm"><b>Mindset:</b> Mensen sterker maken boven mensen wegautomatiseren.</div>
+        <div class="vd"><b>Wat we doen:</b> We nemen je mensen mee, halen de angst weg, en maken de winst van AI voor iedereen voelbaar.</div>
+      </div>
+      <div class="val">
+        <div class="vn" style="color:var(--seagreen-d)">GROEI ALS RITME</div>
+        <div class="vs" style="color:var(--seagreen-d)">"Elke maand een stapje verder, geen eenmalig vuurwerk."</div>
+        <div class="vr">AI-volwassenheid is geen project met een einddatum, maar een gewoonte. Volgehouden kleine stappen verslaan de grote eenmalige sprint.</div>
+        <div class="vm"><b>Mindset:</b> Volhouden boven scoren.</div>
+        <div class="vd"><b>Wat we doen:</b> We blijven naast je staan, maken vooruitgang zichtbaar, en vieren elke stap.</div>
+      </div>
+      <div class="val">
+        <div class="vn" style="color:var(--gold-d)">LEF BOVEN PERFECTIE</div>
+        <div class="vs" style="color:var(--gold-d)">"Klein beginnen, groot durven, snel leren."</div>
+        <div class="vr">Wie wacht op het perfecte plan, wordt ingehaald. Wij experimenteren, leren snel, en zijn eerlijk over wat wél en níét werkt.</div>
+        <div class="vm"><b>Mindset:</b> Doen en leren boven afwachten en analyseren.</div>
+        <div class="vd"><b>Wat we doen:</b> We starten klein en concreet, leveren waarde in weken niet maanden, en zeggen het direct als iets niet werkt.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="manifestsec">
+  <div class="wrap">
+    <h2 class="sec" style="margin-bottom:20px">Het GRWN-manifest</h2>
+    <div class="manifest">
+      <p class="intro">Ooit waren het schoenen die ons verder lieten lopen. Toen de machine die onze handen versterkte. Daarna de computer die ons denken vergrootte.</p>
+      <p>Steeds was de angst hetzelfde — en steeds bleek het tegendeel: niet de techniek nam het over, maar de mens die haar omarmde liep voorop. AI is de volgende stap. Geen vervanger, maar een verlengstuk van onszelf. Iets dat ons helpt beter te worden in wat we al doen.</p>
+      <p>Toch staan we op een tweesprong. Er ontstaat een wereld met twee soorten mensen: zij die mét AI werken, en zij die het niet doen. De eersten worden sterker, sneller, vrijer. Dat is geen dreigement — het is een uitnodiging. Want de verschuiving komt er hoe dan ook. De enige vraag is of je er klaar voor bent.</p>
+      <p>Wij geloven dat werken vanuit je talent je energie gééft. Dat succes zelfvertrouwen kweekt. En dat AI, goed ingezet, precies dát mogelijk maakt: het neemt het routinewerk weg, zodat mensen tijd en energie overhouden voor waar ze écht goed in zijn — en waar ze blij van worden.</p>
+      <p>Maar techniek verandert niets als mensen niet meebewegen. Daarom beginnen wij nooit bij de tool, altijd bij de mens. We halen de angst weg, maken het toegankelijk, en maken het — ja — leuk. Niet over mensen heen, maar mét ze. Stap voor stap, in een ritme dat blijft.</p>
+      <p>Want we doen dit samen. Mens én AI, hand in hand, samen omhoog. En samen bereiken we meer dan we ooit durfden dromen.</p>
+      <p class="sign">— GRWN</p>
+    </div>
+
+    <div class="band">
+      <h2>Klaar om samen te groeien?</h2>
+      <p>Plan een vrijblijvende kennismaking. We luisteren eerst, en denken vanuit verbinding met je mee.</p>
+      <a class="btn" href="index.html#contact">Plan een kennismaking →</a>
+    </div>
+  </div>
+</section>
+
+<footer>© 2026 GRWN · grwn.ai · mens én AI, samen omhoog</footer>
+
+<script src="/grwn-chat.js" defer></script>
+</body>
+</html>

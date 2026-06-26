@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/favicon.svg">
 <title>GRWN — AI-maturity scan</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -171,6 +173,7 @@ footer{padding:30px 0;color:var(--slate);font-size:12.5px;text-align:center}
       </div>
       <a href="index.html#aanpak">Aanpak</a>
       <a href="grwn-pricing.html">Prijzen</a>
+      <a href="grwn-manifest.html">Manifest</a>
       <a href="index.html#contact">Contact</a>
     </div>
     <div class="gn-right">
@@ -186,6 +189,7 @@ footer{padding:30px 0;color:var(--slate);font-size:12.5px;text-align:center}
     <a href="grwn-prompts.html">Prompt-tips</a>
     <a href="index.html#aanpak">Aanpak</a>
     <a href="grwn-pricing.html">Prijzen</a>
+    <a href="grwn-manifest.html">Manifest</a>
     <a href="index.html#contact">Contact</a>
   </div>
 </nav>
@@ -247,7 +251,7 @@ footer{padding:30px 0;color:var(--slate);font-size:12.5px;text-align:center}
   </div>
 </main>
 
-<footer><div class="wrap">GRWN · with AI — benchmark: minder dan 1% van organisaties is écht AI-volwassen (ServiceNow / McKinsey, 2025).</div></footer>
+<footer><div class="wrap">GRWN · with AI — benchmark: slechts 1% van de leiders noemt de AI-inzet van hun organisatie &ldquo;volwassen&rdquo; (<a href="https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/superagency-in-the-workplace-empowering-people-to-unlock-ais-full-potential-at-work" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">McKinsey, Superagency in the Workplace, 2025</a>).</div></footer>
 
 <script>
 var DIMS = ["Strategie & leiderschap","Mensen & vaardigheid","Processen","Technologie & data","Governance & risico","Waarde & meten","Cultuur & mens"];
@@ -337,7 +341,7 @@ function calc(){
   document.getElementById('pct').textContent='Maturity-score: '+pct+'/100';
   document.getElementById('desc').textContent=lv.desc;
   var bench = pct>50
-    ? 'Sterk: je zit boven de 50 — een niveau dat minder dan 1% van de organisaties haalt. Je loopt voor op vrijwel iedereen.'
+    ? 'Sterk: je zit boven de 50 — verder dan de meeste organisaties komen. Je loopt voor op vrijwel iedereen.'
     : (pct>40
       ? 'Je zit rond het punt waar de meeste organisaties blijven steken. Eén gerichte stap zet je in de voorhoede.'
       : 'Je zit bij de grote groep die AI vooral nog verkent. Goed nieuws: hier is de tijdwinst het grootst en het snelst te pakken.');
