@@ -153,7 +153,7 @@
       qs.forEach(function (q) {
         var c = document.createElement("button"); c.className = "grwnc-chip"; c.type = "button"; c.textContent = q;
         c.addEventListener("click", function () {
-          if (q.indexOf("kennismaking") > -1) { gotoContact(); return; }
+          if (q.indexOf("kennismaking") > -1) { bookCall(); return; }
           cw.remove(); input.value = q; sendMsg();
         });
         cw.appendChild(c);
@@ -214,10 +214,13 @@
     location.href = (path === "/" || /index\.html$/.test(path)) ? "#contact" : "/#contact";
   }
 
+  var BOOKING_URL = "https://calendar.app.google/Vs8WcaoVoNAvXMmJ9";
+  function bookCall() { window.open(BOOKING_URL, "_blank", "noopener"); }
+
   btn.addEventListener("click", function () { panel.classList.contains("open") ? closePanel() : openPanel(); });
   closeBtn.addEventListener("click", closePanel);
   send.addEventListener("click", sendMsg);
-  document.getElementById("grwncCta").addEventListener("click", gotoContact);
+  document.getElementById("grwncCta").addEventListener("click", bookCall);
   input.addEventListener("input", autoGrow);
   input.addEventListener("keydown", function (e) {
     if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMsg(); }
