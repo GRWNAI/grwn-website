@@ -37,46 +37,46 @@
   .stage{position:relative;min-height:52vh;display:flex;align-items:center;justify-content:center;overflow:hidden;}
   #globe{display:block;width:100%;height:100%;cursor:grab;touch-action:none;}
   #globe:active{cursor:grabbing;}
-  .legend{position:absolute;left:14px;bottom:12px;display:flex;flex-wrap:wrap;gap:6px 12px;font-size:11.5px;color:var(--muted);
+  .legend{position:absolute;left:14px;bottom:12px;display:flex;flex-wrap:wrap;gap:6px 12px;font-size:12.5px;color:var(--muted);
     background:rgba(8,12,26,.55);border:1px solid var(--line);border-radius:10px;padding:8px 11px;backdrop-filter:blur(4px);max-width:calc(100% - 28px);}
   .legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px;}
-  .hint{position:absolute;left:50%;top:12px;transform:translateX(-50%);font-size:12px;color:var(--muted);
+  .hint{position:absolute;left:50%;top:12px;transform:translateX(-50%);font-size:13px;color:var(--muted);
     background:rgba(8,12,26,.55);border:1px solid var(--line);border-radius:999px;padding:5px 13px;pointer-events:none;}
   .panel{background:var(--panel);border-left:1px solid var(--line);padding:18px;overflow-y:auto;max-height:calc(100vh - 56px);}
   @media(max-width:880px){.panel{border-left:0;border-top:1px solid var(--line);max-height:none;}}
   .pcard{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:14px 15px;margin-bottom:12px;}
-  .pcard h3{font-size:15px;margin-bottom:6px;display:flex;align-items:center;gap:8px;}
-  .pcard p{font-size:14px;line-height:1.6;color:#d6def5;}
-  .ptitle{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:2px 0 10px;}
+  .pcard h3{font-size:17px;margin-bottom:7px;display:flex;align-items:center;gap:8px;}
+  .pcard p{font-size:15.5px;line-height:1.65;color:#dbe3f7;}
+  .ptitle{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:2px 0 10px;}
   .chip-row{display:flex;flex-wrap:wrap;gap:7px;}
   .ichip{display:flex;align-items:center;gap:8px;width:100%;text-align:left;background:var(--panel2);border:1px solid var(--line);
-    color:var(--text);font:inherit;font-weight:700;font-size:13.5px;padding:11px 13px;border-radius:12px;cursor:pointer;transition:.12s;}
+    color:var(--text);font:inherit;font-weight:700;font-size:14.5px;padding:12px 14px;border-radius:12px;cursor:pointer;transition:.12s;}
   .ichip:hover{border-color:var(--accent);transform:translateY(-1px);}
   .ichip.on{border-color:var(--choke);background:rgba(255,93,108,.12);}
-  .ichip .em{font-size:18px;flex:none;}
-  .ichip small{display:block;color:var(--muted);font-weight:600;font-size:11.5px;margin-top:1px;}
+  .ichip .em{font-size:20px;flex:none;}
+  .ichip small{display:block;color:var(--muted);font-weight:600;font-size:12.5px;margin-top:2px;line-height:1.4;}
   .scencard{display:block;width:100%;text-align:left;background:var(--panel2);border:1px solid var(--line);color:var(--text);font:inherit;border-radius:12px;padding:12px 13px;margin-bottom:9px;cursor:pointer;transition:.12s;}
   .scencard:hover{border-color:var(--accent);transform:translateY(-1px);}
-  .scencard .sc-top{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:800;}
-  .scencard p{font-size:12.5px;color:var(--muted);line-height:1.5;margin:6px 0 8px;}
-  .scencard .sc-go{font-size:12px;font-weight:700;color:var(--accent);}
-  .vsec{margin-top:13px;}
+  .scencard .sc-top{display:flex;align-items:center;gap:8px;font-size:15.5px;font-weight:800;}
+  .scencard p{font-size:14px;color:#c2cdea;line-height:1.55;margin:7px 0 9px;}
+  .scencard .sc-go{font-size:13px;font-weight:700;color:var(--accent);}
+  .vsec{margin-top:14px;}
   .vsec:first-of-type{margin-top:2px;}
   .vsec .ptitle{margin:0 0 5px;}
-  .vsec p{font-size:14px;line-height:1.6;color:#d6def5;}
+  .vsec p{font-size:15.5px;line-height:1.65;color:#dbe3f7;}
   .scmeta{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 9px;}
-  .scmeta span{font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;border:1px solid var(--line);}
+  .scmeta span{font-size:12.5px;font-weight:700;padding:4px 10px;border-radius:999px;border:1px solid var(--line);}
   .scmeta .duur{color:var(--muted);}
   .scmeta .k-lo{color:#7be3a7;border-color:rgba(95,227,154,.4);background:rgba(95,227,154,.1);}
   .scmeta .k-mid{color:#ffce7a;border-color:rgba(255,180,84,.4);background:rgba(255,180,84,.12);}
   .scmeta .k-hi{color:#ff9aa3;border-color:rgba(255,93,108,.4);background:rgba(255,93,108,.12);}
   .rolbadge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 8px;vertical-align:middle;}
-  .deprow{font-size:13px;margin:7px 0;color:var(--text);line-height:2;}
+  .deprow{font-size:14.5px;margin:8px 0;color:var(--text);line-height:2.05;}
   .deprow b{color:var(--muted);font-weight:700;margin-right:4px;}
   .deprow .tag{margin:0 4px 4px 0;display:inline-block;}
   .topbron{font-size:12.5px;color:var(--accent2);text-decoration:none;font-weight:600;white-space:nowrap;}
   .impact{margin-top:10px;}
-  .impact .tag{display:inline-block;font-size:11px;font-weight:800;padding:3px 9px;border-radius:999px;margin:0 5px 6px 0;}
+  .impact .tag{display:inline-block;font-size:12.5px;font-weight:800;padding:4px 10px;border-radius:999px;margin:0 5px 6px 0;}
   .tag.hit{background:rgba(255,93,108,.16);color:#ff8a95;border:1px solid rgba(255,93,108,.4);}
   .tag.up{background:rgba(255,180,84,.14);color:var(--oil);border:1px solid rgba(255,180,84,.35);}
   .scbtns{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
@@ -88,17 +88,18 @@
   .steps i.on{background:var(--accent2);}
   .choices{display:flex;flex-direction:column;gap:8px;margin-top:10px;}
   .choice{text-align:left;background:var(--panel2);border:1px solid var(--line);color:var(--text);font:inherit;font-weight:700;
-    font-size:13.5px;padding:11px 13px;border-radius:12px;cursor:pointer;}
+    font-size:14.5px;padding:12px 14px;border-radius:12px;cursor:pointer;line-height:1.45;}
   .choice:hover{border-color:var(--accent2);}
   .foot{font-size:11px;color:var(--muted);text-align:center;padding:10px;border-top:1px solid var(--line);}
   .loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;}
   .spin{width:28px;height:28px;border:3px solid var(--line);border-top-color:var(--accent);border-radius:50%;display:inline-block;animation:spin .8s linear infinite;}
   @keyframes spin{to{transform:rotate(360deg);}}
-  .nlbox{margin-top:10px;background:rgba(255,180,84,.10);border:1px solid rgba(255,180,84,.35);border-radius:11px;padding:10px 12px;font-size:13px;line-height:1.55;color:#ffe2bd;}
-  .basis{font-size:12px;color:var(--muted);font-style:italic;background:rgba(124,155,255,.08);border:1px solid var(--line);border-radius:9px;padding:8px 11px;margin-top:8px;line-height:1.5;}
+  .nlbox{margin-top:10px;background:rgba(255,180,84,.10);border:1px solid rgba(255,180,84,.35);border-radius:11px;padding:11px 13px;font-size:14.5px;line-height:1.6;color:#ffe2bd;}
+  .basis{font-size:13px;color:var(--muted);font-style:italic;background:rgba(124,155,255,.08);border:1px solid var(--line);border-radius:9px;padding:9px 12px;margin-top:8px;line-height:1.55;}
   .basis b{font-style:normal;color:var(--accent2);}
-  .afh{margin:6px 0 2px;padding-left:18px;font-size:13.5px;line-height:1.65;color:#d6def5;}
-  .afh li{margin-bottom:3px;}
+  .afh{margin:6px 0 2px;padding-left:20px;font-size:14.5px;line-height:1.7;color:#dbe3f7;}
+  .afh li{margin-bottom:5px;}
+  .afh.oorz li::marker{color:#ffce7a;}
   .meldrow{margin-top:14px;text-align:center;}
   .meldrow a{color:var(--muted);font-size:12px;text-decoration:none;}
   .meldrow a:hover{color:var(--choke);}
@@ -263,6 +264,7 @@ const VARS = [
     effect:'Hapert de toevoer, dan schiet de gasprijs omhoog: een hogere energierekening, duurdere producten (van brood tot staal) en in het uiterste geval gas op rantsoen voor de industrie. Een koude winter en lege gasopslagen maken het erger; een zachte winter en volle opslagen dempen het.',
     risico:'Let op: spanning rond Oekraïne en sancties, hoe vol de Europese gasopslagen zitten (boven ~90% = comfortabel) en het weer. Het meeste Russische gas is al weg, dus een nieuwe klap is kleiner dan in 2022. Prijspieken duren meestal één tot twee winters; daarna past de markt zich aan met LNG en andere leveranciers.',
     afh:['Hoe koud de winter is (vraag naar verwarming)','Hoe vol de gasopslagen zitten','Capaciteit om LNG per schip te importeren','Alternatieve leveranciers: Noorwegen, Qatar, VS'],
+    oorzaken:['Een nieuw of escalerend conflict rond Oekraïne','Sancties over en weer tussen Rusland en het Westen','Sabotage of een ongeluk bij een pijpleiding (zoals Nord Stream)','Rusland dat levering bewust als drukmiddel inzet','Een technische storing of langdurige onderhoudsstop'],
     scenarios:[
       {naam:'Rusland draait het gas volledig dicht', kans:'Deels al gebeurd', duur:'piek 1–2 winters', uitleg:'Rusland stopt alle pijpleidinggas, zoals deels gebeurde in 2022. Gas is voor Rusland een drukmiddel: het kan de kraan dichtdraaien bij sancties of een conflict.', seed:'Rusland stopt per direct alle pijpleidinggas naar Europa, midden in de winter.'},
       {naam:'Gedeeltelijke beperking als drukmiddel', kans:'Reëel', duur:'weken–maanden', uitleg:'Rusland levert mínder of dreigt ermee om landen onder druk te zetten (bijvoorbeeld rond steun aan Oekraïne). Een sluipend wapen dat de prijzen al laat stijgen.', seed:'Rusland knijpt de gaskraan deels dicht en gebruikt levering als politiek drukmiddel.'},
@@ -275,6 +277,7 @@ const VARS = [
     effect:'Bij dreiging of sluiting stijgt de olieprijs vaak in dagen fors, omdat de markt schrikt. Tankers varen langzamer of mijden het gebied en verzekeringen worden duurder; aan de pomp en in transportkosten merk je dat het snelst. Vaak is het meer dreiging dan langdurige sluiting — ook Iran zelf heeft belang bij een open straat.',
     risico:'Let op: directe confrontaties tussen Iran en Israël of de VS, aanvallen op schepen, en hoe de marines reageren. Volledige sluiting is zeldzaam — ook Iran verdient aan open vaart en zou zichzelf raken. Meestal gaat het om dreiging en korte incidenten (dagen tot weken); de olieprijs schiet omhoog op de schrik en zakt vaak weer als het meevalt.',
     afh:['Spanningen met Iran en in de Golfregio','Aanwezigheid van marines die de route bewaken','Beperkte alternatieve pijpleidingen om Hormuz heen','Strategische olievoorraden van landen'],
+    oorzaken:['Militaire confrontatie tussen Iran en Israël of de VS','Nieuwe sancties die Iran tot vergelding aanzetten','Aanvallen op of het enteren van olietankers','Zeemijnen of dreigementen die de scheepvaart stilleggen','Een incident of misverstand dat tot escalatie leidt'],
     scenarios:[
       {naam:'Iran blokkeert of bedreigt de doorvaart', kans:'Verhoogd bij conflict', duur:'dagen–weken', uitleg:'Iran ligt pal aan de Straat van Hormuz en dreigt die bij oplopende spanningen af te sluiten (bijvoorbeeld na een aanval of nieuwe sancties). Tankers durven dan niet meer te varen.', seed:'Iran dreigt de Straat van Hormuz te sluiten of legt zeemijnen; tankers durven niet meer te varen.'},
       {naam:'Aanvallen op olietankers', kans:'Reëel', duur:'weken', uitleg:'Tankers worden beschoten of geënterd, zoals in 2019 in de Golf gebeurde. Verzekeringen worden onbetaalbaar en rederijen mijden het gebied.', seed:'Er vinden aanvallen plaats op olietankers in de Golf; verzekeringen en transport stokken.'},
@@ -287,6 +290,7 @@ const VARS = [
     effect:'Snijden ze in de productie, dan stijgt de olieprijs en betaal je meer aan de pomp. Pompen ze juist veel, dan daalt de prijs (fijn voor de consument, lastig voor producenten). Het effect is meestal geleidelijk en deels voorspelbaar — de markt kijkt mee naar elke OPEC+-vergadering.',
     risico:'Let op: de uitkomst van OPEC+-vergaderingen (meestal maandelijks), de wereldwijde vraag en de verhouding Saoedi-Arabië–Rusland–VS. Dit is het meest stuurbare drukpunt: geen ramp nodig, alleen een besluit. Effecten houden vaak maanden tot een jaar aan, tot een volgend besluit of tot de Amerikaanse schalieolie bijspringt.',
     afh:['Productieafspraken binnen OPEC+','Wereldwijde vraag naar olie','Reserve-capaciteit (spare capacity)','Verhouding Saoedi-Arabië, Rusland en de VS'],
+    oorzaken:['Een OPEC+-besluit om de productie te verlagen voor prijssteun','Onenigheid tussen leden die uitmondt in een prijzenoorlog','Een aanval of onrust die installaties stillegt (zoals Abqaiq 2019)','Een sterke verandering in de wereldvraag (groei of dip)','Geopolitieke spanning tussen Saoedi-Arabië, Rusland en de VS'],
     scenarios:[
       {naam:'OPEC+ snijdt fors in de productie', kans:'Hoog (gebeurt vaak)', duur:'maanden–jaar', uitleg:'OPEC+ (Saoedi-Arabië, Rusland e.a.) spreekt af minder olie te pompen om de prijs op te drijven, zoals al meermaals gebeurde. Minder aanbod betekent een duurdere prijs.', seed:'OPEC+ besluit de olieproductie flink te verlagen om de prijs op te drijven.'},
       {naam:'Prijzenoorlog en overaanbod', kans:'Laag–Reëel', duur:'maanden', uitleg:'Landen pompen juist méér om marktaandeel te pakken, zoals Saoedi-Arabië en Rusland in 2020. De prijs keldert — fijn aan de pomp, hard voor producenten.', seed:'Grote producenten verhogen juist de productie; er ontstaat een prijzenoorlog en overaanbod.'},
@@ -299,6 +303,7 @@ const VARS = [
     effect:'Bij blokkade of aanvallen varen rederijen om Afrika: langere levertijden, hogere vrachtkosten en duurdere verzekeringen. Geen totale tekorten, maar wel prijsdruk en vertraging — van brandstof tot spullen uit Azië. Hoe langer het duurt, hoe meer het in de winkelprijzen kruipt.',
     risico:'Let op: aanvallen in de Rode Zee, verzekeringspremies voor schepen en of grote rederijen omvaren. Dit speelt nu al langere tijd op laag niveau. Het is zelden volledig dicht; het is vooral duurder en trager. Zulke periodes kunnen maanden aanhouden en ebben weg zodra de veiligheid verbetert.',
     afh:['Veiligheid in de Rode Zee (o.a. Houthi-aanvallen)','Verzekeringskosten voor schepen','Capaciteit om om Afrika heen te varen','Spanningen in het Midden-Oosten'],
+    oorzaken:['Aanvallen op schepen in de Rode Zee (Houthi-aanvallen)','Een vastgelopen of gezonken schip dat het kanaal blokkeert','Oplaaiend conflict in het Midden-Oosten','Sterk gestegen verzekeringspremies waardoor rederijen omvaren','Politieke instabiliteit in de regio'],
     scenarios:[
       {naam:'Aanvallen sluiten de Rode Zee de facto', kans:'Verhoogd (speelt nu)', duur:'maanden', uitleg:'Aanvallen op schepen (zoals de Houthi-aanvallen vanaf 2023) maken de route te gevaarlijk. Rederijen varen dan om heel Afrika: weken langer en flink duurder.', seed:'Aanhoudende aanvallen maken de Rode Zee onveilig; schepen mijden Suez en varen om heel Afrika.'},
       {naam:'Blokkade van het Suezkanaal', kans:'Laag', duur:'dagen–weken', uitleg:'Eén vastgelopen schip kan het kanaal dagenlang blokkeren, zoals de Ever Given in 2021. De wereldhandel stokt dan vrijwel meteen.', seed:'Het Suezkanaal raakt geblokkeerd (zoals met de Ever Given) en de wereldhandel loopt vast.'}
@@ -310,6 +315,7 @@ const VARS = [
     effect:'Valt Qatarees LNG (deels) weg, dan moeten Azië en Europa vechten om het overige LNG op de wereldmarkt — en stijgt de prijs. Bij een koude winter koopt Azië soms al het vrije LNG op, waardoor Europa meer moet betalen. Het werkt door in de gasprijs en dus in de energierekening.',
     risico:'Let op: spanningen in de Golf en de Straat van Hormuz (daar vaart Qatarees LNG doorheen) en hoe koud de winter in Azië is. Een volledige stop is onwaarschijnlijk, maar prijspieken door schaarste komen voor — meestal rond één winter, daarna ontspant de markt.',
     afh:['Doorvaart via de Straat van Hormuz','Langetermijncontracten met Azië','Wereldwijde concurrentie om LNG','Stabiliteit in de Golf'],
+    oorzaken:['Een conflict in de Golf of blokkade van de Straat van Hormuz','Een technisch incident bij de LNG-installaties','Een koude winter in Azië die de vraag opjaagt','Concurrentie waarbij Azië al het vrije LNG opkoopt','Politieke spanningen in de regio'],
     scenarios:[
       {naam:'Qatar legt de export stil', kans:'Laag', duur:'weken–maanden', uitleg:'Bij een conflict in de Golf of een blokkade van Hormuz kan Qatar geen LNG meer verschepen (al het Qatarese LNG gaat via Hormuz). Azië en Europa missen dan in één klap een grote leverancier.', seed:'Door een conflict in de Golf legt Qatar tijdelijk de LNG-export stil.'},
       {naam:'Azië koopt alle LNG op', kans:'Reëel (koude winter)', duur:'een winter', uitleg:'Bij een koude winter of crisis kopen Aziatische landen al het vrije LNG op, zoals in 2021-2022. Europa moet dan fors meer betalen of grijpt mis.', seed:'Een koude winter in Azië doet landen al het beschikbare LNG opkopen; Europa vist achter het net.'}
@@ -321,6 +327,7 @@ const VARS = [
     effect:'Stijgt de gasprijs of valt graan- of kunstmestexport weg, dan worden eten en veevoer duurder — met maanden vertraging (van oogst tot schap). In Nederland merk je het als hogere prijzen; elders kan het tot tekorten en onrust leiden. Goede oogsten en alternatieve leveranciers dempen het.',
     risico:'Let op: de gasprijs (drijft kunstmest), oogstberichten en het weer, en exportbesluiten van Rusland en Oekraïne. Voedseleffecten komen met vertraging (maanden, van oogst tot schap) en houden vaak een seizoen tot een jaar aan. Goede oogsten elders en alternatieve leveranciers dempen de klap.',
     afh:['De gasprijs (kunstmest is gasintensief)','Graan- en kunstmestexport uit Rusland/Oekraïne','Oogsten en het weer','Exportrestricties van landen'],
+    oorzaken:['Een piek in de gasprijs die kunstmest onbetaalbaar maakt','Oorlog die graan- of kunstmestexport blokkeert (zoals Oekraïne)','Exportverboden van landen die hun eigen markt beschermen','Misoogsten door extreem weer of droogte','Rusland dat kunstmestexport beperkt als drukmiddel'],
     scenarios:[
       {naam:'Gasprijs piekt, kunstmest onbetaalbaar', kans:'Reëel', duur:'seizoen–jaar', uitleg:'Kunstmest maken kost veel gas; bij hoge gasprijzen (zoals in 2022) sluiten kunstmestfabrieken en gebruiken boeren minder. Lagere oogsten, hogere voedselprijzen.', seed:'De gasprijs piekt; kunstmest wordt zo duur dat boeren minder gebruiken en oogsten dalen.'},
       {naam:'Rusland beperkt de kunstmestexport', kans:'Reëel', duur:'maanden', uitleg:'Rusland is een topexporteur van kunstmest en kan de export inperken als drukmiddel. Boeren wereldwijd betalen dan meer, wat doorwerkt in de prijs van eten.', seed:'Rusland beperkt de export van kunstmest als geopolitiek drukmiddel.'},
@@ -452,7 +459,7 @@ function drawPoints(){
   ent.merge(sel)
     .each(function(d){ d.vis=visible(d.ll); const p=projection(d.ll); d.x=p?p[0]:0; d.y=p?p[1]:0; })
     .attr('cx',d=>d.x).attr('cy',d=>d.y)
-    .attr('r',d=> d.type==='var' ? (selVar&&selVar.id===d.k?8:6) : d.type==='choke'?5.5 : (d.k===selCountry?7:4.5))
+    .attr('r',d=> d.type==='var' ? (selVar&&selVar.id===d.k?10.5:8) : d.type==='choke'?7 : (d.k===selCountry?9:6.5))
     .attr('display',d=>d.vis?null:'none')
     .attr('fill',d=> d.type==='var'?'var(--accent)': d.type==='choke'?'var(--choke)': d.type==='prod'?'var(--producer)':'var(--consumer)')
     .attr('stroke',d=> ((d.type==='var'&&selVar&&selVar.id===d.k)||hl.has(d.k))?'#fff':'rgba(0,0,0,.5)')
@@ -463,9 +470,9 @@ function drawPoints(){
 
   const labs = nodes.filter(d=>d.vis && (d.type==='var'||hl.has(d.k)||d.k===selCountry||(selVar&&d.type==='choke')));
   const ls=gLbl.selectAll('text').data(labs,d=>d.k);
-  ls.enter().append('text').attr('font-size',11).attr('font-weight',700)
-    .attr('fill','#dfe7ff').attr('paint-order','stroke').attr('stroke','#070b16').attr('stroke-width',3)
-    .merge(ls).attr('x',d=>d.x+8).attr('y',d=>d.y+4).text(d=> d.type==='var' ? (d.naam.length>20?d.naam.slice(0,19)+'…':d.naam) : lab(d.k));
+  ls.enter().append('text').attr('font-size',13).attr('font-weight',700)
+    .attr('fill','#dfe7ff').attr('paint-order','stroke').attr('stroke','#070b16').attr('stroke-width',3.5)
+    .merge(ls).attr('font-size',13).attr('x',d=>d.x+10).attr('y',d=>d.y+4).text(d=> d.type==='var' ? (d.naam.length>20?d.naam.slice(0,19)+'…':d.naam) : lab(d.k));
   ls.exit().remove();
 }
 
@@ -591,6 +598,7 @@ function renderAI(){
       +'<div class="vsec"><span class="ptitle">📍 Wat is het?</span><p>'+escW(v.wat||v.kort)+'</p></div>'
       +(v.waarom?'<div class="vsec"><span class="ptitle">⚡ Waarom is dit zo belangrijk?</span><p>'+escW(v.waarom)+'</p></div>':'')
       +'<div class="vsec"><span class="ptitle">🔗 Waar hangt dit van af?</span><ul class="afh">'+v.afh.map(a=>'<li>'+escW(a)+'</li>').join('')+'</ul></div>'
+      +((v.oorzaken&&v.oorzaken.length)?'<div class="vsec"><span class="ptitle">⚠️ Mogelijke oorzaken</span><ul class="afh oorz">'+v.oorzaken.map(a=>'<li>'+escW(a)+'</li>').join('')+'</ul></div>':'')
       +(v.effect?'<div class="vsec"><span class="ptitle">📉 Wat gebeurt er als het misgaat?</span><p>'+escW(v.effect)+'</p></div>':'')
       +(v.risico?'<div class="vsec"><span class="ptitle">🔭 Hoe schat je het risico in?</span><p>'+escW(v.risico)+'</p></div>':'')
       +'</div>';
