@@ -6,7 +6,25 @@
 
   var INK = "#173049", MAG = "#E83F6F", MAG_D = "#C72C58", GOLD = "#F5B400", LINE = "#EAEEF1", CLOUD = "#F6F9FB", SLATE = "#5C6873", CERU = MAG, CERU_D = MAG_D;
 
-  var GROWIE = '<svg viewBox="0 0 100 100" aria-hidden="true"><line x1="50" y1="24" x2="50" y2="13" stroke="#1A5D85" stroke-width="3" stroke-linecap="round"/><path d="M50 3 L52.6 10 L60 12.6 L52.6 15.2 L50 22 L47.4 15.2 L40 12.6 L47.4 10 Z" fill="#F5B400"/><circle cx="22" cy="52" r="6.5" fill="#1A5D85"/><circle cx="78" cy="52" r="6.5" fill="#1A5D85"/><rect x="27" y="26" width="46" height="52" rx="18" fill="#E83F6F"/><rect x="27" y="26" width="46" height="16" rx="12" fill="#C72C58" opacity="0.30"/><circle cx="50" cy="49" r="15" fill="#fff"/><circle cx="50" cy="49" r="9" fill="#2274A5"/><circle cx="50" cy="49" r="4" fill="#173049"/><circle cx="53.4" cy="45.6" r="1.9" fill="#fff"/><circle cx="35" cy="63" r="3.4" fill="#FF8AB0" opacity="0.85"/><circle cx="65" cy="63" r="3.4" fill="#FF8AB0" opacity="0.85"/><path d="M41 68 Q50 75 59 68" stroke="#173049" stroke-width="2.8" fill="none" stroke-linecap="round"/></svg>';
+  // Growie-koppie (tv-kop met Nora's twee ogen + vriendelijk boogje). blink=true laat beide ogen knipperen.
+  function growieKop(blink) {
+    var st = blink ? '<style>.eyes{transform-box:fill-box;transform-origin:center;animation:gblink 4.5s ease-in-out infinite}@keyframes gblink{0%,92%,100%{transform:scaleY(1)}96%{transform:scaleY(.08)}}</style>' : '';
+    var ec = blink ? ' class="eyes"' : '';
+    return '<svg viewBox="0 0 100 100" aria-hidden="true">' + st +
+      '<path d="M50,34 Q44,22 56,18" fill="none" stroke="#173049" stroke-width="3" stroke-linecap="round"/>' +
+      '<circle cx="59" cy="15" r="6" fill="#F5B400"/>' +
+      '<circle cx="12" cy="62" r="4" fill="#173049"/><circle cx="88" cy="62" r="4" fill="#173049"/>' +
+      '<rect x="16" y="34" width="68" height="56" rx="14" fill="#E83F6F"/>' +
+      '<rect x="25" y="43" width="50" height="40" rx="9" fill="#fff"/>' +
+      '<g' + ec + '>' +
+      '<path d="M33.5,64 C31.5,48 48.5,48 46.5,64 Q40,58 33.5,64 Z" fill="#173049"/><circle cx="41.9" cy="54" r="2.4" fill="#fff"/>' +
+      '<path d="M53.5,64 C51.5,48 68.5,48 66.5,64 Q60,58 53.5,64 Z" fill="#173049"/><circle cx="61.9" cy="54" r="2.4" fill="#fff"/>' +
+      '</g>' +
+      '<path d="M42,73 Q50,80 58,73" fill="none" stroke="#173049" stroke-width="2" stroke-linecap="round"/>' +
+      '</svg>';
+  }
+  var GROWIE = growieKop(false);
+  var GROWIE_BLINK = growieKop(true);
 
   var css = "" +
     ".grwnc-btn{position:fixed;right:22px;bottom:22px;z-index:99998;height:54px;padding:0 22px 0 17px;border-radius:999px;border:0;cursor:pointer;background:" + CERU + ";color:#fff;box-shadow:0 12px 32px rgba(23,48,73,.30);display:flex;align-items:center;gap:10px;font-family:Inter,system-ui,sans-serif;font-size:15px;font-weight:700;transition:transform .15s,background .15s}" +
@@ -57,7 +75,8 @@
     ".grwnc-foot button{flex:none;width:44px;border:0;border-radius:12px;background:" + CERU + ";color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center}" +
     ".grwnc-foot button:hover{background:" + CERU_D + "}.grwnc-foot button:disabled{background:#cfd6d2;cursor:not-allowed}" +
     ".grwnc-foot button svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}" +
-    ".grwnc-note{font-size:11px;color:#9aa8b5;text-align:center;padding:0 12px 10px;background:#fff}" +
+    ".grwnc-note{font-size:11px;color:#9aa8b5;text-align:center;padding:0 12px 6px;background:#fff}" +
+    ".grwnc-credit{font-size:10px;color:#aeb7c1;text-align:center;padding:0 12px 12px;background:#fff;line-height:1.45}" +
     "@media(max-width:560px){.grwnc-panel{top:0;left:0;right:0;bottom:auto;width:100%;max-width:100%;height:100dvh;max-height:none;border-radius:0;border:0}.grwnc-btn{right:16px;bottom:16px}.grwnc-teaser{right:16px;left:16px;width:auto;max-width:none}}" +
     ".grwnbk-ov{position:fixed;inset:0;z-index:100000;background:rgba(15,35,54,.55);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;padding:24px;font-family:Inter,system-ui,sans-serif}" +
     ".grwnbk-ov.open{display:flex;animation:grwncIn .2s ease}" +
@@ -94,7 +113,7 @@
     '</div>' +
     '<div class="grwnc-panel" id="grwncPanel" role="dialog" aria-label="Growie — AI-assistent van GRWN">' +
       '<div class="grwnc-head">' +
-        '<div class="av">' + GROWIE + '</div>' +
+        '<div class="av">' + GROWIE_BLINK + '</div>' +
         '<div><h4>Growie</h4><p>De AI-assistent van GRWN</p></div>' +
         '<button class="x" id="grwncClose" aria-label="Sluiten">&times;</button>' +
       '</div>' +
@@ -105,6 +124,7 @@
         '<button id="grwncSend" aria-label="Versturen"><svg viewBox="0 0 24 24"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>' +
       '</div>' +
       '<div class="grwnc-note">AI-assistent — kan fouten maken. Voor maatwerk: plan een kennismaking.</div>' +
+      '<div class="grwnc-credit">Growie — bedacht &amp; getekend door Nora Gloudemans 💛</div>' +
     '</div>' +
     '<div class="grwnbk-ov" id="grwnbkOv" role="dialog" aria-modal="true" aria-label="Plan een kennismaking met GRWN">' +
       '<div class="grwnbk-card">' +
