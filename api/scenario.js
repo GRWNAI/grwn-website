@@ -2,7 +2,7 @@
 // Env var in Vercel: GEMINI_API_KEY  (zelfde als Growie/LVL UP)
 export const maxDuration = 30;
 
-const MODELS = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-2.0-flash-lite", "gemini-1.5-flash"];
+const MODELS = ["gemini-2.5-flash", "gemini-2.0-flash"];
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const KEYS = "Rusland, SaoediArabie, VS, Qatar, Noorwegen, Irak, VAE, Iran, Algerije, Nigeria, Koeweit, Kazachstan, Duitsland, Italie, Frankrijk, Nederland, Spanje, VK, China, India, Japan, ZuidKorea, Turkije, Polen, Hormuz, Malakka, Suez, BabElMandeb";
@@ -67,6 +67,12 @@ export default async function handler(req, res) {
         temperature: mode === "watals" ? 0.95 : 0.45,
         responseMimeType: "application/json",
       },
+      safetySettings: [
+        { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_ONLY_HIGH" },
+        { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_ONLY_HIGH" },
+        { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_ONLY_HIGH" },
+        { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_ONLY_HIGH" },
+      ],
       system_instruction: { parts: [{ text: systemPrompt(level, mode) }] },
     };
 
@@ -85,14 +91,19 @@ export default async function handler(req, res) {
         } catch (e) { lastErr = e.message; await sleep(700); continue; }
 
         if (r.ok) {
-          const text = (d.candidates?.[0]?.content?.parts || []).map((p) => p.text).filter(Boolean).join("");
+          const cand = d.candidates && d.candidates[0];
+          const text = ((cand && cand.content && cand.content.parts) || []).map((p) => p.text).filter(Boolean).join("");
+          if (!text) {
+            const why = (cand && cand.finishReason) || (d.promptFeedback && d.promptFeedback.blockReason) || "leeg antwoord";
+            lastErr = model + ": geen tekst (" + why + ")"; break;
+          }
           let scene;
           try { scene = JSON.parse(text); }
           catch (e) {
-            const m = text && text.match(/\{[\s\S]*\}/);
+            const m = text.match(/\{[\s\S]*\}/);
             if (m) { try { scene = JSON.parse(m[0]); } catch (e2) {} }
           }
-          if (!scene || typeof scene.situatie !== "string") { lastErr = "AI gaf geen geldig scenario"; break; }
+          if (!scene || typeof scene.situatie !== "string") { lastErr = model + ": ongeldig JSON-scenario"; break; }
           // veilige defaults
           scene.titel = scene.titel || "Scenario";
           ["geraakt", "omhoog", "keuzes", "stromen"].forEach((k) => { if (!Array.isArray(scene[k])) scene[k] = []; });
@@ -102,7 +113,7 @@ export default async function handler(req, res) {
           scene.slot = scene.slot || "";
           return res.status(200).json({ ok: true, scene });
         }
-        lastErr = d.error?.message || ("server " + r.status);
+        lastErr = model + ": " + (d.error?.message || ("server " + r.status));
         if (!isBusy(d)) break;
         await sleep(700);
       }
