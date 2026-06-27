@@ -1042,7 +1042,7 @@ function startGame(){
   S.history=[{role:"system",content:sys}];
   saveState();
   if(S.provider==="demo"){ demoKickoff(); }
-  else { send("[De speler heeft zojuist de intake voltooid. Verwelkom hen kort en start meteen met de eerste vraag van het Tutorial Level.]", true); }
+  else { send("[De speler heeft zojuist de intake voltooid. Verwelkom hen heel kort en stel meteen de eerste vraag van het Tutorial Level. BELANGRIJK: bied al bij deze allereerste vraag 2 à 4 keuzeknoppen aan met de [[KEUZES]]-marker (volgens de KEUZE-HULP-regels), zodat de speler meteen kan kiezen of zelf typen.]", true); }
 }
 
 /* ============ RENDER ============ */
@@ -1287,13 +1287,13 @@ function demoKickoff(){
     `Hé ${S.name}! 💡 Ik ben de Vernieuwer. Tijd om met AI praktische, creatieve dingen te maken. Laten we beginnen!`
   );
   setTimeout(()=>{addMsg(intro,"coach");bump();
-    setTimeout(()=>{addMsg("🎮 **TUTORIAL — Vraag 1/3**\nJe vraagt een AI om de '3 nieuwste regels rond "+(S.role.includes("verzeker")?"schade-uitkeringen":"jouw vakgebied")+"'. Het antwoord klinkt overtuigend maar je twijfelt. Hoe controleer je of het klopt — en hoe noem je het risico dat AI dingen verzint?","coach");},900);
+    setTimeout(()=>{addMsg("🎮 **TUTORIAL — Vraag 1/3**\nJe vraagt een AI om de '3 nieuwste regels rond "+(S.role.includes("verzeker")?"schade-uitkeringen":"jouw vakgebied")+"'. Het antwoord klinkt overtuigend maar je twijfelt. Hoe controleer je of het klopt — en hoe noem je het risico dat AI dingen verzint?\n\n[[KEUZES]]Ik check het bij de originele bron | Ik vraag de AI om bronnen | Het risico heet 'hallucinatie'[[/KEUZES]]","coach");},900);
   },500);
 }
 const demoScript=[
   // step 1 -> after answer to Q1
-  ()=>"💡 Goed bezig! Dat 'verzinnen' heet een **hallucinatie** — altijd checken bij de bron.\n\n**Vraag 2/3:** Je wilt een AI een klantmail laten schrijven. Wat zet je MINIMAAL in je prompt om een bruikbaar resultaat te krijgen?",
-  ()=>"⭐ Sterk — rol, doel, context en gewenste toon: dat is het fundament van een goede prompt!\n\n**Vraag 3/3 (praktijk):** Noem één terugkerende taak in jouw week die je deze maand met AI zou willen aanpakken.",
+  ()=>"💡 Goed bezig! Dat 'verzinnen' heet een **hallucinatie** — altijd checken bij de bron.\n\n**Vraag 2/3:** Je wilt een AI een klantmail laten schrijven. Wat zet je MINIMAAL in je prompt om een bruikbaar resultaat te krijgen?\n\n[[KEUZES]]Rol, doel, context en toon | Een duidelijk doel en de doelgroep | Een voorbeeld van het gewenste resultaat[[/KEUZES]]",
+  ()=>"⭐ Sterk — rol, doel, context en gewenste toon: dat is het fundament van een goede prompt!\n\n**Vraag 3/3 (praktijk):** Noem één terugkerende taak in jouw week die je deze maand met AI zou willen aanpakken.\n\n[[VOORBEELDEN]]Mijn e-mails sneller beantwoorden | Verslagen samenvatten | Teksten nakijken en verbeteren[[/VOORBEELDEN]]",
   ()=>{ // determine level
     S.level=2;S.coins=150;S.streak=1;S.meters={skill:2,mind:3,vol:1,impact:1};S.badges=["🌟 Vliegende start"];renderDash();
     return "🎉 **TUTORIAL VOLTOOID!** Je start op **Level 2 — Verkenner 🧭** (Gevorderd). Je krijgt je eerste Power-Up: 🌟 Vliegende start!\n\n"+demoCycle()+"\n[[demo:awaitquest]]";
