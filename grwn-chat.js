@@ -239,29 +239,36 @@
   // Voor de planner ín het venster (iframe): vervang BOOKING_EMBED_URL door de officiële
   // "insluiten op website"-link van Google (Agenda → afspraakschema → Delen → Insluiten;
   // de src eindigt meestal op ?gv=true). Met de korte link hierboven blokkeert Google vaak het iframe.
-  var BOOKING_EMBED_URL = "https://calendar.app.google/Vs8WcaoVoNAvXMmJ9";
+  var BOOKING_EMBED_URL = "https://calendar.google.com/calendar/appointments/schedules/AcZssZ0YjqzBW8udmkhO2724oQTAu0Bxp4ZyuYppcFt_p8J-jrOezjSA0gCy4bSyRikO9yLdjCUCE7t4?gv=true";
   var bkOv = document.getElementById("grwnbkOv"),
       bkFrame = document.getElementById("grwnbkFrame");
-  function openBookingModal() {
-    if (bkFrame && !bkFrame.getAttribute("src")) bkFrame.setAttribute("src", BOOKING_EMBED_URL);
-    if (bkOv) bkOv.classList.add("open");
-    document.body.style.overflow = "hidden";
+  // Alleen een officiële Google-embed-URL kan in een iframe; de korte calendar.app.google-link niet.
+  function isEmbeddable(u) { return /calendar\.google\.com\/calendar\/appointments|[?&]gv=true/.test(u); }
+  function openBooking() {
+    if (isEmbeddable(BOOKING_EMBED_URL)) {
+      if (bkFrame && !bkFrame.getAttribute("src")) bkFrame.setAttribute("src", BOOKING_EMBED_URL);
+      if (bkOv) bkOv.classList.add("open");
+      document.body.style.overflow = "hidden";
+    } else {
+      // Nog geen embed-URL: open netjes in een nieuw tabblad i.p.v. een leeg iframe te tonen.
+      window.open(BOOKING_URL, "_blank", "noopener");
+    }
   }
   function closeBookingModal() {
     if (bkOv) bkOv.classList.remove("open");
     document.body.style.overflow = "";
   }
-  window.grwnBook = openBookingModal;
-  function bookCall() { openBookingModal(); }
+  window.grwnBook = openBooking;
+  function bookCall() { openBooking(); }
   (function () {
     var x = document.getElementById("grwnbkX");
     if (x) x.addEventListener("click", closeBookingModal);
     if (bkOv) bkOv.addEventListener("click", function (e) { if (e.target === bkOv) closeBookingModal(); });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeBookingModal(); });
-    // Alle afspraak-links op de pagina openen in de modal i.p.v. een nieuw tabblad
+    // Alle afspraak-links op de pagina via de booking-flow laten lopen
     document.addEventListener("click", function (e) {
       var a = e.target && e.target.closest ? e.target.closest('a[href*="calendar.app.google"]') : null;
-      if (a) { e.preventDefault(); openBookingModal(); }
+      if (a) { e.preventDefault(); openBooking(); }
     }, true);
   })();
 
