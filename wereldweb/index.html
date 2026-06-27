@@ -453,10 +453,10 @@ function drawPoints(){
   for(const k in CHOKE){ if(covered.has(CHOKE[k]))continue; nodes.push({k,ll:CHOKE[k],type:'choke'}); }
   VARS.forEach(v=>nodes.push({k:v.id,ll:v.ll,type:'var',naam:v.naam}));   // drukpunten bovenop
   const sel=gPts.selectAll('circle').data(nodes,d=>d.k);
-  const ent=sel.enter().append('circle')
+  const merged=sel.enter().append('circle').merge(sel)
     .attr('cursor',d=>(d.type==='var'||d.type==='prod'||d.type==='cons')?'pointer':'default')
-    .on('click',(e,d)=>{ if(d.type==='var'){ selectVar(d.k); } else if(d.type==='prod'||d.type==='cons'){ selectCountry(d.k); } });
-  ent.merge(sel)
+    .on('click',(e,d)=>{ e.stopPropagation(); if(d.type==='var'){ selectVar(d.k); } else if(d.type==='prod'||d.type==='cons'){ selectCountry(d.k); } });
+  merged
     .each(function(d){ d.vis=visible(d.ll); const p=projection(d.ll); d.x=p?p[0]:0; d.y=p?p[1]:0; })
     .attr('cx',d=>d.x).attr('cy',d=>d.y)
     .attr('r',d=> d.type==='var' ? (selVar&&selVar.id===d.k?10.5:8) : d.type==='choke'?7 : (d.k===selCountry?9:6.5))
@@ -464,7 +464,7 @@ function drawPoints(){
     .attr('fill',d=> d.type==='var'?'var(--accent)': d.type==='choke'?'var(--choke)': d.type==='prod'?'var(--producer)':'var(--consumer)')
     .attr('stroke',d=> ((d.type==='var'&&selVar&&selVar.id===d.k)||hl.has(d.k))?'#fff':'rgba(0,0,0,.5)')
     .attr('stroke-width',d=> ((d.type==='var'&&selVar&&selVar.id===d.k)||hl.has(d.k))?2.5:1)
-    .attr('opacity',d=> (!drill&&hl.size&&!hl.has(d.k)&&d.type!=='choke')?.4:1)
+    .attr('opacity',d=> (!drill&&hl.size&&!hl.has(d.k)&&d.type!=='choke')?.55:1)
     .style('filter',d=> d.type==='var'?'drop-shadow(0 0 7px rgba(70,214,198,.8))': hl.has(d.k)?'drop-shadow(0 0 6px rgba(255,93,108,.9))':(d.type==='choke'?'drop-shadow(0 0 5px rgba(255,93,108,.6))':'none'));
   sel.exit().remove();
 
@@ -477,11 +477,12 @@ function drawPoints(){
 }
 
 /* rotatie + sleep */
-svg.call(d3.drag()
+svg.call(d3.drag().clickDistance(8)
   .on('start',()=>{dragging=true;autoRot=false;clearTimeout(resumeT);})
   .on('drag',(e)=>{ const k=.3; rotation=[rotation[0]+e.dx*k, Math.max(-90,Math.min(90,rotation[1]-e.dy*k)), rotation[2]]; render(); })
   .on('end',()=>{dragging=false;clearTimeout(resumeT);resumeT=setTimeout(()=>{autoRot=true;},2500);}));
-d3.timer(()=>{ if(autoRot&&!dragging){ rotation=[rotation[0]+0.12,rotation[1],rotation[2]]; render(); } });
+function idle(){ return !selCountry && !selVar && !aiScene && !aiLoading && !aiWaiting; }
+d3.timer(()=>{ if(autoRot&&!dragging&&idle()){ rotation=[rotation[0]+0.10,rotation[1],rotation[2]]; render(); } });
 
 /* land laden (optioneel — globe werkt ook zonder) */
 fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
