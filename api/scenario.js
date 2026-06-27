@@ -2,7 +2,7 @@
 // Env var in Vercel: GEMINI_API_KEY  (zelfde als Growie/LVL UP)
 export const maxDuration = 30;
 
-const MODELS = ["gemini-2.5-flash", "gemini-2.0-flash"];
+const MODELS = ["gemini-2.5-flash", "gemini-2.5-flash-lite"];
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const KEYS = "Rusland, SaoediArabie, VS, Qatar, Noorwegen, Irak, VAE, Iran, Algerije, Nigeria, Koeweit, Kazachstan, Duitsland, Italie, Frankrijk, Nederland, Spanje, VK, China, India, Japan, ZuidKorea, Turkije, Polen, Hormuz, Malakka, Suez, BabElMandeb";
@@ -65,7 +65,6 @@ export default async function handler(req, res) {
       generationConfig: {
         maxOutputTokens: 1600,
         temperature: mode === "watals" ? 0.95 : 0.45,
-        responseMimeType: "application/json",
       },
       safetySettings: [
         { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_ONLY_HIGH" },
@@ -77,7 +76,7 @@ export default async function handler(req, res) {
     };
 
     const isBusy = (o) => /503|429|overload|high demand|UNAVAILABLE|RESOURCE_EXHAUSTED/i.test(JSON.stringify(o || ""));
-    let lastErr = "AI tijdelijk niet bereikbaar";
+    const errs = [];
 
     for (const model of MODELS) {
       for (let attempt = 0; attempt < 1; attempt++) {
@@ -88,14 +87,14 @@ export default async function handler(req, res) {
             { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) }
           );
           d = await r.json();
-        } catch (e) { lastErr = e.message; await sleep(700); continue; }
+        } catch (e) { errs.push("netwerk: " + e.message); await sleep(700); continue; }
 
         if (r.ok) {
           const cand = d.candidates && d.candidates[0];
           const text = ((cand && cand.content && cand.content.parts) || []).map((p) => p.text).filter(Boolean).join("");
           if (!text) {
             const why = (cand && cand.finishReason) || (d.promptFeedback && d.promptFeedback.blockReason) || "leeg antwoord";
-            lastErr = model + ": geen tekst (" + why + ")"; break;
+            errs.push(model + ": geen tekst (" + why + ")"); break;
           }
           let scene;
           try { scene = JSON.parse(text); }
@@ -103,7 +102,7 @@ export default async function handler(req, res) {
             const m = text.match(/\{[\s\S]*\}/);
             if (m) { try { scene = JSON.parse(m[0]); } catch (e2) {} }
           }
-          if (!scene || typeof scene.situatie !== "string") { lastErr = model + ": ongeldig JSON-scenario"; break; }
+          if (!scene || typeof scene.situatie !== "string") { errs.push(model + ": ongeldig JSON-scenario"); break; }
           // veilige defaults
           scene.titel = scene.titel || "Scenario";
           ["geraakt", "omhoog", "keuzes", "stromen"].forEach((k) => { if (!Array.isArray(scene[k])) scene[k] = []; });
@@ -113,12 +112,12 @@ export default async function handler(req, res) {
           scene.slot = scene.slot || "";
           return res.status(200).json({ ok: true, scene });
         }
-        lastErr = model + ": " + (d.error?.message || ("server " + r.status));
+        errs.push(model + ": " + (d.error?.message || ("server " + r.status)));
         if (!isBusy(d)) break;
         await sleep(700);
       }
     }
-    return res.status(503).json({ error: "Het scenario maken lukte niet: " + lastErr });
+    return res.status(503).json({ error: "Het scenario maken lukte niet: " + (errs.join(" | ") || "onbekend") });
   } catch (e) {
     return res.status(500).json({ error: e.message });
   }
