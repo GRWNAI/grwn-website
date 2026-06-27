@@ -88,6 +88,45 @@
   .challenge-banner .cb-txt b{display:block;font-size:20px;font-weight:900;}
   .challenge-banner .cb-txt small{font-size:12.5px;font-weight:700;opacity:.95;}
   .challenge-banner .cb-go{font-size:18px;opacity:.9;background:rgba(255,255,255,.2);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+  /* === BELONINGEN === */
+  .gwrap{position:relative;display:inline-block;line-height:0;}
+  .ghat{position:absolute;top:-12px;left:50%;transform:translateX(-50%);font-size:26px;line-height:1;z-index:2;filter:drop-shadow(0 2px 3px rgba(0,0,0,.45));pointer-events:none;}
+  .rewards{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 16px;margin-bottom:18px;}
+  .rw-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:6px;}
+  .rw-head>b{font-size:16px;}
+  .rw-btns{display:flex;gap:8px;flex-wrap:wrap;}
+  .rw-b{background:var(--card2);border:1px solid var(--line2);color:var(--text);font-family:inherit;font-weight:800;font-size:13px;padding:8px 12px;border-radius:12px;cursor:pointer;}
+  .rw-b:hover{border-color:var(--accent);}
+  .rw-c{color:var(--accent2);}
+  .mrow{display:flex;align-items:center;gap:11px;margin:9px 0 0;}
+  .mico{font-size:22px;flex:none;}
+  .mmid{flex:1;min-width:0;}
+  .mtop{display:flex;justify-content:space-between;font-size:13px;font-weight:800;margin-bottom:4px;}
+  .mnum{color:var(--muted);}
+  .mbar{height:9px;background:var(--card3);border-radius:6px;overflow:hidden;}
+  .mbar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:6px;transition:width .5s;}
+  .sb-inner{max-width:460px;width:100%;}
+  .sb-title{margin:0 0 2px;}
+  .sb-sub{color:var(--muted);font-size:13px;margin:0 0 14px;}
+  .stk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:16px;max-height:46vh;overflow-y:auto;}
+  @media(max-width:420px){.stk-grid{grid-template-columns:repeat(3,1fr);}}
+  .stk{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:10px 6px;text-align:center;opacity:.5;}
+  .stk.got{opacity:1;border-color:var(--accent);background:var(--card3);}
+  .stk-e{font-size:30px;line-height:1.1;}
+  .stk-n{font-size:11px;font-weight:800;margin-top:3px;}
+  .stk-h{font-size:10px;color:var(--muted);margin-top:3px;line-height:1.25;}
+  .shop-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+  .shopitem{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:12px 8px;text-align:center;}
+  .shop-e{font-size:34px;line-height:1;}
+  .shop-n{font-size:12.5px;font-weight:800;margin:5px 0 8px;}
+  .shop-b{width:100%;background:var(--card3);border:1px solid var(--line2);color:var(--text);font-family:inherit;font-weight:800;font-size:13px;padding:8px;border-radius:10px;cursor:pointer;}
+  .shop-b.buy{background:var(--accent);border-color:var(--accent);}
+  .shop-b.on{background:var(--accent2);border-color:var(--accent2);color:#16121f;}
+  .stk-toast{position:fixed;left:50%;top:18px;transform:translate(-50%,-26px);background:var(--card3);border:1px solid var(--accent);border-radius:16px;padding:11px 16px;display:flex;align-items:center;gap:12px;z-index:200;box-shadow:0 12px 30px rgba(0,0,0,.5);opacity:0;transition:.4s;}
+  .stk-toast.show{transform:translate(-50%,0);opacity:1;}
+  .stk-toast .tt-e{font-size:34px;line-height:1;}
+  .stk-toast .tt-t b{display:block;font-size:14px;}
+  .stk-toast .tt-t span{font-size:13px;color:var(--accent2);font-weight:800;}
   .lb-btn{width:100%;margin-top:10px;border:1px solid var(--line2);background:var(--card);color:var(--text);
     border-radius:14px;padding:13px;font-family:inherit;font-weight:900;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;}
   .lb-btn:active{transform:scale(.98);}
@@ -306,11 +345,12 @@
       <div class="chips">
         <div class="chip"><span class="ic">⭐</span><span id="totStars">0</span></div>
         <div class="chip"><span class="ic">🏆</span><span id="curLvlBadge">1</span></div>
+        <div class="chip"><span class="ic">🪙</span><span id="coinCount">0</span></div>
       </div>
     </div>
 
     <div class="hero">
-      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <span class="gwrap"><span class="ghat" id="ghat"></span><svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path d="M60 32 C60 16 74 20 74 10" fill="none" stroke="#16293b" stroke-width="5" stroke-linecap="round"/>
         <circle cx="75" cy="9" r="9" fill="#f6c722"/>
         <rect x="8" y="58" width="14" height="20" rx="6" fill="#16293b"/>
@@ -320,8 +360,18 @@
         <path d="M43,70 C41,54 59,54 57,70 Q50,63.5 43,70 Z" fill="#16293b"/><circle cx="52" cy="58.5" r="2.4" fill="#fff"/>
         <path d="M63,70 C61,54 79,54 77,70 Q70,63.5 63,70 Z" fill="#16293b"/><circle cx="72" cy="58.5" r="2.4" fill="#fff"/>
         <path d="M49 78 Q60 87 71 78" fill="none" stroke="#16293b" stroke-width="4.5" stroke-linecap="round"/>
-      </svg>
+      </svg></span>
       <div class="bubble">Hoi! Ik ben <b>Growie</b>. Kies een spel, je level en hoe je wilt oefenen — druk dan op <b>Start</b>!</div>
+    </div>
+
+    <div class="rewards">
+      <div class="rw-head"><b>🎯 Mijn uitdagingen</b>
+        <div class="rw-btns">
+          <button class="rw-b" onclick="openStickerboek()">🎟️ Stickers <span id="stCount" class="rw-c">0/16</span></button>
+          <button class="rw-b" onclick="openShop()">🎩 Pimp Growie</button>
+        </div>
+      </div>
+      <div id="missions"></div>
     </div>
 
     <div class="sec"><span class="step">1</span>Kies een spel</div>
@@ -430,6 +480,115 @@ function load(){
 function save(){ try{localStorage.setItem('klok_v2',JSON.stringify(state));}catch(e){} }
 
 /* =========================================================
+   BELONINGEN: stickers · uitdagingen · munten · Pimp Growie
+========================================================= */
+;(function migrateRW(){
+  if(typeof state.coins!=='number') state.coins=0;
+  if(!state.stickers) state.stickers={};
+  if(!state.stat) state.stat={};
+  var s=state.stat;
+  ['correct','bestStreak','perfect','fast','chal','maxChal'].forEach(function(k){ if(typeof s[k]!=='number') s[k]=0; });
+  if(!s.lvl3) s.lvl3={};
+  if(!state.hats) state.hats={};
+  if(typeof state.hat!=='string') state.hat='';
+})();
+const STICKERS=[
+  {id:'first',e:'🐣',n:'Eerste goed!',h:'Lees je eerste klok goed.'},
+  {id:'c10',e:'🐶',n:'Hondje',h:'Lees 10 klokken goed.'},
+  {id:'c25',e:'🐱',n:'Poesje',h:'Lees 25 klokken goed.'},
+  {id:'c50',e:'🦄',n:'Eenhoorn',h:'Lees 50 klokken goed.'},
+  {id:'c100',e:'🐲',n:'Draak',h:'Lees 100 klokken goed.'},
+  {id:'s5',e:'🔥',n:'Vuurtje',h:'5 goed achter elkaar.'},
+  {id:'s10',e:'⚡',n:'Bliksem',h:'10 goed achter elkaar.'},
+  {id:'perfect1',e:'🌟',n:'Foutloos!',h:'Speel een level zonder fouten.'},
+  {id:'perfect3',e:'🏅',n:'Foutloze held',h:'Speel 3 levels foutloos.'},
+  {id:'fast',e:'⏩',n:'Snelle bliksem',h:'Speel een level foutloos én snel.'},
+  {id:'l3',e:'⭐',n:'Sterren-ster',h:'Haal 3 sterren op een level.'},
+  {id:'all',e:'🌈',n:'Regenboog',h:'Speel alle 5 levels uit.'},
+  {id:'ch10',e:'🍭',n:'Snoepje',h:'Haal 10 in de Challenge.'},
+  {id:'ch20',e:'🍩',n:'Donut',h:'Haal 20 in de Challenge.'},
+  {id:'ch30',e:'🏆',n:'Challenge-koning',h:'Haal 30 in de Challenge.'},
+  {id:'chal5',e:'🎮',n:'Doorzetter',h:'Speel 5 Challenges.'}
+];
+const HATS=[
+  {id:'cap',e:'🧢',n:'Petje',p:20},
+  {id:'hat',e:'🎩',n:'Hoge hoed',p:30},
+  {id:'rain',e:'🌈',n:'Regenboog',p:40},
+  {id:'grad',e:'🎓',n:'Slimmerik',p:55},
+  {id:'crown',e:'👑',n:'Kroontje',p:75},
+  {id:'rocket',e:'🚀',n:'Raket',p:100}
+];
+let _newStickers=[];
+function rwUnlock(id){ if(state.stickers[id]) return; state.stickers[id]=true; _newStickers.push(id); }
+function rwCheck(){
+  const s=state.stat;
+  if(s.correct>=1)rwUnlock('first'); if(s.correct>=10)rwUnlock('c10'); if(s.correct>=25)rwUnlock('c25');
+  if(s.correct>=50)rwUnlock('c50'); if(s.correct>=100)rwUnlock('c100');
+  if(s.bestStreak>=5)rwUnlock('s5'); if(s.bestStreak>=10)rwUnlock('s10');
+  if(s.perfect>=1)rwUnlock('perfect1'); if(s.perfect>=3)rwUnlock('perfect3');
+  if(s.fast>=1)rwUnlock('fast');
+  if(Object.keys(s.lvl3||{}).length>=1)rwUnlock('l3');
+  let all=true; for(let i=1;i<=5;i++){ if(!(state.done[i]>0)) all=false; } if(all)rwUnlock('all');
+  if(s.maxChal>=10)rwUnlock('ch10'); if(s.maxChal>=20)rwUnlock('ch20'); if(s.maxChal>=30)rwUnlock('ch30');
+  if(s.chal>=5)rwUnlock('chal5');
+}
+function rwFlush(){ if(_newStickers.length){ const ids=_newStickers.slice(); _newStickers=[]; ids.forEach((id,i)=>setTimeout(()=>stickerToast(id),250+i*1400)); } renderRewards(); }
+function rwCorrect(){ const s=state.stat; s.correct++; if(typeof game!=='undefined'&&game){ game._st=(game._st||0)+1; if(game._st>s.bestStreak)s.bestStreak=game._st; } state.coins+=2; rwCheck(); save(); rwFlush(); }
+function rwWrong(){ if(typeof game!=='undefined'&&game){ game._st=0; game.mistakes=(game.mistakes||0)+1; } save(); }
+function rwLevelDone(stars,lvl,mistakes,timeMs){
+  const s=state.stat;
+  if(mistakes===0){ s.perfect++; if(timeMs<150000) s.fast++; }
+  if(stars>=3){ s.lvl3[lvl]=true; }
+  state.coins+=stars*5;
+  rwCheck(); save(); rwFlush();
+}
+function rwChallenge(score){ const s=state.stat; s.chal++; if(score>s.maxChal)s.maxChal=score; state.coins+=Math.round(score/2); rwCheck(); save(); rwFlush(); }
+function rwCount(){ return STICKERS.filter(x=>state.stickers[x.id]).length; }
+function renderRewards(){
+  const cc=$('coinCount'); if(cc) cc.textContent=state.coins;
+  const sc=$('stCount'); if(sc) sc.textContent=rwCount()+'/'+STICKERS.length;
+  applyHat();
+  const mc=$('missions'); if(!mc) return;
+  const s=state.stat;
+  const goals=[
+    {ico:'⏱️',txt:'Lees klokken goed',cur:Math.min(s.correct,25),max:25},
+    {ico:'🔥',txt:'Goed achter elkaar',cur:Math.min(s.bestStreak,10),max:10},
+    {ico:'🌟',txt:'Foutloze levels',cur:Math.min(s.perfect,3),max:3}
+  ];
+  mc.innerHTML=goals.map(function(g){
+    const pct=Math.round(g.cur/g.max*100), done=g.cur>=g.max;
+    return '<div class="mrow"><span class="mico">'+g.ico+'</span><div class="mmid"><div class="mtop"><span>'+g.txt+'</span><span class="mnum">'+g.cur+'/'+g.max+(done?' ✓':'')+'</span></div><div class="mbar"><i style="width:'+pct+'%"></i></div></div></div>';
+  }).join('');
+}
+function applyHat(){ const g=$('ghat'); if(!g) return; const hat=HATS.find(h=>h.id===state.hat); g.textContent=hat?hat.e:''; }
+function rwModal(html){ const m=document.createElement('div'); m.className='modal'; m.innerHTML='<div class="inner sb-inner">'+html+'</div>'; document.body.appendChild(m); return m; }
+function openStickerboek(){
+  const grid=STICKERS.map(function(x){ const got=state.stickers[x.id];
+    return '<div class="stk'+(got?' got':'')+'"><div class="stk-e">'+(got?x.e:'❓')+'</div><div class="stk-n">'+(got?x.n:'???')+'</div><div class="stk-h">'+x.h+'</div></div>';
+  }).join('');
+  const m=rwModal('<h2 class="sb-title">🎟️ Stickerboek</h2><p class="sb-sub">'+rwCount()+' van '+STICKERS.length+' verzameld</p><div class="stk-grid">'+grid+'</div><button id="sbClose">Sluiten</button>');
+  $('sbClose').onclick=()=>m.remove();
+}
+function openShop(){
+  const items=HATS.map(function(h){ const owned=state.hats[h.id]; const on=state.hat===h.id;
+    return '<div class="shopitem"><div class="shop-e">'+h.e+'</div><div class="shop-n">'+h.n+'</div>'+
+      (owned?'<button class="shop-b'+(on?' on':'')+'" data-eq="'+h.id+'">'+(on?'✓ Op':'Opzetten')+'</button>'
+            :'<button class="shop-b buy" data-buy="'+h.id+'">🪙 '+h.p+'</button>')+'</div>';
+  }).join('');
+  const off=state.hat?'<div class="shopitem"><div class="shop-e">🙂</div><div class="shop-n">Geen pet</div><button class="shop-b" data-eq="">Afzetten</button></div>':'';
+  const m=rwModal('<h2 class="sb-title">🎩 Pimp Growie</h2><p class="sb-sub">Je hebt 🪙 <b>'+state.coins+'</b> munten</p><div class="shop-grid">'+items+off+'</div><button id="shopClose">Sluiten</button>');
+  m.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{ const hat=HATS.find(h=>h.id===b.dataset.buy); if(state.coins<hat.p){ b.textContent='Te weinig 🪙'; setTimeout(()=>b.textContent='🪙 '+hat.p,1000); return;} state.coins-=hat.p; state.hats[hat.id]=true; state.hat=hat.id; save(); m.remove(); renderRewards(); openShop(); });
+  m.querySelectorAll('[data-eq]').forEach(b=>b.onclick=()=>{ state.hat=b.dataset.eq; save(); m.remove(); renderRewards(); openShop(); });
+  $('shopClose').onclick=()=>m.remove();
+}
+function stickerToast(id){ const x=STICKERS.find(s=>s.id===id); if(!x) return; if(typeof confetti==='function')confetti(50);
+  const t=document.createElement('div'); t.className='stk-toast';
+  t.innerHTML='<div class="tt-e">'+x.e+'</div><div class="tt-t"><b>Nieuwe sticker!</b><span>'+x.n+'</span></div>';
+  document.body.appendChild(t); setTimeout(()=>t.classList.add('show'),30);
+  setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),400); },2700);
+}
+
+/* =========================================================
    TIJD HELPERS
 ========================================================= */
 function randomInt(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
@@ -528,6 +687,7 @@ function renderHome(){
     '<div class="li-ex">Voorbeelden: '+L.voorb+'</div>'+
     '<div class="li-desc">'+L.uitleg+'</div>'+
     '<div class="li-can"><b>Wat je moet kunnen:</b> '+L.kunnen+'</div>';
+  renderRewards();
 }
 function goHome(){ stopAll(); renderHome(); }
 function setFormat(f){ state.format=f; save();
@@ -555,7 +715,7 @@ function launchMode(mode){
   $('roundBadge').classList.remove('hidden');
   $('progBar').parentElement.classList.remove('low');
   if(mode==='challenge'){ startChallenge(); return; }
-  game={mode, round:0, total:(mode==='match'?4:8), correct:0, lvl:state.level, locked:false};
+  game={mode, round:0, total:(mode==='match'?4:8), correct:0, lvl:state.level, locked:false, mistakes:0, _st:0, startAt:Date.now()};
   nextRound();
 }
 function stopAll(){
@@ -573,7 +733,7 @@ const CH_TIME=45;
 function startChallenge(){
   $('hud').classList.remove('hidden');
   $('roundBadge').classList.add('hidden');
-  game={mode:'challenge', lvl:state.level, score:0, streak:0, locked:false, ended:false, endAt:Date.now()+CH_TIME*1000};
+  game={mode:'challenge', lvl:state.level, score:0, streak:0, locked:false, ended:false, endAt:Date.now()+CH_TIME*1000, _st:0, mistakes:0};
   updateHud();
   game.timer=setInterval(challengeTick,100);
   nextChallengeQ();
@@ -620,7 +780,7 @@ function chAnswer(opt,correct,b,grid){
     setBuddy('😄'); miniStar(); updateHud();
     setTimeout(nextChallengeQ,300);
   }else{
-    b.classList.add('fout'); game.streak=0; updateHud(); setBuddy('🤔');
+    b.classList.add('fout'); game.streak=0; rwWrong(); updateHud(); setBuddy('🤔');
     [...grid.children].forEach(c=>{if(c.textContent===correct)c.classList.add('goed');});
     setTimeout(nextChallengeQ,650);
   }
@@ -633,6 +793,7 @@ function endChallenge(){
   $('hudTime').textContent='⏱ 0';
   document.querySelectorAll('.opt').forEach(o=>o.classList.add('disabled'));
   confetti(40);
+  rwChallenge(game.score);
   showChallengeResult(game.score, game.lvl);
 }
 function escapeHtml(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
@@ -717,7 +878,7 @@ function roundLees(){
       const ok=(opt===correct);
       if(ok){ b.classList.add('goed'); game.correct++; setBuddy('😄'); miniStar(); confetti(8);
         $('feedback').textContent=pick(['Goed zo! 🎉','Top! 🌟','Helemaal goed! 👏','Knap gedaan! 💪']); $('feedback').className='feedback goed'; }
-      else{ b.classList.add('fout'); setBuddy('🤔');
+      else{ b.classList.add('fout'); setBuddy('🤔'); rwWrong();
         [...grid.children].forEach(c=>{if(c.textContent===correct)c.classList.add('goed');});
         $('feedback').textContent='Het juiste antwoord is '+correct; $('feedback').className='feedback fout'; }
       grid.querySelectorAll('.opt').forEach(o=>o.classList.add('disabled'));
@@ -746,7 +907,7 @@ function roundZet(){
       $('feedback').textContent=pick(['Goed gezet! 🎉','Top! 🌟','Helemaal goed! 👏']); $('feedback').className='feedback goed';
       showExplainNext(t);
     } else {
-      setBuddy('🤔'); $('feedback').textContent='Nog niet helemaal'; $('feedback').className='feedback fout';
+      rwWrong(); setBuddy('🤔'); $('feedback').textContent='Nog niet helemaal'; $('feedback').className='feedback fout';
       $('hint').textContent='Het moet '+fmt(t.h,t.m)+' worden. Kijk goed naar de wijzers en probeer opnieuw.';
     }
   };
@@ -829,7 +990,7 @@ function matchClick(card){
     miniStar(); setBuddy('😄'); $('hint').textContent='Goed zo! 🎉';
     if(game.matchDone===4){ game.correct++; setTimeout(()=>{ $('feedback').textContent='Alles gekoppeld! 🌟'; $('feedback').className='feedback goed'; confetti(); setTimeout(nextRound,1100);},400); }
   }else{
-    card.classList.add('fout'); const sel=game.matchSel;
+    rwWrong(); card.classList.add('fout'); const sel=game.matchSel;
     setTimeout(()=>{card.classList.remove('fout'); sel.classList.remove('sel');},420);
     game.matchSel=null; $('hint').textContent='Net niet, probeer een andere. 💪';
   }
@@ -909,6 +1070,7 @@ function finishGame(){
   if((state.done[game.lvl]||0) < stars) state.done[game.lvl]=stars;
   if(stars>=2 && game.lvl<5 && state.level===game.lvl) state.level=game.lvl+1;
   save(); confetti(46);
+  rwLevelDone(stars, game.lvl, game.mistakes||0, Date.now()-(game.startAt||Date.now()));
   showModal(stars, game.correct, game.total);
 }
 
@@ -958,7 +1120,7 @@ function setBuddy(face){
   if(face) f.textContent=face;
   if(b){ b.classList.remove('bounce'); void b.offsetWidth; b.classList.add('bounce'); }
 }
-function miniStar(){ confetti(8); }
+function miniStar(){ confetti(8); rwCorrect(); }
 function confetti(n){
   n=n||20; const fx=$('fx');
   const emojis=['⭐','🌟','✨','🎉','💜'];
