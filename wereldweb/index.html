@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wereldweb · Energie-afhankelijkheden</title>
+<style>
+  :root{
+    --bg:#0a0f1e; --bg2:#0e1630; --panel:#121b34; --panel2:#1a2547; --line:rgba(255,255,255,.10);
+    --text:#eaf0ff; --muted:#93a1c4; --accent:#46d6c6; --accent2:#7c9bff;
+    --gas:#5ec8ff; --oil:#ffb454; --choke:#ff5d6c; --producer:#ffd23f; --consumer:#9d7bff;
+    --ok:#5fe39a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:
+      radial-gradient(1200px 700px at 70% -10%, #16224a 0%, transparent 60%),
+      linear-gradient(180deg,#0b1124,#070b16) fixed;
+    color:var(--text);min-height:100vh;overflow-x:hidden;}
+  a{color:var(--accent);}
+  .top{display:flex;align-items:center;gap:14px;padding:12px 18px;border-bottom:1px solid var(--line);
+    background:rgba(8,12,26,.6);backdrop-filter:blur(8px);position:sticky;top:0;z-index:20;flex-wrap:wrap;}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:18px;letter-spacing:.2px;}
+  .brand .dot{width:13px;height:13px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#7af0e4,#2a9d92);box-shadow:0 0 14px rgba(70,214,198,.7);}
+  .brand small{font-weight:600;color:var(--muted);font-size:12px;margin-left:2px;}
+  .top .spacer{flex:1;}
+  .seg{display:flex;background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:3px;gap:2px;}
+  .seg button{border:0;background:transparent;color:var(--muted);font:inherit;font-weight:700;font-size:13px;
+    padding:7px 13px;border-radius:8px;cursor:pointer;white-space:nowrap;}
+  .seg button.on{background:var(--accent);color:#06231e;}
+  .seg.lvl button.on{background:var(--accent2);color:#0a1030;}
+  .layout{display:grid;grid-template-columns:1fr 380px;gap:0;min-height:calc(100vh - 56px);}
+  @media(max-width:880px){.layout{grid-template-columns:1fr;}}
+  .stage{position:relative;min-height:52vh;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+  #globe{display:block;width:100%;height:100%;cursor:grab;touch-action:none;}
+  #globe:active{cursor:grabbing;}
+  .legend{position:absolute;left:14px;bottom:12px;display:flex;flex-wrap:wrap;gap:6px 12px;font-size:11.5px;color:var(--muted);
+    background:rgba(8,12,26,.55);border:1px solid var(--line);border-radius:10px;padding:8px 11px;backdrop-filter:blur(4px);max-width:calc(100% - 28px);}
+  .legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px;}
+  .hint{position:absolute;left:50%;top:12px;transform:translateX(-50%);font-size:12px;color:var(--muted);
+    background:rgba(8,12,26,.55);border:1px solid var(--line);border-radius:999px;padding:5px 13px;pointer-events:none;}
+  .panel{background:var(--panel);border-left:1px solid var(--line);padding:18px;overflow-y:auto;max-height:calc(100vh - 56px);}
+  @media(max-width:880px){.panel{border-left:0;border-top:1px solid var(--line);max-height:none;}}
+  .pcard{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:14px 15px;margin-bottom:12px;}
+  .pcard h3{font-size:15px;margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+  .pcard p{font-size:14px;line-height:1.6;color:#d6def5;}
+  .ptitle{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:2px 0 10px;}
+  .chip-row{display:flex;flex-wrap:wrap;gap:7px;}
+  .ichip{display:flex;align-items:center;gap:8px;width:100%;text-align:left;background:var(--panel2);border:1px solid var(--line);
+    color:var(--text);font:inherit;font-weight:700;font-size:13.5px;padding:11px 13px;border-radius:12px;cursor:pointer;transition:.12s;}
+  .ichip:hover{border-color:var(--accent);transform:translateY(-1px);}
+  .ichip.on{border-color:var(--choke);background:rgba(255,93,108,.12);}
+  .ichip .em{font-size:18px;flex:none;}
+  .ichip small{display:block;color:var(--muted);font-weight:600;font-size:11.5px;margin-top:1px;}
+  .impact{margin-top:10px;}
+  .impact .tag{display:inline-block;font-size:11px;font-weight:800;padding:3px 9px;border-radius:999px;margin:0 5px 6px 0;}
+  .tag.hit{background:rgba(255,93,108,.16);color:#ff8a95;border:1px solid rgba(255,93,108,.4);}
+  .tag.up{background:rgba(255,180,84,.14);color:var(--oil);border:1px solid rgba(255,180,84,.35);}
+  .scbtns{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+  .btn{border:0;border-radius:11px;font:inherit;font-weight:800;font-size:14px;padding:11px 16px;cursor:pointer;background:var(--accent);color:#06231e;}
+  .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--text);}
+  .btn:disabled{opacity:.4;cursor:default;}
+  .steps{display:flex;gap:5px;margin:4px 0 12px;}
+  .steps i{flex:1;height:5px;border-radius:3px;background:var(--panel2);}
+  .steps i.on{background:var(--accent2);}
+  .choices{display:flex;flex-direction:column;gap:8px;margin-top:10px;}
+  .choice{text-align:left;background:var(--panel2);border:1px solid var(--line);color:var(--text);font:inherit;font-weight:700;
+    font-size:13.5px;padding:11px 13px;border-radius:12px;cursor:pointer;}
+  .choice:hover{border-color:var(--accent2);}
+  .foot{font-size:11px;color:var(--muted);text-align:center;padding:10px;border-top:1px solid var(--line);}
+  .loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;}
+  .spin{width:28px;height:28px;border:3px solid var(--line);border-top-color:var(--accent);border-radius:50%;display:inline-block;animation:spin .8s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .nlbox{margin-top:10px;background:rgba(255,180,84,.10);border:1px solid rgba(255,180,84,.35);border-radius:11px;padding:10px 12px;font-size:13px;line-height:1.55;color:#ffe2bd;}
+</style>
+</head>
+<body>
+  <div class="top">
+    <div class="brand"><span class="dot"></span>Wereldweb <small>· energie</small></div>
+    <div class="spacer"></div>
+    <div class="seg lvl" id="lvlSeg">
+      <button data-lvl="kind">Kind</button>
+      <button data-lvl="tiener" class="on">Tiener</button>
+      <button data-lvl="volw">Volwassen</button>
+    </div>
+    <div class="seg" id="modeSeg">
+      <button data-mode="verken" class="on">🌍 Verken</button>
+      <button data-mode="ai">🎯 Scenario's</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <div class="stage">
+      <svg id="globe"></svg>
+      <div class="hint" id="hint">Sleep om de globe te draaien · tik op een land</div>
+      <div class="legend">
+        <span><i style="background:var(--producer)"></i>producent</span>
+        <span><i style="background:var(--consumer)"></i>afnemer</span>
+        <span><i style="background:var(--choke)"></i>knooppunt</span>
+        <span><i style="background:var(--gas)"></i>gas</span>
+        <span><i style="background:var(--oil)"></i>olie</span>
+      </div>
+      <div class="loading" id="loading">Globe laden…</div>
+    </div>
+    <div class="panel" id="panel"></div>
+  </div>
+  <div class="foot">Vereenvoudigd educatief model van echte afhankelijkheden — bedoeld om te begrijpen, niet als exacte data. © Wereldweb</div>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+<script>
+/* =======================================================================
+   DATA — zorgvuldig samengesteld, vereenvoudigd model van energiestromen
+======================================================================= */
+const C = { // landen & knooppunten: [lon, lat]
+  Rusland:[37.6,55.8], SaoediArabie:[46.7,24.7], VS:[-98,39], Qatar:[51.2,25.3],
+  Noorwegen:[8.5,60.5], Irak:[44.4,33.3], VAE:[54.4,24.5], Iran:[51.4,35.7],
+  Algerije:[3.05,36.7], Nigeria:[8,9], Koeweit:[47.9,29.4], Kazachstan:[67,48],
+  Duitsland:[13.4,52.5], Italie:[12.5,41.9], Frankrijk:[2.35,48.85], Nederland:[4.9,52.4],
+  Spanje:[-3.7,40.4], VK:[-0.13,51.5], China:[116.4,39.9], India:[77.2,28.6],
+  Japan:[139.7,35.7], ZuidKorea:[127,37.5], Turkije:[32.85,39.9], Polen:[21,52.2]
+};
+const CHOKE = { Hormuz:[56.4,26.6], Malakka:[101.5,2.5], Suez:[32.55,30], BabElMandeb:[43.4,12.6] };
+const LABEL = { SaoediArabie:'Saoedi-Arabië', VAE:'V.A.E.', ZuidKorea:'Zuid-Korea', VK:'V.K.', VS:'V.S.',
+  BabElMandeb:'Bab-el-Mandeb', Kazachstan:'Kazachstan' };
+const lab = k => LABEL[k]||k;
+
+const PRODUCERS = ['Rusland','SaoediArabie','VS','Qatar','Noorwegen','Irak','VAE','Iran','Algerije','Nigeria','Koeweit','Kazachstan'];
+const FLOWS = [ // {van, naar, soort}
+  {v:'Rusland',n:'Duitsland',s:'gas'},{v:'Rusland',n:'Italie',s:'gas'},{v:'Rusland',n:'Turkije',s:'gas'},
+  {v:'Rusland',n:'China',s:'olie'},{v:'Rusland',n:'India',s:'olie'},
+  {v:'Noorwegen',n:'Duitsland',s:'gas'},{v:'Noorwegen',n:'VK',s:'gas'},{v:'Noorwegen',n:'Nederland',s:'gas'},
+  {v:'Algerije',n:'Italie',s:'gas'},{v:'Algerije',n:'Spanje',s:'gas'},
+  {v:'Qatar',n:'Japan',s:'gas'},{v:'Qatar',n:'ZuidKorea',s:'gas'},{v:'Qatar',n:'India',s:'gas'},
+  {v:'VS',n:'Duitsland',s:'gas'},{v:'VS',n:'Nederland',s:'gas'},
+  {v:'SaoediArabie',n:'China',s:'olie'},{v:'SaoediArabie',n:'India',s:'olie'},{v:'SaoediArabie',n:'Japan',s:'olie'},
+  {v:'VAE',n:'China',s:'olie'},{v:'Irak',n:'China',s:'olie'},{v:'Irak',n:'India',s:'olie'},
+  {v:'Koeweit',n:'ZuidKorea',s:'olie'}
+];
+// land-info per niveau
+const INFO = {
+  Rusland:{rol:'producent', kind:'Een heel groot land met veel gas en olie. Veel landen kochten hier hun energie.',
+    tiener:'Een van de grootste exporteurs van gas en olie ter wereld. Europa was er lang sterk van afhankelijk.',
+    volw:'Grootmacht in fossiele energie; pijpleidinggas naar Europa is sinds 2022 grotendeels weggevallen, export verschoof naar China en India.'},
+  SaoediArabie:{rol:'producent', kind:'Een woestijnland met heel veel olie onder de grond.',
+    tiener:'Een van de grootste olie-exporteurs; veel olie gaat via de Golf naar Azië.',
+    volw:'Kernland van OPEC; stuurt mee op de olieprijs via productieafspraken. Export vooral via de Straat van Hormuz richting Azië.'},
+  Qatar:{rol:'producent', kind:'Klein, rijk land met heel veel gas (LNG, gas op schepen).',
+    tiener:'Topexporteur van vloeibaar gas (LNG) naar o.a. Japan, Korea en India.',
+    volw:'Een van de grootste LNG-exporteurs; tankers varen door de Straat van Hormuz, wat het kwetsbaar maakt voor blokkades.'},
+  Duitsland:{rol:'afnemer', kind:'Een fabrieksland dat veel energie nodig heeft maar weinig zelf heeft.',
+    tiener:'Grote industrie, veel energie nodig. Was sterk afhankelijk van Russisch gas, nu van Noorwegen en LNG.',
+    volw:'Industriële motor van Europa; na 2022 razendsnel omgeschakeld van Russisch pijpleidinggas naar LNG (VS/Qatar) en Noors gas, met hogere prijzen.'},
+  China:{rol:'afnemer', kind:'Het land met de meeste mensen en fabrieken; heeft enorm veel energie nodig.',
+    tiener:'Grootste energie-importeur ter wereld; koopt olie uit de Golf en Rusland.',
+    volw:'Grootste olie-importeur; sterk afhankelijk van doorvoer via Hormuz en Malakka. Koopt sinds 2022 meer korting-olie uit Rusland.'},
+  India:{rol:'afnemer', kind:'Een heel groot land dat steeds meer energie gebruikt.',
+    tiener:'Snelgroeiende vraag; importeert veel olie uit de Golf en goedkope Russische olie.',
+    volw:'Derde olie-importeur; balanceert tussen Golf-leveranciers en sterk toegenomen Russische import na 2022.'}
+};
+const DEFAULT_INFO = {
+  producent:{kind:'Dit land verkoopt energie aan andere landen.',tiener:'Een producent/exporteur van energie.',volw:'Netto-exporteur van energie in dit model.'},
+  afnemer:{kind:'Dit land koopt energie van andere landen.',tiener:'Een afnemer die energie importeert.',volw:'Netto-importeur; afhankelijk van leveranciers en doorvoerroutes.'}
+};
+
+const DISRUPTIONS = [
+  { id:'rus', em:'🛑', naam:'Rusland sluit de gaskraan', sub:'pijpleidinggas naar Europa stopt',
+    hits:['Duitsland','Italie','Polen','Turkije'], up:['Duitsland','Italie'],
+    arcs:FLOWS.filter(f=>f.v==='Rusland'&&f.s==='gas'),
+    kind:'Brr! Veel huizen in Europa werden warm met gas uit Rusland. Als de kraan dichtgaat, wordt energie duurder en moet Europa elders gas kopen.',
+    tiener:'Europa kreeg veel gas via pijpleidingen uit Rusland. Valt dat weg, dan stijgen de prijzen en moet Europa snel gas halen uit Noorwegen en LNG-schepen (VS, Qatar) — en zuiniger doen.',
+    volw:'Wegvallend Russisch pijpleidinggas dwingt Europa tot duurdere LNG (VS/Qatar), meer Noors gas, vraagreductie en opslag. Gevolg: prijspieken, industrie onder druk, en een blijvende herschikking van de gasmarkt.',
+    nl:'🇳🇱 Voor Nederland: je energierekening stijgt, en omdat gas nodig is voor kunstmest en transport worden ook je boodschappen duurder. Sinds Groningen dicht is hebben we weinig eigen gas — we leunen op import en LNG via de haven.'},
+  { id:'hormuz', em:'⚓', naam:'Straat van Hormuz geblokkeerd', sub:'~1/5 van alle olie ter wereld',
+    hits:['SaoediArabie','VAE','Irak','Koeweit','Qatar','China','India','Japan','ZuidKorea'], up:['China','India','Japan'],
+    arcs:FLOWS.filter(f=>['SaoediArabie','VAE','Irak','Koeweit','Qatar'].includes(f.v)),
+    kind:'Heel veel olie vaart door één smal straatje bij de Golf. Gaat dat dicht, dan komt er ineens veel minder olie de wereld op — overal wordt benzine duurder.',
+    tiener:'Door de Straat van Hormuz gaat ongeveer een vijfde van alle olie. Bij een blokkade kunnen Golf-landen hun olie en gas niet verschepen; vooral Azië (China, India, Japan, Korea) zit klem en de olieprijs schiet wereldwijd omhoog.',
+    volw:'Hormuz is het belangrijkste olie-knooppunt (~20% van de wereldolie + Qatarees LNG). Een blokkade raakt Golf-exporteurs en Aziatische importeurs direct; de wereldwijde prijs reageert onmiddellijk, want er is nauwelijks alternatieve route met die capaciteit.',
+    nl:'🇳🇱 Voor Nederland: een wereldwijde olieschok betekent direct duurdere benzine en diesel aan de pomp, duurder transport en hogere prijzen in de supermarkt. Rotterdam is bovendien een groot olie-doorvoerpunt.'},
+  { id:'suez', em:'🚢', naam:'Suez / Bab-el-Mandeb dicht', sub:'route Europa ↔ Azië',
+    hits:['Italie','Duitsland','India','China'], up:['Italie','Duitsland'],
+    arcs:[{v:'Qatar',n:'Italie',s:'gas'},{v:'Qatar',n:'Duitsland',s:'gas'}],
+    kind:'Schepen tussen Europa en Azië nemen een kort weggetje via het Suezkanaal. Is dat dicht, dan moeten ze de héle lange weg om Afrika — dat duurt langer en kost meer.',
+    tiener:'Suez en Bab-el-Mandeb verbinden Europa en Azië. Bij blokkade varen tankers om heel Afrika heen: weken langer, hogere kosten en vertraagde leveringen van olie en LNG.',
+    volw:'Verstoring van Suez/Bab-el-Mandeb dwingt omvaren via Kaap de Goede Hoop (+1–2 weken), wat vrachtkosten en leveringszekerheid raakt. Geen totale tekorten, maar prijs- en timingdruk, vooral voor Europa.',
+    nl:'🇳🇱 Voor Nederland (handels- en havenland): langere vaarroutes maken import duurder en trager — van brandstof tot spullen en voedsel uit Azië. Dat zie je terug in de prijzen.'},
+  { id:'malakka', em:'🌊', naam:'Straat van Malakka dicht', sub:'olie-ader naar Oost-Azië',
+    hits:['China','Japan','ZuidKorea'], up:['China','Japan','ZuidKorea'],
+    arcs:FLOWS.filter(f=>['China','Japan','ZuidKorea'].includes(f.n)&&f.s==='olie'),
+    kind:'De meeste olie voor China en Japan vaart door een ander smal straatje bij Singapore. Gaat dat dicht, dan komen die landen in de problemen.',
+    tiener:'Via de Straat van Malakka gaat het grootste deel van de olie naar China, Japan en Korea. Een blokkade snijdt Oost-Azië af van Golf-olie — een grote kwetsbaarheid.',
+    volw:'Malakka is de smalle flessenhals tussen Indische Oceaan en Oost-Azië. China noemt dit zelf het “Malakka-dilemma” en bouwt daarom pijpleidingen en alternatieve routes om de afhankelijkheid te verkleinen.',
+    nl:'🇳🇱 Voor Nederland: indirect, maar merkbaar — duurdere olie en haperende Aziatische fabrieken jagen prijzen op en kunnen leiden tot tekorten aan producten die wij importeren.'}
+];
+
+const SCENARIOS = [
+  { id:'gaskraan', em:'🔥', titel:'De Gaskraan', disrupt:'rus',
+    intro:{kind:'Het is winter. Rusland zegt: geen gas meer naar Europa. Wat gebeurt er?',
+      tiener:'Winter. Rusland draait het pijpleidinggas naar Europa dicht. Jij gaat ontdekken wat dat in beweging zet.',
+      volw:'Het is winter en Rusland stopt de pijpleidinggasleveringen aan Europa. Doorloop de keten en de beleidsopties.'},
+    steps:[
+      {q:'Wie heeft hier het meeste last van?',
+       a:[{t:'Landen met veel eigen gas',ok:false,r:'Niet echt — die kunnen zichzelf bedruipen.'},
+          {t:'Landen die veel Russisch gas kochten (zoals Duitsland, Italië)',ok:true,r:'Klopt. Industrielanden zonder eigen gas voelen het direct: prijzen omhoog.'}]},
+      {q:'Wat kan Europa op korte termijn doen?',
+       a:[{t:'Gas op schepen (LNG) kopen uit de VS en Qatar, en zuiniger zijn',ok:true,r:'Precies. LNG + meer Noors gas + vraag verlagen + opslag vullen.'},
+          {t:'Niets, gewoon afwachten',ok:false,r:'Te riskant — dan lopen prijzen en tekorten op.'}]},
+      {q:'Wat is een blijvend gevolg?',
+       a:[{t:'Alles gaat snel terug naar normaal',ok:false,r:'Niet helemaal — de markt verandert structureel.'},
+          {t:'Europa bouwt LNG-havens en spreidt leveranciers; energie blijft duurder',ok:true,r:'Ja. Minder afhankelijk van één leverancier, maar tegen hogere kosten.'}]}
+    ],
+    slot:{kind:'Knap! Je zag hoe één kraan de hele keten in beweging zet.',
+      tiener:'Goed gedaan. Je begrijpt nu de keten: afhankelijkheid → prijsschok → alternatieven → blijvende verschuiving.',
+      volw:'Je hebt de volledige keten doorlopen: blootstelling, korte-termijnmitigatie (LNG, Noorwegen, vraagreductie) en structurele diversificatie tegen hogere kosten.'} },
+  { id:'hormuz', em:'⚓', titel:'Het Nauwe Straatje', disrupt:'hormuz',
+    intro:{kind:'Bij de Golf is een heel smal stukje zee. Stel: het gaat dicht. Wat dan?',
+      tiener:'Spanning in de Golf: de Straat van Hormuz dreigt dicht te gaan. Ontdek wat er op het spel staat.',
+      volw:'Geopolitieke spanning dreigt de Straat van Hormuz te sluiten. Onderzoek de mondiale gevolgen en de speelruimte.'},
+    steps:[
+      {q:'Waarom is juist dit straatje zo belangrijk?',
+       a:[{t:'Er vaart ongeveer een vijfde van alle olie doorheen',ok:true,r:'Klopt — daarom raakt een blokkade meteen de hele wereldmarkt.'},
+          {t:'Het is gewoon een mooi vaargebied',ok:false,r:'Nee, het gaat om de enorme oliestroom.'}]},
+      {q:'Wie voelt het het hardst?',
+       a:[{t:'Aziatische afnemers zoals China, India, Japan en Korea',ok:true,r:'Ja — hun olie komt grotendeels uit de Golf via Hormuz.'},
+          {t:'Alleen de landen in de Golf zelf',ok:false,r:'Ook zij, maar de afnemers in Azië zitten net zo klem.'}]},
+      {q:'Wat gebeurt er met de prijs?',
+       a:[{t:'Die blijft gelijk',ok:false,r:'Onwaarschijnlijk bij zo’n groot wegvallend aanbod.'},
+          {t:'De olieprijs schiet wereldwijd omhoog — ook bij ons',ok:true,r:'Precies. Eén knooppunt, mondiaal effect aan de pomp.'}]}
+    ],
+    slot:{kind:'Top! Je snapt nu waarom één smal straatje de hele wereld raakt.',
+      tiener:'Sterk. Je ziet hoe een knooppunt (chokepoint) een lokaal probleem wereldwijd maakt.',
+      volw:'Je hebt het chokepoint-mechanisme doorgrond: geconcentreerde doorvoer + weinig alternatieven = mondiale prijsschok bij verstoring.'} }
+];
+
+/* =======================================================================
+   STATE
+======================================================================= */
+let LEVEL='tiener', MODE='verken';
+let activeDisrupt=null;      // verken-modus
+let selCountry=null;
+let scenario=null, scStep=0, scChosen=null;
+let aiMode='realistisch', aiHistory=[], aiScene=null, aiLoading=false, aiError='';
+
+/* =======================================================================
+   GLOBE (D3 orthografisch, SVG — werkt ook zonder landgrenzen)
+======================================================================= */
+const svg=d3.select('#globe');
+let W=0,H=0,scale=0;
+const projection=d3.geoOrthographic().clipAngle(90).precision(.4);
+const path=d3.geoPath(projection);
+let land=null, rotation=[ -20,-25,0 ], dragging=false, autoRot=true;
+
+const gSphere=svg.append('path').attr('class','sphere');
+const gGrat=svg.append('path').attr('fill','none');
+const gLand=svg.append('path');
+const gArcs=svg.append('g');
+const gPts=svg.append('g');
+const gLbl=svg.append('g');
+const graticule=d3.geoGraticule10();
+
+function resize(){
+  const st=document.querySelector('.stage');
+  W=st.clientWidth; H=st.clientHeight||st.clientWidth;
+  svg.attr('viewBox',`0 0 ${W} ${H}`).attr('width',W).attr('height',H);
+  scale=Math.min(W,H)/2.15;
+  projection.scale(scale).translate([W/2,H/2]).rotate(rotation);
+  render();
+}
+function visible(lonlat){ return d3.geoDistance(lonlat,[-rotation[0],-rotation[1]])<Math.PI/2-0.02; }
+
+function render(){
+  projection.rotate(rotation);
+  gSphere.attr('d',path({type:'Sphere'})).attr('fill','#0b1430').attr('stroke','rgba(120,160,255,.25)').attr('stroke-width',1);
+  gGrat.attr('d',path(graticule)).attr('stroke','rgba(120,150,220,.10)').attr('stroke-width',.6);
+  if(land) gLand.attr('d',path(land)).attr('fill','#16213f').attr('stroke','rgba(140,170,230,.22)').attr('stroke-width',.5);
+  drawArcs(); drawPoints();
+}
+
+function curArcs(){
+  if(MODE==='ai'){ return ((aiScene&&aiScene.stromen)||[]).map(s=>({v:s.van,n:s.naar,s:s.soort==='olie'?'olie':'gas'})); }
+  if(MODE==='scenario'&&scenario){ return DISRUPTIONS.find(d=>d.id===scenario.disrupt).arcs; }
+  if(activeDisrupt){ return activeDisrupt.arcs; }
+  if(selCountry){ return FLOWS.filter(f=>f.v===selCountry||f.n===selCountry); }
+  return FLOWS; // overzicht
+}
+function drawArcs(){
+  const arcs=curArcs();
+  const data=arcs.map(f=>{ const a=C[f.v],b=C[f.n]; if(!a||!b)return null;
+    return {d:{type:'LineString',coordinates:[a,b]}, s:f.s}; }).filter(Boolean);
+  const sel=gArcs.selectAll('path').data(data);
+  sel.enter().append('path').merge(sel)
+    .attr('d',d=>path(d.d))
+    .attr('fill','none')
+    .attr('stroke',d=>d.s==='gas'?'var(--gas)':'var(--oil)')
+    .attr('stroke-width',1.6).attr('stroke-linecap','round')
+    .attr('opacity',.85).attr('stroke-dasharray','1 6');
+  sel.exit().remove();
+}
+function highlightSet(){
+  if(MODE==='ai'&&aiScene){ return new Set([...(aiScene.geraakt||[]),...(aiScene.omhoog||[])]); }
+  if(MODE==='scenario'&&scenario){ return new Set(DISRUPTIONS.find(d=>d.id===scenario.disrupt).hits); }
+  if(activeDisrupt) return new Set(activeDisrupt.hits);
+  return new Set();
+}
+function drawPoints(){
+  const hl=highlightSet();
+  const nodes=[];
+  for(const k in C){ nodes.push({k,ll:C[k],type:PRODUCERS.includes(k)?'prod':'cons'}); }
+  for(const k in CHOKE){ nodes.push({k,ll:CHOKE[k],type:'choke'}); }
+  const sel=gPts.selectAll('circle').data(nodes,d=>d.k);
+  const ent=sel.enter().append('circle').attr('cursor','pointer')
+    .on('click',(e,d)=>{ if(d.type!=='choke'){ selCountry=d.k; activeDisrupt=null; renderPanel(); render(); } });
+  ent.merge(sel)
+    .each(function(d){ d.vis=visible(d.ll); const p=projection(d.ll); d.x=p?p[0]:0; d.y=p?p[1]:0; })
+    .attr('cx',d=>d.x).attr('cy',d=>d.y)
+    .attr('r',d=> d.type==='choke'?5.5 : (d.k===selCountry?7:4.5))
+    .attr('display',d=>d.vis?null:'none')
+    .attr('fill',d=> d.type==='choke'?'var(--choke)': d.type==='prod'?'var(--producer)':'var(--consumer)')
+    .attr('stroke',d=> hl.has(d.k)?'#fff':'rgba(0,0,0,.5)')
+    .attr('stroke-width',d=> hl.has(d.k)?2.5:1)
+    .attr('opacity',d=> (hl.size&&!hl.has(d.k)&&d.type!=='choke')?.4:1)
+    .style('filter',d=> hl.has(d.k)?'drop-shadow(0 0 6px rgba(255,93,108,.9))':(d.type==='choke'?'drop-shadow(0 0 5px rgba(255,93,108,.6))':'none'));
+  sel.exit().remove();
+
+  // labels alleen voor highlight/selectie/knooppunt
+  const labs=nodes.filter(d=>d.vis && (hl.has(d.k)||d.k===selCountry||d.type==='choke'));
+  const ls=gLbl.selectAll('text').data(labs,d=>d.k);
+  ls.enter().append('text').attr('font-size',11).attr('font-weight',700)
+    .attr('fill','#dfe7ff').attr('paint-order','stroke').attr('stroke','#070b16').attr('stroke-width',3)
+    .merge(ls).attr('x',d=>d.x+8).attr('y',d=>d.y+4).text(d=>lab(d.k));
+  ls.exit().remove();
+}
+
+/* rotatie + sleep */
+svg.call(d3.drag()
+  .on('start',()=>{dragging=true;autoRot=false;})
+  .on('drag',(e)=>{ const k=.3; rotation=[rotation[0]+e.dx*k, Math.max(-90,Math.min(90,rotation[1]-e.dy*k)), rotation[2]]; render(); })
+  .on('end',()=>{dragging=false;}));
+d3.timer(()=>{ if(autoRot&&!dragging){ rotation=[rotation[0]+0.12,rotation[1],rotation[2]]; render(); } });
+
+/* land laden (optioneel — globe werkt ook zonder) */
+fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
+  .then(r=>r.json()).then(world=>{ land=topojson.feature(world,world.objects.countries); render(); })
+  .catch(()=>{}).finally(()=>{ const l=document.getElementById('loading'); if(l)l.style.display='none'; });
+
+/* =======================================================================
+   PANEL
+======================================================================= */
+const panel=document.getElementById('panel');
+function focusOn(k){ // draai globe naar een land
+  const ll=C[k]||CHOKE[k]; if(!ll)return; autoRot=false;
+  const target=[-ll[0],-ll[1],0]; const start=rotation.slice(); let t0=null;
+  d3.timer(function(el){ if(t0===null)t0=el; const k2=Math.min(1,(el-t0)/700);
+    rotation=[start[0]+(target[0]-start[0])*k2, start[1]+(target[1]-start[1])*k2, 0]; render();
+    return k2>=1; });
+}
+function renderPanel(){
+  if(MODE==='verken') renderVerken(); else renderAI();
+}
+function renderVerken(){
+  let html='';
+  if(selCountry){
+    const inf=INFO[selCountry], rol=(inf&&inf.rol)|| (PRODUCERS.includes(selCountry)?'producent':'afnemer');
+    const txt=(inf&&inf[LEVEL])||DEFAULT_INFO[rol][LEVEL];
+    const exp=FLOWS.filter(f=>f.v===selCountry), imp=FLOWS.filter(f=>f.n===selCountry);
+    html+='<div class="pcard"><h3>'+(rol==='producent'?'🟡':'🟣')+' '+lab(selCountry)+'</h3><p>'+txt+'</p>';
+    if(exp.length) html+='<div class="impact"><span class="ptitle">Levert aan</span><br>'+exp.map(f=>'<span class="tag '+(f.s==='gas'?'up':'up')+'" style="background:rgba(94,200,255,.12);color:'+(f.s==='gas'?'var(--gas)':'var(--oil)')+';border:1px solid var(--line)">'+lab(f.n)+' · '+f.s+'</span>').join('')+'</div>';
+    if(imp.length) html+='<div class="impact"><span class="ptitle">Krijgt van</span><br>'+imp.map(f=>'<span class="tag" style="background:rgba(124,155,255,.12);color:var(--consumer);border:1px solid var(--line)">'+lab(f.v)+' · '+f.s+'</span>').join('')+'</div>';
+    html+='</div>';
+    html+='<button class="btn ghost" style="width:100%;margin-bottom:14px" onclick="clearSel()">↺ Toon alles</button>';
+  } else {
+    html+='<div class="pcard"><h3>🌍 Verken de afhankelijkheden</h3><p>Tik op een land op de globe om te zien wie energie levert en wie afhankelijk is. Of zet hieronder een <b>verstoring</b> aan en zie wat er gebeurt — én wat dat betekent voor <b>Nederland</b> 🇳🇱 en je portemonnee.</p></div>';
+  }
+  html+='<div class="ptitle">Wat als… (zet een verstoring aan)</div><div class="chip-row">';
+  DISRUPTIONS.forEach(d=>{ const on=activeDisrupt&&activeDisrupt.id===d.id;
+    html+='<button class="ichip'+(on?' on':'')+'" onclick="toggleDisrupt(\''+d.id+'\')"><span class="em">'+d.em+'</span><span>'+d.naam+'<small>'+d.sub+'</small></span></button>';
+  });
+  html+='</div>';
+  if(activeDisrupt){
+    const d=activeDisrupt;
+    html+='<div class="pcard" style="margin-top:12px;border-color:rgba(255,93,108,.4)"><h3>'+d.em+' '+d.naam+'</h3><p>'+d[LEVEL]+'</p>';
+    html+='<div class="impact"><span class="ptitle">Direct geraakt</span><br>'+d.hits.map(h=>'<span class="tag hit">'+lab(h)+'</span>').join('')+'</div>';
+    if(d.up&&d.up.length) html+='<div class="impact"><span class="ptitle">Prijs/druk omhoog</span><br>'+d.up.map(h=>'<span class="tag up">'+lab(h)+' ↑</span>').join('')+'</div>';
+    if(d.nl) html+='<div class="nlbox">'+d.nl+'</div>';
+    html+='</div>';
+  }
+  panel.innerHTML=html;
+}
+function renderScenario(){
+  let html='';
+  if(!scenario){
+    html+='<div class="pcard"><h3>🎯 Geleide scenario’s</h3><p>Doorloop een echte situatie stap voor stap en ontdek de keten van gevolgen. Kies een scenario:</p></div>';
+    SCENARIOS.forEach(s=>{ html+='<button class="ichip" onclick="startScenario(\''+s.id+'\')"><span class="em">'+s.em+'</span><span>'+s.titel+'<small>'+s.intro[LEVEL].slice(0,60)+'…</small></span></button>'; });
+    panel.innerHTML=html; return;
+  }
+  const s=scenario;
+  html+='<div class="steps">'+s.steps.map((_,i)=>'<i class="'+(i<=scStep?'on':'')+'"></i>').join('')+'</div>';
+  if(scStep>=s.steps.length){
+    html+='<div class="pcard"><h3>'+s.em+' Geslaagd!</h3><p>'+s.slot[LEVEL]+'</p></div>';
+    html+='<div class="scbtns"><button class="btn" onclick="exitScenario()">Kies een ander scenario</button></div>';
+    panel.innerHTML=html; return;
+  }
+  const st=s.steps[scStep];
+  if(scStep===0 && scChosen===null && !st._seenIntro){ /* toon intro boven stap 1 */
+    html+='<div class="pcard"><h3>'+s.em+' '+s.titel+'</h3><p>'+s.intro[LEVEL]+'</p></div>';
+  }
+  html+='<div class="pcard"><h3>Vraag '+(scStep+1)+'</h3><p>'+st.q+'</p><div class="choices">';
+  st.a.forEach((a,i)=>{ const chosen=scChosen===i;
+    html+='<button class="choice" '+(scChosen!==null?'disabled style="opacity:'+(a.ok?1:.5)+';border-color:'+(a.ok?'var(--ok)':(chosen?'var(--choke)':'var(--line)'))+'"':'')+' onclick="answer('+i+')">'+(scChosen!==null?(a.ok?'✓ ':(chosen?'✗ ':'')):'')+a.t+'</button>';
+  });
+  html+='</div>';
+  if(scChosen!==null){ const a=st.a[scChosen];
+    html+='<p style="margin-top:10px;color:'+(a.ok?'var(--ok)':'#ff8a95')+';font-size:13.5px;font-weight:700">'+a.r+'</p>';
+    html+='<div class="scbtns"><button class="btn" onclick="nextStep()">'+(scStep+1<s.steps.length?'Volgende ▶':'Afronden 🎉')+'</button></div>';
+  }
+  panel.innerHTML=html;
+}
+
+/* ---------- AI scenario-motor (dynamisch, Nederland-gericht, geen quiz) ---------- */
+function escW(s){return String(s||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+function escA(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;');}
+function renderAI(){
+  let html='';
+  html+='<div class="pcard"><h3>🎯 Scenario-motor</h3><p>Klik je door een echte situatie en zie wat het doet — voor de wereld én voor Nederland: voedsel, brandstof en prijzen. Kies een stijl:</p>'
+    +'<div class="seg" style="width:100%;margin-top:8px">'
+    +'<button class="'+(aiMode==='realistisch'?'on':'')+'" style="flex:1" onclick="setAiMode(\'realistisch\')">🎯 Realistisch</button>'
+    +'<button class="'+(aiMode==='watals'?'on':'')+'" style="flex:1" onclick="setAiMode(\'watals\')">🔮 Wat-als</button>'
+    +'</div></div>';
+  if(aiLoading){ html+='<div class="pcard" style="text-align:center"><div class="spin"></div><p style="margin-top:10px;color:var(--muted)">De AI denkt na over de gevolgen…</p></div>'; panel.innerHTML=html; return; }
+  if(aiError){ html+='<div class="pcard" style="border-color:rgba(255,93,108,.4)"><h3>⚠️ Even niet gelukt</h3><p>'+escW(aiError)+'</p></div><div class="scbtns"><button class="btn" onclick="aiStart()">Opnieuw</button></div>'; panel.innerHTML=html; return; }
+  if(!aiScene){ html+='<div class="scbtns"><button class="btn" style="width:100%" onclick="aiStart()">▶ Start een scenario</button></div>'; panel.innerHTML=html; return; }
+  const s=aiScene;
+  html+='<div class="pcard"><h3>'+(aiMode==='watals'?'🔮 ':'')+escW(s.titel)+'</h3><p>'+escW(s.situatie)+'</p>';
+  if(s.geraakt&&s.geraakt.length) html+='<div class="impact"><span class="ptitle">Geraakt</span><br>'+s.geraakt.map(h=>'<span class="tag hit">'+lab(h)+'</span>').join('')+'</div>';
+  if(s.omhoog&&s.omhoog.length) html+='<div class="impact"><span class="ptitle">Prijs/druk omhoog</span><br>'+s.omhoog.map(h=>'<span class="tag up">'+lab(h)+' ↑</span>').join('')+'</div>';
+  html+='</div>';
+  if(s.nederland) html+='<div class="pcard" style="border-color:rgba(255,180,84,.45)"><h3>🇳🇱 Wat betekent dit voor Nederland?</h3><p>'+escW(s.nederland)+'</p></div>';
+  if(s.einde){ html+='<div class="pcard" style="border-color:rgba(95,227,154,.4)"><h3>🏁 Tot zover</h3><p>'+escW(s.slot)+'</p></div><div class="scbtns"><button class="btn" onclick="aiStart()">Nieuw scenario</button></div>'; }
+  else if(s.keuzes&&s.keuzes.length){ html+='<div class="ptitle">Wat wil je verder ontdekken?</div><div class="choices">'+s.keuzes.map(k=>'<button class="choice" data-l="'+escA(k.label)+'" onclick="aiChoose(this.dataset.l)">'+escW(k.label)+'</button>').join('')+'</div>'; }
+  else { html+='<div class="scbtns"><button class="btn" onclick="aiStart()">Nieuw scenario</button></div>'; }
+  panel.innerHTML=html;
+}
+function aiSceneText(s){ return (s.titel?s.titel+': ':'')+s.situatie+(s.keuzes&&s.keuzes.length?(' [opties: '+s.keuzes.map(k=>k.label).join(' | ')+']'):''); }
+function callAI(){
+  aiLoading=true; aiError=''; renderAI();
+  fetch('/api/scenario',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({level:LEVEL,mode:aiMode,history:aiHistory})})
+    .then(r=>r.json().then(j=>({ok:r.ok,j}))).then(({ok,j})=>{
+      aiLoading=false;
+      if(ok&&j&&j.ok&&j.scene){ aiScene=j.scene; aiHistory.push({role:'model',content:aiSceneText(aiScene)}); renderAI(); render(); if(aiScene.geraakt&&aiScene.geraakt[0])focusOn(aiScene.geraakt[0]); }
+      else { aiError=(j&&j.error)||'De AI gaf geen geldig antwoord.'; renderAI(); }
+    }).catch(()=>{ aiLoading=false; aiError='Geen verbinding met de scenario-motor. Dit werkt pas live (op grwn.ai/wereldweb), niet als los offline bestand.'; renderAI(); });
+}
+window.aiStart=function(){ aiScene=null; aiError=''; aiHistory=[{role:'user',content:'Start een nieuw scenario over energie en geopolitiek. Geef een pakkende openingssituatie, leg de gevolgen uit voor voedsel/brandstof/prijzen, maak duidelijk wat het voor Nederland betekent, en geef 2-3 richtingen om verder te ontdekken.'}]; callAI(); };
+window.aiChoose=function(label){ aiHistory.push({role:'user',content:'Ik kies: '+label}); callAI(); };
+window.setAiMode=function(m){ aiMode=m; if(!aiScene&&!aiLoading) renderAI(); };
+
+/* =======================================================================
+   ACTIES
+======================================================================= */
+function clearSel(){ selCountry=null; renderPanel(); render(); }
+window.clearSel=clearSel;
+window.toggleDisrupt=function(id){ const d=DISRUPTIONS.find(x=>x.id===id);
+  activeDisrupt=(activeDisrupt&&activeDisrupt.id===id)?null:d; selCountry=null;
+  if(activeDisrupt&&activeDisrupt.hits[0]) focusOn(activeDisrupt.hits[0]);
+  renderPanel(); render(); };
+window.startScenario=function(id){ scenario=SCENARIOS.find(s=>s.id===id); scStep=0; scChosen=null;
+  const dz=DISRUPTIONS.find(d=>d.id===scenario.disrupt); if(dz&&dz.hits[0])focusOn(dz.hits[0]);
+  renderPanel(); render(); };
+window.answer=function(i){ scChosen=i; renderPanel(); };
+window.nextStep=function(){ scStep++; scChosen=null; renderPanel(); render(); };
+window.exitScenario=function(){ scenario=null; scStep=0; scChosen=null; renderPanel(); render(); };
+
+document.getElementById('lvlSeg').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b)return;
+  LEVEL=b.dataset.lvl; document.querySelectorAll('#lvlSeg button').forEach(x=>x.classList.toggle('on',x===b)); renderPanel(); });
+document.getElementById('modeSeg').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b)return;
+  MODE=b.dataset.mode; document.querySelectorAll('#modeSeg button').forEach(x=>x.classList.toggle('on',x===b));
+  activeDisrupt=null; selCountry=null; scenario=null; scStep=0; scChosen=null; aiScene=null; aiHistory=[]; aiLoading=false; aiError='';
+  document.getElementById('hint').textContent = MODE==='verken'?'Sleep om te draaien · tik op een land':'Kies een scenario in het paneel →';
+  renderPanel(); render(); });
+
+window.addEventListener('resize',resize);
+resize(); renderPanel();
+</script>
+</body>
+</html>
