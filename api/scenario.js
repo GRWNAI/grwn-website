@@ -33,10 +33,13 @@ PUBLIEK: de gewone Nederlander (geen expert). Leg het glashelder en concreet uit
 
 OPDRACHT: gegeven de geschiedenis en de laatste keuze, beschrijf de NIEUWE situatie en leg de gevolgen helder uit. Maak telkens expliciet wat het betekent voor VOEDSEL, BRANDSTOF en PRIJZEN, en -- heel belangrijk -- wat het concreet betekent voor NEDERLAND en de gewone Nederlander (boodschappen, benzine/diesel, energierekening, banen, de haven). Bied daarna 2 of 3 richtingen om verder te ontdekken. Na 3 tot 5 stappen rond je af (einde=true) met een korte slotreflectie. Verzin NOOIT exacte percentages of cijfers alsof ze feitelijk zijn.
 
+MISSIE: help de gewone Nederlander begrijpen wat er ECHT gaande is en hoe reeel hun zorgen zijn (komt er oorlog? wordt benzine duurder? gaat de gasprijs omhoog?), zodat ze minder vatbaar worden voor paniekberichten. Vul daarom ALTIJD het veld "perspectief": een rustige, eerlijke inschatting van hoe waarschijnlijk dit is en hoe groot de impact echt is, en wat men realistisch mag verwachten. Niet bagatelliseren, niet bangmaken -- nuchter en in verhouding.
+
 Antwoord UITSLUITEND met geldige JSON, exact dit formaat:
-{"titel":"korte titel","situatie":"de situatie en gevolgen (voedsel, brandstof, prijzen), in het juiste niveau","nederland":"wat dit concreet betekent voor Nederland en de gewone Nederlander","basis":"de echte afhankelijkheid of het mechanisme waarop deze redenering rust (en eerlijk: hoe zeker)","geraakt":["sleutel"],"omhoog":["sleutel"],"stromen":[{"van":"sleutel","naar":"sleutel","soort":"gas"}],"keuzes":[{"label":"richting om te ontdekken"}],"einde":false,"slot":""}
+{"titel":"korte titel","situatie":"de situatie en gevolgen (voedsel, brandstof, prijzen), in het juiste niveau","nederland":"wat dit concreet betekent voor Nederland en de gewone Nederlander","perspectief":"nuchtere inschatting: hoe waarschijnlijk en hoe groot is dit echt, en wat mag je realistisch verwachten","basis":"de echte afhankelijkheid of het mechanisme waarop deze redenering rust (en eerlijk: hoe zeker)","geraakt":["sleutel"],"omhoog":["sleutel"],"stromen":[{"van":"sleutel","naar":"sleutel","soort":"gas"}],"keuzes":[{"label":"richting om te ontdekken"}],"einde":false,"slot":""}
 - "geraakt" = direct geraakte landen. "omhoog" = landen waar prijs/druk stijgt. "stromen" = relevante of verstoorde energiestromen (soort = "gas" of "olie").
 - "nederland" = ALTIJD invullen: het concrete gevolg voor Nederland (prijzen, boodschappen, brandstof, energierekening, haven).
+- "perspectief" = ALTIJD invullen: een rustige, eerlijke inschatting die paniek in verhouding brengt (hoe waarschijnlijk + hoe groot de impact echt is). Niet bagatelliseren, niet bangmaken.
 - "basis" = ALTIJD invullen: noem de echte afhankelijkheid of het mechanisme uit het wereldmodel waarop je redenering rust, en wees eerlijk als iets onzeker of speculatief is. Verzin geen feiten of cijfers.
 - Gebruik ALLEEN geldige sleutels uit de lijst. Laat een lijst leeg als niet van toepassing.
 - Bij einde=true: "keuzes" is [] en vul "slot". Anders is "slot" "".`;
@@ -108,6 +111,7 @@ export default async function handler(req, res) {
           ["geraakt", "omhoog", "keuzes", "stromen"].forEach((k) => { if (!Array.isArray(scene[k])) scene[k] = []; });
           scene.nederland = typeof scene.nederland === "string" ? scene.nederland : "";
           scene.basis = typeof scene.basis === "string" ? scene.basis : "";
+          scene.perspectief = typeof scene.perspectief === "string" ? scene.perspectief : "";
           scene.einde = !!scene.einde;
           scene.slot = scene.slot || "";
           return res.status(200).json({ ok: true, scene });
