@@ -453,7 +453,7 @@ function renderAI(){
   panel.innerHTML=html;
 }
 function aiSceneText(s){ return (s.titel?s.titel+': ':'')+s.situatie+(s.keuzes&&s.keuzes.length?(' [opties: '+s.keuzes.map(k=>k.label).join(' | ')+']'):''); }
-function aiBusy(msg){ return /quota|exceed|429|503|rate|druk|overload|UNAVAILABLE|RESOURCE_EXHAUSTED/i.test(String(msg||'')); }
+function aiQuota(msg){ return /quota|RESOURCE_EXHAUSTED|exceeded your current quota|too many requests|rate.?limit|\b429\b/i.test(String(msg||'')); }
 function callAI(){
   aiLoading=true; aiWaiting=false; aiError=''; renderAI();
   fetch('/api/scenario',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({level:LEVEL,mode:aiMode,history:aiHistory})})
@@ -461,21 +461,18 @@ function callAI(){
     .then(({ok,status,j})=>{
       if(ok&&j&&j.ok&&j.scene){ aiRetries=0; aiLoading=false; aiWaiting=false; aiScene=j.scene; aiHistory.push({role:'model',content:aiSceneText(aiScene)}); renderAI(); render(); if(aiScene.geraakt&&aiScene.geraakt[0])focusOn(aiScene.geraakt[0]); return; }
       const msg=(j&&j.error)||('serverfout '+status);
-      if((aiBusy(msg)||status===503||status===429) && aiRetries<3){
+      if(aiQuota(msg) && aiRetries<2){
         aiRetries++; aiLoading=false; aiWaiting=true; renderAI();
         const m=String(msg).match(/retry in ([\d.]+)s/i);
-        const wait=m?Math.min(9000,(Math.ceil(parseFloat(m[1]))+1)*1000):5000;
+        const wait=m?Math.min(9000,(Math.ceil(parseFloat(m[1]))+1)*1000):6000;
         setTimeout(()=>{ aiWaiting=false; callAI(); }, wait);
         return;
       }
       aiLoading=false; aiWaiting=false;
-      aiError = aiBusy(msg) ? 'De AI-sleutel zit even aan de limiet (Google). Probeer over een halve minuut opnieuw — of zet pay-as-you-go aan voor meer ruimte.' : msg;
+      aiError = aiQuota(msg) ? 'De AI-sleutel zit aan de limiet (quota bij Google). Probeer later opnieuw of zet meer ruimte aan.' : msg;
       renderAI();
     })
-    .catch(()=>{
-      if(aiRetries<2){ aiRetries++; aiLoading=false; aiWaiting=true; renderAI(); setTimeout(()=>{ aiWaiting=false; callAI(); },5000); }
-      else { aiLoading=false; aiWaiting=false; aiError='Geen verbinding met de scenario-motor. Dit werkt pas live (op grwn.ai/wereldweb), niet als los offline bestand.'; renderAI(); }
-    });
+    .catch(()=>{ aiLoading=false; aiWaiting=false; aiError='Geen verbinding met de scenario-motor (kon /api/scenario niet bereiken).'; renderAI(); });
 }
 window.aiStart=function(){ aiScene=null; aiError=''; aiRetries=0; aiHistory=[{role:'user',content:'Start een nieuw scenario over energie en geopolitiek. Geef een pakkende openingssituatie, leg de gevolgen uit voor voedsel/brandstof/prijzen, maak duidelijk wat het voor Nederland betekent, en geef 2-3 richtingen om verder te ontdekken.'}]; callAI(); };
 window.aiChoose=function(label){ aiRetries=0; aiHistory.push({role:'user',content:'Ik kies: '+label}); callAI(); };

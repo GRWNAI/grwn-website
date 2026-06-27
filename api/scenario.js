@@ -63,7 +63,7 @@ export default async function handler(req, res) {
     const body = {
       contents,
       generationConfig: {
-        maxOutputTokens: 900,
+        maxOutputTokens: 1600,
         temperature: mode === "watals" ? 0.95 : 0.45,
         responseMimeType: "application/json",
       },
@@ -107,7 +107,7 @@ export default async function handler(req, res) {
         await sleep(700);
       }
     }
-    return res.status(503).json({ error: "De scenario-motor is heel even druk. Probeer zo nog eens. (" + lastErr + ")" });
+    return res.status(503).json({ error: "Het scenario maken lukte niet: " + lastErr });
   } catch (e) {
     return res.status(500).json({ error: e.message });
   }
