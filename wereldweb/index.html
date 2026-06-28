@@ -75,6 +75,15 @@
   .deprow b{color:var(--muted);font-weight:700;margin-right:4px;}
   .deprow .tag{margin:0 4px 4px 0;display:inline-block;}
   .topbron{font-size:12.5px;color:var(--accent2);text-decoration:none;font-weight:600;white-space:nowrap;}
+  .berow{display:flex;align-items:center;gap:12px;margin:12px 0 4px;}
+  .berow input[type=range]{flex:1;accent-color:var(--accent);height:6px;cursor:pointer;}
+  .beval{font-size:20px;font-weight:800;color:var(--text);white-space:nowrap;}
+  .beval small{font-size:12px;color:var(--muted);font-weight:600;}
+  .belive{font-size:13px;color:var(--accent2);font-weight:600;margin-top:2px;}
+  .berow2{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:var(--panel2);border:1px solid var(--line);color:var(--text);font:inherit;font-size:14.5px;font-weight:700;padding:10px 13px;border-radius:11px;margin-bottom:6px;cursor:pointer;}
+  .berow2:hover{border-color:var(--accent);}
+  .berow2 .bep{margin-left:auto;font-weight:800;}
+  .bedot{width:12px;height:12px;border-radius:50%;flex:none;}
   .impact{margin-top:10px;}
   .impact .tag{display:inline-block;font-size:12.5px;font-weight:800;padding:4px 10px;border-radius:999px;margin:0 5px 6px 0;}
   .tag.hit{background:rgba(255,93,108,.16);color:#ff8a95;border:1px solid rgba(255,93,108,.4);}
@@ -113,8 +122,14 @@
 <body>
   <div class="top">
     <div class="brand"><span class="dot"></span>Wereldweb <small>· energie</small></div>
+    <div class="seg" id="layerSeg">
+      <button data-layer="deps" class="on">🔗 Afhankelijkheden</button>
+      <button data-layer="breakeven">💰 Breakeven</button>
+      <button data-layer="blocs">🤝 Blokken</button>
+    </div>
     <div class="spacer"></div>
-    <a href="#" onclick="return openBronnen()" class="topbron">ℹ️ Bronnen &amp; uitleg</a>
+    <a href="#" onclick="return openOPEC()" class="topbron">📅 OPEC-kalender</a>
+    <a href="#" onclick="return openBronnen()" class="topbron">ℹ️ Bronnen</a>
   </div>
 
   <div class="layout">
@@ -335,6 +350,45 @@ const VARS = [
     ]}
 ];
 
+/* ======== UITBREIDINGEN: breakeven, allianties/blokken, OPEC-kalender ======== */
+// Fiscale breakeven-olieprijs ($/vat): wat een land minimaal nodig heeft om zijn begroting te dekken.
+// Bron: IMF (REO Midden-Oosten & Centraal-Azië, mei 2025) en IIF — momentopname 2025. null = geen schone schatting.
+const BREAKEVEN = { VAE:57, Qatar:45, Rusland:77, Koeweit:78, SaoediArabie:85, Irak:92, Kazachstan:116, Algerije:119, Iran:124, Nigeria:null };
+const BREAKEVEN_BRON = 'IMF (REO MCD, mei 2025) & IIF — stand 2025';
+
+// Allianties / blokken (vereenvoudigd; een land kan in meerdere blokken zitten).
+const BLOCS = [
+  { id:'navo', naam:'NAVO', em:'🛡️', kleur:'#5b8bff', leden:['VS','Duitsland','Frankrijk','Nederland','Spanje','VK','Italie','Turkije','Polen'] },
+  { id:'eu', naam:'EU', em:'⭐', kleur:'#ffd23f', leden:['Duitsland','Frankrijk','Nederland','Spanje','Italie','Polen'] },
+  { id:'opec', naam:'OPEC+', em:'🛢️', kleur:'#46d6c6', leden:['SaoediArabie','VAE','Irak','Koeweit','Iran','Algerije','Nigeria','Rusland','Kazachstan'] },
+  { id:'brics', naam:'BRICS+', em:'🌐', kleur:'#ff9aa3', leden:['China','India','Rusland','Iran','VAE','SaoediArabie'] },
+  { id:'gcc', naam:'Golfraad (GCC)', em:'🕌', kleur:'#c9a3ff', leden:['SaoediArabie','VAE','Qatar','Koeweit'] }
+];
+
+// Relatieve relaties per land (vereenvoudigd, voor de 'bondgenoten'-weergave). Geopolitiek is genuanceerd; dit is een grove indeling.
+const RELATIONS = {
+  Rusland:{allies:['China','Iran','India','Kazachstan'], rivals:['VS','Duitsland','VK','Polen','Frankrijk']},
+  VS:{allies:['Duitsland','Frankrijk','VK','Nederland','Japan','ZuidKorea','SaoediArabie','Italie','Polen','Spanje'], rivals:['Rusland','Iran','China']},
+  China:{allies:['Rusland','Iran','Kazachstan'], rivals:['VS','Japan','India']},
+  Iran:{allies:['Rusland','China'], rivals:['VS','SaoediArabie','VAE']},
+  SaoediArabie:{allies:['VS','VAE','Koeweit','Qatar'], rivals:['Iran']},
+  Duitsland:{allies:['VS','Frankrijk','Nederland','Polen','Italie','Spanje','VK'], rivals:['Rusland']}
+};
+
+// OPEC(+) vergaderkalender — gedateerde momentopname; eerstvolgende datum kan live worden ververst.
+const OPEC_CAL = {
+  asof: '28 juni 2026',
+  bron: 'OPEC.org & marktberichten',
+  cadans: 'In 2026 vergadert de "groep van acht" (landen met vrijwillige productieverlagingen) maandelijks; de JMMC elke twee maanden; de volledige ministeriële (OPEC en non-OPEC) doorgaans halfjaarlijks.',
+  agenda: ['Productiequota en eventuele aanpassingen','Naleving van de afspraken (conformity)','Compensatie voor eerdere overproductie','Marktvooruitzicht: vraag, aanbod en voorraden','Prijsontwikkeling en geopolitieke risico\'s'],
+  meetings: [
+    {datum:'4 januari 2026', type:'Groep van acht', note:'Maandelijkse review van de productieniveaus'},
+    {datum:'7 juni 2026', type:'41e OPEC en non-OPEC Ministeriële + 66e JMMC', note:'Halfjaarlijkse hoofdvergadering'},
+    {datum:'Maandelijks', type:'Groep van acht', note:'Markt, naleving en compensatie'},
+    {datum:'Elke 2 maanden', type:'JMMC', note:'Monitoring van de afspraken'}
+  ]
+};
+
 const SCENARIOS = [
   { id:'gaskraan', em:'🔥', titel:'De Gaskraan', disrupt:'rus',
     intro:{kind:'Het is winter. Rusland zegt: geen gas meer naar Europa. Wat gebeurt er?',
@@ -384,6 +438,10 @@ let scenario=null, scStep=0, scChosen=null;
 let aiMode='realistisch', aiHistory=[], aiScene=null, aiLoading=false, aiError='', aiRetries=0, aiWaiting=false;
 let selVar=null, lastScenarioIdx=null;
 let lastNodes=[];
+let LAYER='deps';                 // deps | breakeven | blocs
+let oilPrice=75;                  // schuifje ($/vat)
+let liveOil=null, liveAsOf='';    // live opgehaalde Brent-prijs
+let opecNextLive='';              // live opgehaalde eerstvolgende OPEC-datum
 
 /* =======================================================================
    GLOBE (D3 orthografisch, SVG — werkt ook zonder landgrenzen)
@@ -445,35 +503,71 @@ function highlightSet(){
   if(selCountry){ const s=new Set(); FLOWS.forEach(f=>{ if(f.v===selCountry)s.add(f.n); if(f.n===selCountry)s.add(f.v); }); return s; }
   return new Set();
 }
+function beColor(k){ const b=BREAKEVEN[k]; if(b==null) return null; return b<=oilPrice ? '#5fe39a' : '#ff5d6c'; }
+function blocColor(k){ for(const b of BLOCS){ if(b.leden.includes(k)) return b.kleur; } return null; }
+function relSet(){
+  if(!selCountry) return null;
+  let r=RELATIONS[selCountry];
+  if(!r){ const al=new Set(); BLOCS.forEach(b=>{ if(b.leden.includes(selCountry)) b.leden.forEach(x=>{ if(x!==selCountry) al.add(x); }); }); r={allies:[...al],rivals:[]}; }
+  return r;
+}
 function drawPoints(){
   const hl=highlightSet();
-  const drill=false;
   let nodes=[];
-  const covered=new Set(VARS.map(v=>v.ll));   // landen/knooppunten die al door een drukpunt worden gedekt
-  for(const k in C){ if(covered.has(C[k]))continue; nodes.push({k,ll:C[k],type:PRODUCERS.includes(k)?'prod':'cons'}); }
-  for(const k in CHOKE){ if(covered.has(CHOKE[k]))continue; nodes.push({k,ll:CHOKE[k],type:'choke'}); }
-  VARS.forEach(v=>nodes.push({k:v.id,ll:v.ll,type:'var',naam:v.naam}));   // drukpunten bovenop
+  if(LAYER==='deps'){
+    const covered=new Set(VARS.map(v=>v.ll));
+    for(const k in C){ if(covered.has(C[k]))continue; nodes.push({k,ll:C[k],type:PRODUCERS.includes(k)?'prod':'cons'}); }
+    for(const k in CHOKE){ if(covered.has(CHOKE[k]))continue; nodes.push({k,ll:CHOKE[k],type:'choke'}); }
+    VARS.forEach(v=>nodes.push({k:v.id,ll:v.ll,type:'var',naam:v.naam}));
+  } else {                        // breakeven / blokken: alle landen, geen drukpunten
+    for(const k in C){ nodes.push({k,ll:C[k],type:PRODUCERS.includes(k)?'prod':'cons'}); }
+    for(const k in CHOKE){ nodes.push({k,ll:CHOKE[k],type:'choke'}); }
+  }
+  const rel = (LAYER==='blocs') ? relSet() : null;
+  function fillFor(d){
+    if(d.type==='var') return 'var(--accent)';
+    if(d.type==='choke') return (LAYER==='deps')?'var(--choke)':'#46506e';
+    if(LAYER==='breakeven'){ const c=beColor(d.k); return c||'#4a5675'; }
+    if(LAYER==='blocs'){
+      if(rel){ if(d.k===selCountry) return '#ffffff'; if(rel.allies.includes(d.k)) return '#5fe39a'; if(rel.rivals.includes(d.k)) return '#ff5d6c'; return '#4a5675'; }
+      return blocColor(d.k)||'#4a5675';
+    }
+    return d.type==='prod'?'var(--producer)':'var(--consumer)';
+  }
+  function dimFor(d){
+    if(d.type==='var') return 1;
+    if(LAYER==='deps') return (hl.size&&!hl.has(d.k)&&d.type!=='choke')?.55:1;
+    if(LAYER==='breakeven') return (d.type==='cons'||BREAKEVEN[d.k]==null)?.3:1;
+    if(LAYER==='blocs'){ if(rel) return (d.k===selCountry||rel.allies.includes(d.k)||rel.rivals.includes(d.k))?1:.35; return blocColor(d.k)?1:.35; }
+    return 1;
+  }
   const sel=gPts.selectAll('circle').data(nodes,d=>d.k);
   const merged=sel.enter().append('circle').merge(sel)
     .attr('cursor',d=>(d.type==='var'||d.type==='prod'||d.type==='cons')?'pointer':'default');
   merged
     .each(function(d){ d.vis=visible(d.ll); const p=projection(d.ll); d.x=p?p[0]:0; d.y=p?p[1]:0; })
     .attr('cx',d=>d.x).attr('cy',d=>d.y)
-    .attr('r',d=> d.type==='var' ? (selVar&&selVar.id===d.k?10.5:8) : d.type==='choke'?7 : (d.k===selCountry?9:6.5))
+    .attr('r',d=> d.type==='var' ? (selVar&&selVar.id===d.k?10.5:8) : d.type==='choke'?7 : (d.k===selCountry?9.5:6.5))
     .attr('display',d=>d.vis?null:'none')
-    .attr('fill',d=> d.type==='var'?'var(--accent)': d.type==='choke'?'var(--choke)': d.type==='prod'?'var(--producer)':'var(--consumer)')
-    .attr('stroke',d=> ((d.type==='var'&&selVar&&selVar.id===d.k)||hl.has(d.k))?'#fff':'rgba(0,0,0,.5)')
-    .attr('stroke-width',d=> ((d.type==='var'&&selVar&&selVar.id===d.k)||hl.has(d.k))?2.5:1)
-    .attr('opacity',d=> (!drill&&hl.size&&!hl.has(d.k)&&d.type!=='choke')?.55:1)
-    .style('filter',d=> d.type==='var'?'drop-shadow(0 0 7px rgba(70,214,198,.8))': hl.has(d.k)?'drop-shadow(0 0 6px rgba(255,93,108,.9))':(d.type==='choke'?'drop-shadow(0 0 5px rgba(255,93,108,.6))':'none'));
+    .attr('fill',fillFor)
+    .attr('stroke',d=> ((d.type==='var'&&selVar&&selVar.id===d.k)||d.k===selCountry||(LAYER==='deps'&&hl.has(d.k)))?'#fff':'rgba(0,0,0,.5)')
+    .attr('stroke-width',d=> ((d.type==='var'&&selVar&&selVar.id===d.k)||d.k===selCountry||(LAYER==='deps'&&hl.has(d.k)))?2.5:1)
+    .attr('opacity',dimFor)
+    .style('filter',d=> d.type==='var'?'drop-shadow(0 0 7px rgba(70,214,198,.8))': (LAYER==='deps'&&hl.has(d.k))?'drop-shadow(0 0 6px rgba(255,93,108,.9))':(d.type==='choke'&&LAYER==='deps'?'drop-shadow(0 0 5px rgba(255,93,108,.6))':'none'));
   sel.exit().remove();
   lastNodes=nodes;
 
-  const labs = nodes.filter(d=>d.vis && (d.type==='var'||hl.has(d.k)||d.k===selCountry||(selVar&&d.type==='choke')));
+  const labs = nodes.filter(function(d){
+    if(!d.vis) return false;
+    if(LAYER==='breakeven') return BREAKEVEN[d.k]!=null;
+    if(LAYER==='blocs') return d.type!=='choke';
+    return d.type==='var'||hl.has(d.k)||d.k===selCountry||(selVar&&d.type==='choke');
+  });
   const ls=gLbl.selectAll('text').data(labs,d=>d.k);
-  ls.enter().append('text').attr('font-size',13).attr('font-weight',700).attr('pointer-events','none')
+  ls.enter().append('text').attr('font-weight',700).attr('pointer-events','none')
     .attr('fill','#dfe7ff').attr('paint-order','stroke').attr('stroke','#070b16').attr('stroke-width',3.5)
-    .merge(ls).attr('font-size',13).attr('x',d=>d.x+10).attr('y',d=>d.y+4).text(d=> d.type==='var' ? (d.naam.length>20?d.naam.slice(0,19)+'…':d.naam) : lab(d.k));
+    .merge(ls).attr('font-size',13).attr('x',d=>d.x+10).attr('y',d=>d.y+4)
+    .text(d=> d.type==='var' ? (d.naam.length>20?d.naam.slice(0,19)+'…':d.naam) : (LAYER==='breakeven'&&BREAKEVEN[d.k]!=null ? lab(d.k)+' $'+BREAKEVEN[d.k] : lab(d.k)));
   ls.exit().remove();
 }
 
@@ -510,7 +604,37 @@ function focusLL(ll){ // draai globe naar coördinaat [lon,lat]
 }
 function focusOn(k){ focusLL(C[k]||CHOKE[k]); }
 function renderPanel(){
-  if(selCountry) renderCountry(); else renderAI();
+  if(selCountry) renderCountry();
+  else if(LAYER==='breakeven') renderBreakeven();
+  else if(LAYER==='blocs') renderBlocs();
+  else renderAI();
+}
+function renderBreakeven(){
+  const producers=Object.keys(BREAKEVEN).filter(k=>BREAKEVEN[k]!=null).sort((a,b)=>BREAKEVEN[a]-BREAKEVEN[b]);
+  const tekort=producers.filter(k=>BREAKEVEN[k]>oilPrice);
+  let html='<div class="pcard"><h3>💰 Breakeven-olieprijs</h3>'
+    +'<p>Hoeveel moet een vat olie minstens kosten zodat een land zijn <b>begroting</b> kan dekken? Schuif de olieprijs en zie wie het redt (groen) en wie tekortkomt (rood).</p>'
+    +'<div class="berow"><input type="range" id="oilSlider" min="20" max="150" step="1" value="'+Math.round(oilPrice)+'"><div class="beval">$<span id="oilVal">'+Math.round(oilPrice)+'</span><small>/vat</small></div></div>'
+    +'<div class="belive" id="beLive">'+(liveOil?('📡 Live: $'+liveOil+' (Brent · '+escW(liveAsOf)+')'):'<button class="btn ghost" style="padding:7px 12px;font-size:13px" onclick="fetchOil()">📡 Live olieprijs ophalen</button>')+'</div>'
+    +'<p style="font-size:13.5px;margin-top:8px"><b>'+tekort.length+'</b> van '+producers.length+' producenten komt tekort bij $'+Math.round(oilPrice)+' per vat.</p>'
+    +'<p style="font-size:12px;color:var(--muted)">Bron: '+escW(BREAKEVEN_BRON)+'.</p></div>';
+  html+='<div class="ptitle">Producenten — nodig per vat (laag → hoog)</div>';
+  html+=producers.map(k=>{ const b=BREAKEVEN[k],ok=b<=oilPrice;
+    return '<button class="berow2" onclick="selectCountry(\''+k+'\')"><span class="bedot" style="background:'+(ok?'#5fe39a':'#ff5d6c')+'"></span><b>'+lab(k)+'</b><span class="bep">$'+b+'</span></button>';
+  }).join('');
+  html+='<p style="font-size:12px;color:var(--muted);margin-top:8px">Nigeria: geen schone IMF-schatting beschikbaar.</p>';
+  panel.innerHTML=html;
+  const sl=document.getElementById('oilSlider');
+  if(sl){ sl.oninput=function(){ oilPrice=+this.value; var ov=document.getElementById('oilVal'); if(ov)ov.textContent=Math.round(oilPrice); render(); };
+          sl.onchange=function(){ renderBreakeven(); }; }
+}
+function renderBlocs(){
+  let html='<div class="pcard"><h3>🤝 Blokken & bondgenoten</h3>'
+    +'<p>De grote samenwerkingsverbanden in energie en geopolitiek. Klik een land aan om te zien met wie het optrekt (groen) en waar spanning zit (rood) — op de globe en hier in het paneel.</p>'
+    +'<p style="font-size:12px;color:var(--muted)">Vereenvoudigde indeling; een land kan in meerdere blokken zitten.</p></div>';
+  html+=BLOCS.map(b=>'<div class="pcard"><h3>'+b.em+' '+escW(b.naam)+' <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:'+b.kleur+';vertical-align:middle"></span></h3>'
+    +'<div class="deprow">'+b.leden.filter(k=>C[k]).map(k=>'<button class="tag" style="background:'+b.kleur+'22;color:'+b.kleur+';border:1px solid '+b.kleur+'55;cursor:pointer" onclick="selectCountry(\''+k+'\')">'+lab(k)+'</button>').join(' ')+'</div></div>').join('');
+  panel.innerHTML=html;
 }
 function renderCountry(){
   const k=selCountry; const inf=INFO[k]||{};
@@ -535,6 +659,20 @@ function renderCountry(){
     +'</div>'
     +'<div class="vsec"><span class="ptitle">📉 Wat als de energie hier hapert?</span><p>'+escW(effect)+'</p></div>'
     +'</div>';
+  const be=BREAKEVEN[k];
+  if(be!=null){ const haalbaar=be<=oilPrice;
+    html+='<div class="pcard" style="border-color:'+(haalbaar?'rgba(95,227,154,.45)':'rgba(255,93,108,.45)')+'"><h3>💰 Begroting & olieprijs</h3>'
+      +'<p>'+escW(lab(k))+' heeft naar schatting <b>$'+be+' per vat</b> nodig om de begroting rond te krijgen (fiscale breakeven). Bij $'+Math.round(oilPrice)+' '+(haalbaar?'<b style="color:var(--ok)">haalt het dat ruim</b>':'<b style="color:#ff8a95">komt het tekort</b>')+'.</p>'
+      +'<p style="font-size:12px;color:var(--muted)">Bron: '+escW(BREAKEVEN_BRON)+'. Schuif zelf via de laag 💰 Breakeven.</p></div>';
+  }
+  const rR=RELATIONS[k]; const myBlocs=BLOCS.filter(b=>b.leden.includes(k));
+  if(rR||myBlocs.length){
+    html+='<div class="pcard"><h3>🤝 Bondgenoten & spanningen</h3>';
+    if(myBlocs.length) html+='<div class="deprow"><b>Blokken:</b> '+myBlocs.map(b=>'<span class="tag" style="background:'+b.kleur+'22;color:'+b.kleur+';border:1px solid '+b.kleur+'55">'+b.em+' '+escW(b.naam)+'</span>').join(' ')+'</div>';
+    if(rR&&rR.allies&&rR.allies.length) html+='<div class="deprow"><b>Trekt op met:</b> '+rR.allies.map(x=>'<span class="tag" style="background:rgba(95,227,154,.14);color:#7be3a7;border:1px solid rgba(95,227,154,.4)">'+lab(x)+'</span>').join(' ')+'</div>';
+    if(rR&&rR.rivals&&rR.rivals.length) html+='<div class="deprow"><b>Spanning met:</b> '+rR.rivals.map(x=>'<span class="tag hit">'+lab(x)+'</span>').join(' ')+'</div>';
+    html+='<p style="font-size:12px;color:var(--muted);margin-top:4px">Vereenvoudigd — geopolitiek is genuanceerder. In de laag 🤝 Blokken kleurt de globe de bondgenoten en spanning rond dit land.</p></div>';
+  }
   if(relVars.length){
     html+='<div class="ptitle">🎯 Verbonden drukpunten — klik voor scenario\'s en gevolgen</div>'+
       relVars.map(v=>'<button class="scencard" onclick="selectVar(\''+v.id+'\')"><div class="sc-top"><span class="em">'+v.em+'</span><b>'+escW(v.naam)+'</b></div><p>'+escW(v.kort)+'</p><span class="sc-go">Bekijk de gevolgen →</span></button>').join('');
@@ -595,6 +733,7 @@ function renderAI(){
     html+='</div>';
     if(s.nederland) html+='<div class="pcard" style="border-color:rgba(255,180,84,.45)"><h3>🇳🇱 Wat betekent dit voor Nederland?</h3><p>'+escW(s.nederland)+'</p></div>';
     if(s.perspectief) html+='<div class="pcard" style="border-color:rgba(95,227,154,.45)"><h3>🧭 Hoe erg is het echt?</h3><p>'+escW(s.perspectief)+'</p></div>';
+    if(s.markten) html+='<div class="pcard" style="border-color:rgba(124,155,255,.45)"><h3>📈 Welke sectoren & markten?</h3><p>'+escW(s.markten)+'</p><p style="font-size:11.5px;color:var(--muted);margin-top:6px">Alleen ter uitleg — geen financieel of koopadvies.</p></div>';
     if(s.basis) html+='<div class="basis">ℹ️ <b>Waarop dit rust:</b> '+escW(s.basis)+'</div>';
     if(s.keuzes&&s.keuzes.length){ html+='<div class="ptitle">Verder ontdekken</div><div class="choices">'+s.keuzes.map(k=>'<button class="choice" data-l="'+escA(k.label)+'" onclick="aiChoose(this.dataset.l)">'+escW(k.label)+'</button>').join('')+'</div>'; }
     html+='<div class="meldrow"><a href="#" onclick="return flagScene()">🚩 Klopt dit niet? Meld het</a></div>';
@@ -677,6 +816,39 @@ window.openBronnen=function(){
   m.addEventListener('click',e=>{ if(e.target===m) m.remove(); });
   return false;
 };
+window.openOPEC=function(){
+  const o=OPEC_CAL;
+  const m=document.createElement('div'); m.className='wmodal';
+  m.innerHTML='<div class="box">'
+    +'<h2>📅 OPEC-vergaderkalender</h2>'
+    +'<p style="color:var(--muted);font-size:13px;margin-bottom:10px">OPEC+ stuurt via deze vergaderingen het olie-aanbod — en daarmee de prijs. <b>Stand per '+escW(o.asof)+'</b>'+(opecNextLive?(' · 📡 eerstvolgend (live): <b>'+escW(opecNextLive)+'</b>'):'')+'.</p>'
+    +'<div style="margin-bottom:10px"><button class="btn ghost" style="padding:7px 12px;font-size:13px" onclick="fetchOPEC()">📡 Eerstvolgende datum live ophalen</button></div>'
+    +'<div class="ptitle" style="color:var(--muted)">Geplande momenten</div>'
+    +'<ul style="margin:6px 0 12px 18px;font-size:14px;line-height:1.7;color:var(--text)">'
+    + o.meetings.map(mt=>'<li><b>'+escW(mt.datum)+'</b> — '+escW(mt.type)+'<br><span style="color:var(--muted);font-size:12.5px">'+escW(mt.note)+'</span></li>').join('')
+    +'</ul>'
+    +'<p style="color:var(--muted);font-size:12.5px;line-height:1.6">'+escW(o.cadans)+'</p>'
+    +'<div class="ptitle" style="color:var(--muted);margin-top:10px">Typische agendapunten</div>'
+    +'<ul style="margin:6px 0 12px 18px;font-size:14px;line-height:1.65;color:var(--text)">'+o.agenda.map(a=>'<li>'+escW(a)+'</li>').join('')+'</ul>'
+    +'<p style="color:var(--muted);font-size:12px">Bron: '+escW(o.bron)+' · <a href="https://www.opec.org" target="_blank" rel="noopener">opec.org</a>. Exacte data worden per vergadering bevestigd.</p>'
+    +'<button id="opClose">Sluiten</button></div>';
+  document.body.appendChild(m);
+  document.getElementById('opClose').onclick=()=>m.remove();
+  m.addEventListener('click',e=>{ if(e.target===m) m.remove(); });
+  return false;
+};
+window.fetchOil=function(){
+  const el=document.getElementById('beLive'); if(el) el.innerHTML='⏳ Olieprijs ophalen…';
+  fetch('/api/oil').then(r=>r.json()).then(j=>{
+    if(j&&j.brent){ liveOil=Math.round(j.brent); liveAsOf=j.asof||'zojuist'; oilPrice=+j.brent; if(j.nextOpec) opecNextLive=j.nextOpec; renderBreakeven(); render(); }
+    else { if(el) el.innerHTML='Live ophalen lukte niet — gebruik het schuifje. <a href="#" onclick="return fetchOil()" style="color:var(--accent2)">opnieuw</a>'; }
+  }).catch(()=>{ if(el) el.innerHTML='Live ophalen lukte niet (offline of API niet actief) — gebruik het schuifje.'; });
+  return false;
+};
+window.fetchOPEC=function(){
+  fetch('/api/oil').then(r=>r.json()).then(j=>{ if(j&&j.nextOpec){ opecNextLive=j.nextOpec; if(j.brent){liveOil=Math.round(j.brent);liveAsOf=j.asof||'zojuist';} document.querySelectorAll('.wmodal').forEach(x=>x.remove()); openOPEC(); } }).catch(()=>{});
+  return false;
+};
 
 /* =======================================================================
    ACTIES
@@ -694,6 +866,12 @@ window.answer=function(i){ scChosen=i; renderPanel(); };
 window.nextStep=function(){ scStep++; scChosen=null; renderPanel(); render(); };
 window.exitScenario=function(){ scenario=null; scStep=0; scChosen=null; renderPanel(); render(); };
 
+document.getElementById('layerSeg').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b)return;
+  LAYER=b.dataset.layer; document.querySelectorAll('#layerSeg button').forEach(x=>x.classList.toggle('on',x===b));
+  selVar=null; aiScene=null; aiError=''; aiLoading=false; aiWaiting=false; selCountry=null; lastScenarioIdx=null;
+  document.getElementById('hint').textContent = LAYER==='breakeven'?'Schuif de olieprijs · tik op een land':(LAYER==='blocs'?'Tik op een land voor bondgenoten & spanning':'Sleep om te draaien · tik op een drukpunt of land');
+  renderPanel(); render();
+});
 window.addEventListener('resize',resize);
 resize(); renderPanel();
 </script>
